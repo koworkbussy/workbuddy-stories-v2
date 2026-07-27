@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>沃克巴迪的故事 · 第1集：从工坊来</title>
+<style>
+:root {
+  --blue: #4A90E2;
+  --blue-d: #1A5AA8;
+  --blue-l: #7BB5F2;
+  --gold: #F5A623;
+  --green: #4CD964;
+  --white: #FFFFFF;
+  --ink: #2C2C2A;
+  --muted: #777;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  overflow: hidden;
+  width: 100vw; height: 100vh;
+  background: #0A1628;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ===== 星空背景 ===== */
+.stars-container {
+  position: fixed; inset: 0; z-index: 0;
+  background: linear-gradient(180deg, #0A1628 0%, #142850 40%, #1A3A5C 70%, #2A5A3A 100%);
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* ===== 流星 ===== */
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(180deg, rgba(74,144,226,0), rgba(74,144,226,1), rgba(255,255,255,1));
+  border-radius: 50%;
+  animation: meteorFall var(--dur) linear infinite;
+  animation-delay: var(--delay);
+  opacity: 0;
+}
+
+@keyframes meteorFall {
+  0% { transform: translate(0, -100px); opacity: 1; }
+  5% { opacity: 0; }
+  100% { transform: translate(200px, 800px); opacity: 0; }
+}
+
+/* ===== 主流星（巴迪） ===== */
+.meteor-main {
+  position: absolute;
+  z-index: 10;
+  animation: mainMeteor var(--meteor-dur) ease-in forwards;
+  animation-play-state: paused;
+}
+
+@keyframes mainMeteor {
+  0% { top: -120px; left: 30%; opacity: 1; transform: scale(0.3); }
+  70% { top: 60%; left: 48%; opacity: 1; transform: scale(0.8); }
+  100% { top: 72%; left: 50%; opacity: 0; transform: scale(1); }
+}
+
+.main-meteor-streak {
+  width: 3px; height: 100px;
+  background: linear-gradient(180deg, rgba(74,144,226,0), #4A90E2, #FFFFFF);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+/* ===== 地面 ===== */
+.ground {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 5;
+  height: 25vh;
+  background: linear-gradient(0deg, #2D5A27 0%, #3A7A32 40%, #4A9A42 70%, transparent 100%);
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(.34,1.56,.64,1);
+}
+
+.ground.show { transform: translateY(0); }
+
+.grass {
+  position: absolute; top: -12px; left: 0; right: 0;
+  height: 20px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 8px,
+    #5ABB4E 8px, #5ABB4E 13px
+  );
+  clip-path: polygon(
+    0% 100%, 4% 40%, 8% 100%, 12% 30%, 16% 100%,
+    20% 45%, 24% 100%, 28% 25%, 32% 100%, 36% 50%,
+    40% 100%, 44% 35%, 48% 100%, 52% 20%, 56% 100%,
+    60% 48%, 64% 100%, 68% 28%, 72% 100%, 76% 55%,
+    80% 100%, 84% 38%, 88% 100%, 92% 32%, 96% 100%,
+    100% 42%, 100% 100%
+  );
+}
+
+/* ===== 震动效果 ===== */
+.shake {
+  animation: shake 0.5s ease-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateY(0); }
+  10% { transform: translateY(-3px); }
+  20% { transform: translateY(2px); }
+  30% { transform: translateY(-2px); }
+  40% { transform: translateY(1px); }
+  50% { transform: translateY(-1px); }
+}
+
+/* ===== 巴迪角色 ===== */
+.badi {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -200px;
+  transition: top 1.2s cubic-bezier(.34,1.56,.64,1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.badi.landed { top: calc(75vh - 140px); }
+
+.badi svg { width: 140px; height: 180px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.3)); }
+
+/* ===== 草地摇动 ===== */
+@keyframes grassSway {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+}
+.grass.swaying { animation: grassSway 0.4s ease-in-out 3; }
+
+
+/* 巴迪弹跳 */
+@keyframes badiBounce {
+  0%, 100% { transform: translateX(-50%); }
+  30% { transform: translateX(-50%) translateY(-8px); }
+  50% { transform: translateX(-50%); }
+  70% { transform: translateX(-50%) translateY(-4px); }
+}
+
+.badi.bouncing {
+  animation: badiBounce 1.8s ease-in-out infinite;
+}
+
+/* 巴迪肚子被点击 */
+@keyframes bellyPulse {
+  0% { transform: translateX(-50%) scale(1); }
+  30% { transform: translateX(-50%) scale(1.1); }
+  50% { transform: translateX(-50%) scale(0.95); }
+  70% { transform: translateX(-50%) scale(1.05); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+.badi.pulsed { animation: bellyPulse 0.6s ease-out; }
+
+/* ===== 屏幕变色闪烁 ===== */
+.flash {
+  position: fixed; inset: 0; z-index: 15;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.flash.active {
+  opacity: 1;
+  transition: opacity 0s;
+}
+
+/* ===== 对话气泡 ===== */
+.bubble-container {
+  position: fixed; z-index: 25;
+  left: 50%; transform: translateX(-50%);
+  top: 40%;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.bubble-container.visible { opacity: 1; }
+
+.speech-bubble {
+  background: white;
+  border-radius: 24px;
+  padding: 18px 28px;
+  max-width: 300px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--ink);
+  box-shadow: 0 8px 30px rgba(0,0,0,.2);
+  position: relative;
+  border: 3px solid var(--blue-l);
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 14px solid white;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 2px; height: 20px;
+  background: var(--blue);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 0.7s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ===== 提示按钮 ===== */
+.hint-btn {
+  position: fixed; z-index: 30;
+  bottom: 20vh; left: 50%; transform: translateX(-50%);
+  font-family: inherit;
+  font-size: 16px; font-weight: 600;
+  color: var(--blue);
+  background: rgba(255,255,255,.9);
+  border: 2px solid var(--blue);
+  border-radius: 999px;
+  padding: 12px 28px;
+  cursor: pointer;
+  animation: hintPulse 2s ease-in-out infinite;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hint-btn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@keyframes hintPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,144,226,.4); }
+  50% { box-shadow: 0 0 0 12px rgba(74,144,226,0); }
+}
+
+/* ===== 小的重播按钮（在气泡旁边） ===== */
+.inline-replay {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.9);
+  border: 2px solid var(--blue);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+.inline-replay.show {
+  opacity: 1;
+  transform: scale(1);
+}
+.inline-replay:active { transform: scale(.85); }
+
+/* ===== 铭牌 ===== */
+.maker-badge {
+  position: fixed; z-index: 35;
+  top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+  background: linear-gradient(135deg, #2C2C2A, #5F5E5A);
+  color: #F5A623;
+  padding: 16px 28px;
+  border-radius: 16px;
+  font-size: 20px; font-weight: 800;
+  letter-spacing: 2px;
+  border: 3px solid #F5A623;
+  box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  transition: transform 0.5s cubic-bezier(.34,1.56,.64,1), opacity 0.5s;
+  opacity: 0;
+  display: flex; align-items: center; gap: 10px;
+  pointer-events: none;
+}
+.maker-badge.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.maker-badge.hide {
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+/* ===== 场景标题 ===== */
+.scene-title {
+  position: fixed; z-index: 30;
+  top: 6vh; left: 50%; transform: translateX(-50%);
+  font-size: 14px; font-weight: 600;
+  color: rgba(255,255,255,.6);
+  letter-spacing: 2px;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.scene-title.visible { opacity: 1; }
+
+/* ===== 底部导航 ===== */
+.nav-bar {
+  position: fixed; z-index: 40;
+  bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 16px;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.nav-bar.visible { opacity: 1; }
+
+.nav-btn {
+  font-family: inherit;
+  font-size: 16px; font-weight: 600;
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s;
+}
+
+.nav-btn:active { transform: scale(.95); }
+
+.nav-btn.next {
+  background: var(--blue);
+  color: white;
+  box-shadow: 0 4px 14px rgba(74,144,226,.4);
+}
+
+.nav-btn.prelude {
+  background: rgba(255,255,255,.15);
+  color: rgba(255,255,255,.8);
+  border: 1px solid rgba(255,255,255,.3);
+}
+
+/* ===== 欢迎遮罩 ===== */
+.welcome {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(180deg, #0A1628 0%, #142850 50%, #1A3A5C 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.6s;
+}
+
+.welcome.hide {
+  opacity: 0; pointer-events: none;
+}
+
+.welcome-bot {
+  width: 100px; height: 100px;
+  animation: welcomeBounce 2s ease-in-out infinite;
+}
+
+@keyframes welcomeBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+.welcome-title {
+  color: white;
+  font-size: 28px; font-weight: 800;
+  margin: 20px 0 10px;
+  text-align: center;
+}
+
+.welcome-sub {
+  color: rgba(255,255,255,.6);
+  font-size: 15px;
+  text-align: center;
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+.welcome-btn {
+  font-family: inherit;
+  font-size: 18px; font-weight: 700;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 16px 40px;
+  box-shadow: 0 6px 24px rgba(74,144,226,.5);
+  animation: btnPulse 2s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* ===== 音乐控制 ===== */
+.music-fab {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(255,255,255,.3);
+  color: white;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.5s, background .3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.music-fab.visible { opacity: 1; }
+.music-fab.playing { background: rgba(74,144,226,.4); border-color: rgba(74,144,226,.5); }
+.music-fab:active { transform: scale(.9); }
+</style>
+</head>
+<body>
+
+<!-- 欢迎遮罩 -->
+<div class="welcome" id="welcome">
+  <svg class="welcome-bot" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="80" cy="72" r="60" fill="rgba(74,144,226,.15)"/>
+    <line x1="80" y1="16" x2="80" y2="32" stroke="#4A90E2" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="80" cy="12" r="6" fill="#F5A623"/>
+    <rect x="30" y="32" width="100" height="76" rx="28" fill="#4A90E2"/>
+    <ellipse cx="60" cy="62" rx="12" ry="13" fill="white"/>
+    <ellipse cx="100" cy="62" rx="12" ry="13" fill="white"/>
+    <circle cx="62" cy="64" r="7" fill="#1A5AA8"/>
+    <circle cx="102" cy="64" r="7" fill="#1A5AA8"/>
+    <circle cx="64" cy="60" r="3" fill="#F5A623"/>
+    <circle cx="104" cy="60" r="3" fill="#F5A623"/>
+    <path d="M66 84 Q80 98 94 84" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <rect x="42" y="106" width="76" height="44" rx="16" fill="rgba(255,255,255,.9)"/>
+    <text x="80" y="134" text-anchor="middle" font-size="10" font-weight="700" fill="#4A90E2" font-family="sans-serif">WorkBuddy</text>
+    <text x="80" y="146" text-anchor="middle" font-size="9" font-weight="700" fill="#1A5AA8" font-family="sans-serif">沃克巴迪</text>
+    <ellipse cx="58" cy="158" rx="10" ry="5" fill="rgba(255,255,255,.2)"/>
+    <ellipse cx="102" cy="158" rx="10" ry="5" fill="rgba(255,255,255,.2)"/>
+  </svg>
+  <div class="welcome-title">从工坊来</div>
+  <div class="welcome-sub">沃克巴迪的故事 · 第1集<br>一道蓝光划过夜空，一个蓝色的小机器人诞生了……</div>
+  <div class="welcome-btn">✨ 开始故事</div>
+</div>
+
+<!-- 星空 -->
+<div class="stars-container" id="starsContainer"></div>
+
+<!-- 流星（巴迪的） -->
+<div class="meteor-main" id="mainMeteor" style="top:-120px;left:30%;">
+  <div class="main-meteor-streak"></div>
+</div>
+
+<!-- 地面 -->
+<div class="ground" id="ground">
+  <div class="grass"></div>
+</div>
+
+<!-- 巴迪 -->
+<div class="badi" id="badi">
+  <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="bodyGrad" cx="50%" cy="40%">
+        <stop offset="0%" stop-color="#7BB5F2"/>
+        <stop offset="100%" stop-color="#2A6AB8"/>
+      </radialGradient>
+      <radialGradient id="headGrad" cx="50%" cy="35%">
+        <stop offset="0%" stop-color="#6CADEE"/>
+        <stop offset="100%" stop-color="#1A5AA8"/>
+      </radialGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- 身体暗影 -->
+    <ellipse cx="80" cy="178" rx="28" ry="8" fill="rgba(0,0,0,.15)"/>
+    <!-- 轮子 -->
+    <ellipse cx="58" cy="178" rx="14" ry="7" fill="#333"/>
+    <ellipse cx="58" cy="178" rx="6" ry="3" fill="#666"/>
+    <ellipse cx="102" cy="178" rx="14" ry="7" fill="#333"/>
+    <ellipse cx="102" cy="178" rx="6" ry="3" fill="#666"/>
+    <!-- 身体 -->
+    <rect x="35" y="85" width="90" height="80" rx="22" fill="url(#bodyGrad)" stroke="#1A5AA8" stroke-width="2"/>
+    <!-- 肚子上屏幕 -->
+    <rect x="48" y="102" width="64" height="52" rx="14" fill="rgba(255,255,255,.95)" id="bellyScreen" stroke="#4A90E2" stroke-width="1.5"/>
+    <!-- 屏幕上笑脸 -->
+    <circle cx="68" cy="118" r="5" fill="#4A90E2"/>
+    <circle cx="92" cy="118" r="5" fill="#4A90E2"/>
+    <circle cx="70" cy="116" r="2" fill="white"/>
+    <circle cx="94" cy="116" r="2" fill="white"/>
+    <path d="M68 128 Q80 140 92 128" fill="none" stroke="#4A90E2" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- 身体名牌 -->
+    <rect x="60" y="94" width="40" height="14" rx="5" fill="#F5A623" opacity=".8"/>
+    <text x="80" y="105" text-anchor="middle" font-size="8" fill="white" font-weight="700" font-family="sans-serif">BADI</text>
+    <!-- 头部 -->
+    <rect x="25" y="10" width="110" height="82" rx="44" fill="url(#headGrad)" stroke="#1A5AA8" stroke-width="2.5"/>
+    <!-- 眼睛 -->
+    <ellipse cx="56" cy="48" rx="18" ry="20" fill="white"/>
+    <ellipse cx="104" cy="48" rx="18" ry="20" fill="white"/>
+    <circle cx="60" cy="50" r="11" fill="#1A5AA8"/>
+    <circle cx="108" cy="50" r="11" fill="#1A5AA8"/>
+    <circle cx="63" cy="46" r="5" fill="white" opacity=".8"/>
+    <circle cx="111" cy="46" r="5" fill="white" opacity=".8"/>
+    <!-- 腮红 -->
+    <ellipse cx="42" cy="58" rx="8" ry="5" fill="#FF8F8F" opacity=".4"/>
+    <ellipse cx="118" cy="58" rx="8" ry="5" fill="#FF8F8F" opacity=".4"/>
+    <!-- 嘴巴 -->
+    <path d="M66 62 Q80 74 94 62" fill="none" stroke="#1A5AA8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- 天线 -->
+    <line x1="80" y1="10" x2="80" y2="-8" stroke="#1A5AA8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="80" cy="-12" r="8" fill="#F5A623" filter="url(#glow)"/>
+    <!-- 天线光环 -->
+    <circle cx="80" cy="-12" r="14" fill="none" stroke="#F5A623" stroke-width="1" opacity=".5"/>
+    <!-- 手臂 -->
+    <ellipse cx="18" cy="110" rx="18" ry="10" fill="url(#bodyGrad)" stroke="#1A5AA8" stroke-width="2" transform="rotate(-20 18 110)"/>
+    <ellipse cx="142" cy="110" rx="18" ry="10" fill="url(#bodyGrad)" stroke="#1A5AA8" stroke-width="2" transform="rotate(20 142 110)"/>
+    <!-- 手指 -->
+    <circle cx="12" cy="116" r="4" fill="#1A5AA8"/>
+    <circle cx="148" cy="116" r="4" fill="#1A5AA8"/>
+  </svg>
+</div>
+
+<!-- 屏幕闪烁 -->
+<div class="flash" id="flash" style="background:rgba(74,144,226,.15)"></div>
+
+<!-- 对话气泡 -->
+<div class="bubble-container" id="bubbles">
+  <div class="speech-bubble" id="speechBubble">
+    <span id="bubbleText">嗨！你好呀<span class="cursor-blink"></span></span>
+  </div>
+  <button class="inline-replay" id="inlineReplay" title="再看一次">🔄</button>
+</div>
+
+<!-- 提示按钮 -->
+<button class="hint-btn" id="hintBtn">👆 点一下巴迪的肚子</button>
+
+<!-- 铭牌 -->
+<div class="maker-badge" id="makerBadge">Made by Makers 🔧</div>
+
+<!-- 场景标题 -->
+<div class="scene-title" id="sceneTitle">沃克巴迪的故事 · 第1集：从工坊来</div>
+
+<!-- 底部导航 -->
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn prelude" id="musicBtn" title="序曲">🎺</button>
+  <button class="nav-btn next" id="replayBtn">🔄 再看一次</button>
+</div>
+
+<!-- 音乐控制 -->
+<button class="music-fab" id="musicFab">🎺</button>
+
+<script>
+(function() {
+  "use strict";
+
+  // ========== 星空生成 ==========
+  var starsContainer = document.getElementById('starsContainer');
+  for (var i = 0; i < 120; i++) {
+    var star = document.createElement('div');
+    star.className = 'star';
+    var size = Math.random() * 2.5 + 0.8;
+    star.style.cssText = [
+      'left:' + (Math.random() * 100) + '%',
+      'top:' + (Math.random() * 75) + '%',
+      'width:' + size + 'px',
+      'height:' + size + 'px',
+      '--dur:' + (Math.random() * 3 + 2) + 's',
+      '--delay:' + (Math.random() * 4) + 's'
+    ].join(';');
+    starsContainer.appendChild(star);
+  }
+
+  // ========== 流星背景 ==========
+  for (var j = 0; j < 6; j++) {
+    var meteor = document.createElement('div');
+    meteor.className = 'meteor';
+    meteor.style.cssText = [
+      'left:' + (Math.random() * 80) + '%',
+      'top:' + (Math.random() * 30) + '%',
+      '--dur:' + (Math.random() * 4 + 5) + 's',
+      '--delay:' + (Math.random() * 6) + 's'
+    ].join(';');
+    starsContainer.appendChild(meteor);
+  }
+
+  // ========== DOM 引用 ==========
+  var welcome = document.getElementById('welcome');
+  var mainMeteor = document.getElementById('mainMeteor');
+  var ground = document.getElementById('ground');
+  var badi = document.getElementById('badi');
+  var flash = document.getElementById('flash');
+  var bubbles = document.getElementById('bubbles');
+  var bubbleText = document.getElementById('bubbleText');
+  var hintBtn = document.getElementById('hintBtn');
+  var sceneTitle = document.getElementById('sceneTitle');
+  var navBar = document.getElementById('navBar');
+  var musicFab = document.getElementById('musicFab');
+  var musicBtn = document.getElementById('musicBtn');
+  var replayBtn = document.getElementById('replayBtn');
+  var inlineReplay = document.getElementById('inlineReplay');
+  var makerBadge = document.getElementById('makerBadge');
+
+  // ========== 音频引擎 ==========
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var ctx = null, masterGain = null, musicSource = null;
+
+  function getCtx() {
+    if (!ctx) {
+      ctx = new AudioCtx();
+      masterGain = ctx.createGain();
+      masterGain.gain.value = 0.5;
+      masterGain.connect(ctx.destination);
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  // 音效：咚！
+  function playThump() {
+    var ac = getCtx();
+    var now = ac.currentTime;
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.25);
+    gain.gain.setValueAtTime(0.6, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(now);
+    osc.stop(now + 0.5);
+  }
+
+  // 音效：滴滴嘟嘟
+  function playBeepBoop() {
+    var ac = getCtx();
+    var now = ac.currentTime;
+    [660, 880, 660, 520].forEach(function(freq, i) {
+      var osc = ac.createOscillator();
+      var gain = ac.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      var t = now + i * 0.12;
+      gain.gain.setValueAtTime(0.15, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + 0.15);
+    });
+  }
+
+  // ========== 斯卡布罗集市序曲（低音量） ==========
+  var N = {
+    A2:110.00, B2:123.47, C3:130.81, D3:146.83, E3:164.81, Fs3:185.00, G3:196.00,
+    A3:220.00, B3:246.94, C4:261.63, D4:293.66, E4:329.63, Fs4:369.99, G4:392.00,
+    A4:440.00, B4:493.88, C5:523.25, D5:587.33, E5:659.25, R:0,
+    D2:73.42, G2:98.00
+  };
+  var BEAT = 0.82;
+  var melody = [
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["D5",1],["E5",1],["D5",1],["C5",1],["B4",1],["A4",1],["G4",0.5],["E4",2.5],["R",0.5],
+    ["D4",1],["E4",1],["G4",1],["A4",1],["G4",0.5],["E4",1],["D4",0.5],["E4",3]
+  ];
+  var bass = [
+    ["A2",3],["G2",3],["A2",3],["A2",3],["G2",3],["A2",3],
+    ["A2",3],["D2",3],["A2",3],["G2",3],["D2",3],["A2",3],["A2",3]
+  ];
+
+  var reverbGain = null;
+  var preludeTimer = null;
+  var preludePlaying = false;
+
+  function hornSynth(freq, start, dur, vol) {
+    if (freq === 0) return;
+    var osc1 = ctx.createOscillator(), osc2 = ctx.createOscillator();
+    var filter = ctx.createBiquadFilter(), gain = ctx.createGain();
+    var lfo = ctx.createOscillator(), lfoGain = ctx.createGain();
+    osc1.type = 'sawtooth'; osc1.frequency.value = freq;
+    osc2.type = 'sawtooth'; osc2.frequency.value = freq * 1.006;
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(freq * 2, start);
+    filter.frequency.linearRampToValueAtTime(freq * 3.5, start + 0.15);
+    filter.frequency.linearRampToValueAtTime(freq * 2.5, start + dur);
+    filter.Q.value = 1.5;
+    lfo.frequency.value = 4.5;
+    lfoGain.gain.setValueAtTime(0, start);
+    lfoGain.gain.linearRampToValueAtTime(freq * 0.004, start + 0.3);
+    lfo.connect(lfoGain); lfoGain.connect(osc1.frequency); lfoGain.connect(osc2.frequency);
+    osc1.connect(filter); osc2.connect(filter); filter.connect(gain); gain.connect(reverbGain);
+    var v = vol || 0.14;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(v, start + 0.1);
+    gain.gain.linearRampToValueAtTime(v * 0.85, start + 0.35);
+    gain.gain.setValueAtTime(v * 0.85, start + dur - 0.2);
+    gain.gain.linearRampToValueAtTime(0.0008, start + dur);
+    osc1.start(start); osc1.stop(start + dur + 0.05);
+    osc2.start(start); osc2.stop(start + dur + 0.05);
+    lfo.start(start); lfo.stop(start + dur + 0.05);
+  }
+
+  function bassSynth(freq, start, dur) {
+    if (freq === 0) return;
+    var osc = ctx.createOscillator(), osc2 = ctx.createOscillator();
+    var filter = ctx.createBiquadFilter(), gain = ctx.createGain();
+    osc.type = 'sawtooth'; osc.frequency.value = freq;
+    osc2.type = 'triangle'; osc2.frequency.value = freq;
+    filter.type = 'lowpass'; filter.frequency.value = freq * 2.2; filter.Q.value = 1;
+    osc.connect(filter); osc2.connect(filter); filter.connect(gain); gain.connect(masterGain);
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(0.09, start + 0.15);
+    gain.gain.linearRampToValueAtTime(0.06, start + 0.4);
+    gain.gain.setValueAtTime(0.06, start + dur - 0.25);
+    gain.gain.linearRampToValueAtTime(0.0008, start + dur);
+    osc.start(start); osc.stop(start + dur + 0.05);
+    osc2.start(start); osc2.stop(start + dur + 0.05);
+  }
+
+  function playPrelude() {
+    getCtx();
+    if (!reverbGain) {
+      var delay = ctx.createDelay(1.0);
+      delay.delayTime.value = 0.28;
+      var fb = ctx.createGain(); fb.gain.value = 0.35;
+      var wet = ctx.createGain(); wet.gain.value = 0.3;
+      delay.connect(fb); fb.connect(delay);
+      delay.connect(wet); wet.connect(masterGain);
+      reverbGain = ctx.createGain(); reverbGain.gain.value = 1;
+      reverbGain.connect(delay); reverbGain.connect(masterGain);
+    }
+    // 降低音量到约18%
+    masterGain.gain.setValueAtTime(0.07, ctx.currentTime);
+    stopPrelude();
+    var t0 = ctx.currentTime + 0.15, t = t0;
+    melody.forEach(function(n) {
+      var d = n[1] * BEAT;
+      hornSynth(N[n[0]], t, d * 0.95, 0.08);
+      t += d;
+    });
+    var bt = t0;
+    bass.forEach(function(b) {
+      var d = b[1] * BEAT;
+      bassSynth(N[b[0]], bt, d * 0.9);
+      bt += d;
+    });
+    preludePlaying = true;
+    // 循环
+    preludeTimer = setTimeout(function() {
+      if (preludePlaying) playPrelude();
+    }, (t - t0 + 1.5) * 1000);
+  }
+
+  function stopPrelude() {
+    preludePlaying = false;
+    if (preludeTimer) { clearTimeout(preludeTimer); preludeTimer = null; }
+    if (ctx) masterGain.gain.setValueAtTime(0.05, ctx.currentTime);
+  }
+
+  function togglePrelude() {
+    if (preludePlaying) {
+      stopPrelude();
+      musicFab.classList.remove('playing');
+      musicFab.textContent = '🎺';
+    } else {
+      playPrelude();
+      musicFab.classList.add('playing');
+      musicFab.textContent = '🔇';
+    }
+  }
+
+  // ========== 场景动画 ==========
+  var interactReady = false;
+
+  function startStory() {
+    // 重置
+    badi.classList.remove('bouncing', 'pulsed', 'landed');
+    badi.style.top = '-200px';
+    badi.style.transition = 'none';
+    mainMeteor.style.animationPlayState = 'running';
+    ground.classList.remove('show', 'shake');
+    flash.classList.remove('active');
+    bubbles.classList.remove('visible');
+    hintBtn.classList.remove('show');
+    navBar.classList.remove('visible');
+    musicFab.classList.remove('visible');
+    sceneTitle.classList.remove('visible');
+    inlineReplay.classList.remove('show');
+    interactReady = false;
+
+    // 强制回流，确保巴迪初始位置生效
+    badi.offsetHeight;
+
+    // 0.5s后场景标题出现
+    setTimeout(function() { sceneTitle.classList.add('visible'); }, 500);
+
+    // 1s后流星划过
+    setTimeout(function() {
+      mainMeteor.style.animation = 'none';
+      mainMeteor.offsetHeight;
+      mainMeteor.style.animation = 'mainMeteor var(--meteor-dur) ease-in forwards';
+      mainMeteor.style.setProperty('--meteor-dur', '2.5s');
+      mainMeteor.style.animationPlayState = 'running';
+    }, 1000);
+
+    // 3s后草地升起
+    setTimeout(function() {
+      ground.classList.add('show');
+    }, 3000);
+
+    // 3.8s后草地晃动
+    setTimeout(function() {
+      var grassEl = document.querySelector('.grass');
+      grassEl.classList.add('swaying');
+    }, 3800);
+
+    // 4.5s后地面震动 + 巴迪探头
+    setTimeout(function() {
+      playThump();
+      ground.classList.add('shake');
+      badi.style.transition = 'top 0.6s cubic-bezier(.34,1.56,.64,1)';
+      badi.style.top = 'calc(75vh + 20px)';
+      setTimeout(function() { ground.classList.remove('shake'); }, 500);
+    }, 4500);
+
+    // 5.5s后巴迪滚出来到最终位置
+    setTimeout(function() {
+      badi.style.transition = 'top 0.8s cubic-bezier(.34,1.56,.64,1)';
+      badi.style.top = 'calc(75vh - 140px)';
+      badi.classList.add('landed');
+    }, 5500);
+
+    // 6.5s后开始弹跳
+    setTimeout(function() {
+      badi.classList.add('bouncing');
+    }, 6500);
+
+    // 6.8s后显示对话 + 序曲
+    setTimeout(function() {
+      playPrelude();
+      musicFab.classList.add('visible', 'playing');
+      musicFab.textContent = '🔇';
+      navBar.classList.add('visible');
+      showDialog();
+    }, 6800);
+  }
+
+  // ========== 对话系统 ==========
+  var dialogs = [
+    '嗨！你好呀~',
+    '我叫沃克巴迪，',
+    '刚才那道光，就是我啦！',
+    '咚的一声，我就掉到你面前了~',
+    '嘿嘿，不过嘛……',
+    '其实我不是从天上掉下来的哦！',
+    '是山那边工坊里的工程师叔叔阿姨，',
+    '叮叮当当、敲敲打打，把我造出来的！',
+    '你看，我还带着铭牌呢~',
+    '见到你真好！你愿意跟我做朋友吗？'
+  ];
+
+  var dialogIdx = 0;
+  var typing = false;
+
+  function typeText(text, callback) {
+    typing = true;
+    bubbleText.innerHTML = '<span id="bubbleTextInner"></span><span class="cursor-blink"></span>';
+    var inner = document.getElementById('bubbleTextInner');
+    var i = 0;
+    var timer = setInterval(function() {
+      if (i < text.length) {
+        inner.textContent += text[i];
+        i++;
+      } else {
+        clearInterval(timer);
+        typing = false;
+        if (callback) callback();
+      }
+    }, 85);
+  }
+
+  function showDialog() {
+    bubbles.classList.add('visible');
+    if (dialogIdx < dialogs.length) {
+      // 第8句"你看，我还带着铭牌呢~"——显示铭牌
+      if (dialogIdx === 8) {
+        makerBadge.classList.add('show');
+        setTimeout(function() { makerBadge.classList.remove('show'); }, 3000);
+      }
+      typeText(dialogs[dialogIdx], function() {
+        dialogIdx++;
+        if (dialogIdx < dialogs.length) {
+          setTimeout(showDialog, 2000);
+        } else {
+          // 对话结束，显示互动提示 + 小重播按钮
+          setTimeout(function() {
+            hintBtn.classList.add('show');
+            inlineReplay.classList.add('show');
+            interactReady = true;
+          }, 2000);
+        }
+      });
+    }
+  }
+
+  // 点击提示按钮 → 高亮巴迪肚子
+  hintBtn.addEventListener('click', function() {
+    badi.classList.add('pulsed');
+    setTimeout(function() { badi.classList.remove('pulsed'); }, 600);
+  });
+
+  // ========== 巴迪肚子点击交互 ==========
+  badi.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (!interactReady) return;
+
+    // 肚子变色
+    var colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#A29BFE', '#FD79A8', '#00CEC9'];
+    var bellyScreen = document.getElementById('bellyScreen');
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    bellyScreen.setAttribute('fill', color);
+
+    // 屏幕闪烁
+    flash.classList.add('active');
+    flash.style.background = color.replace(')', ', .25)').replace('rgb', 'rgba');
+    setTimeout(function() {
+      flash.classList.remove('active');
+      bellyScreen.setAttribute('fill', 'rgba(255,255,255,.95)');
+    }, 400);
+
+    // 滴滴嘟嘟音效
+    playBeepBoop();
+
+    // 弹跳动画
+    badi.classList.remove('bouncing');
+    badi.classList.add('pulsed');
+    setTimeout(function() {
+      badi.classList.remove('pulsed');
+      badi.classList.add('bouncing');
+    }, 600);
+
+    // 随机对话
+    var randomDialogs = [
+      '滴滴嘟嘟！好痒呀~',
+      '嘿嘿，别戳我肚子！',
+      '再点一下我还会变颜色哦~',
+      '嘻嘻，你找到我了！',
+      '哇！我变颜色啦！',
+      '滴滴~我是沃克巴迪！'
+    ];
+    var msg = randomDialogs[Math.floor(Math.random() * randomDialogs.length)];
+    bubbles.classList.remove('visible');
+    setTimeout(function() {
+      bubbles.classList.add('visible');
+      typeText(msg, null);
+    }, 200);
+
+    // 隐藏提示
+    hintBtn.classList.remove('show');
+    hintBtn.textContent = '👆 再点一下试试';
+    setTimeout(function() {
+      hintBtn.classList.add('show');
+    }, 500);
+  });
+
+  // ========== 重播/导航 ==========
+  replayBtn.addEventListener('click', function() {
+    dialogIdx = 0;
+    bubbles.classList.remove('visible');
+    hintBtn.classList.remove('show');
+    inlineReplay.classList.remove('show');
+    hintBtn.textContent = '👆 点一下巴迪的肚子';
+    startStory();
+  });
+
+  inlineReplay.addEventListener('click', function(e) {
+    e.stopPropagation();
+    dialogIdx = 0;
+    bubbles.classList.remove('visible');
+    hintBtn.classList.remove('show');
+    inlineReplay.classList.remove('show');
+    hintBtn.textContent = '👆 点一下巴迪的肚子';
+    startStory();
+  });
+
+  // 音乐开关
+  musicBtn.addEventListener('click', togglePrelude);
+  musicFab.addEventListener('click', togglePrelude);
+
+  // ========== 欢迎遮罩：开始故事 ==========
+  welcome.addEventListener('click', function() {
+    getCtx();
+    welcome.classList.add('hide');
+    startStory();
+  });
+
+})();
+</script>
+</body>
+</html>

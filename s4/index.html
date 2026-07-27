@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>沃克巴迪的故事 · 第4集：超级英雄的口袋</title>
+<style>
+:root {
+  --blue: #4A90E2; --blue-d: #1A5AA8; --blue-l: #7BB5F2;
+  --gold: #F5A623; --green: #4CD964; --white: #FFFFFF; --ink: #2C2C2A; --muted: #777;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  overflow: hidden; width: 100vw; height: 100vh;
+  background: #FFF8E1;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
+}
+
+/* ===== 场景背景 ===== */
+.scene-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background: linear-gradient(180deg, #FFF5D6 0%, #FFE8B0 40%, #FFD980 80%, #F0C870 100%);
+}
+.scene-bg.knowledge { background: linear-gradient(180deg, #E8F4FF 0%, #D0E8FF 50%, #C0D8F0 100%); }
+.scene-bg.music { background: linear-gradient(180deg, #FFE8F0 0%, #FFD0E4 50%, #F0C8D8 100%); }
+.scene-bg.math { background: linear-gradient(180deg, #E8FFF0 0%, #D0FFE0 50%, #C0F0D0 100%); }
+
+/* ===== 地面 ===== */
+.ground-layer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 2;
+  height: 22vh;
+  background: linear-gradient(0deg, #C8A858 0%, #E0C878 50%, transparent 100%);
+}
+
+/* ===== 巴迪 ===== */
+.badi {
+  position: fixed; z-index: 20;
+  left: 50%; bottom: 16vh;
+  transition: transform 0.5s cubic-bezier(.34,1.56,.64,1);
+  cursor: pointer;
+}
+.badi svg { width: 140px; height: 180px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.25)); }
+@keyframes badiBounce { 0%,100% { transform: translateX(-50%); } 30% { transform: translateX(-50%) translateY(-10px); } 50% { transform: translateX(-50%); } 70% { transform: translateX(-50%) translateY(-5px); } }
+.badi.bouncing { animation: badiBounce 1.8s ease-in-out infinite; }
+@keyframes badiSpin { 0% { transform: translateX(-50%) rotate(0deg); } 100% { transform: translateX(-50%) rotate(360deg); } }
+.badi.spinning { animation: badiSpin 0.8s ease-in-out; }
+@keyframes badiDance { 0%,100% { transform: translateX(-50%); } 25% { transform: translateX(-40%) rotate(-5deg); } 75% { transform: translateX(-60%) rotate(5deg); } }
+.badi.dancing { animation: badiDance 0.6s ease-in-out infinite; }
+
+/* ===== 对话气泡 ===== */
+.bubble-container {
+  position: fixed; z-index: 35;
+  left: 50%; transform: translateX(-50%);
+  top: 8vh;
+  opacity: 0; transition: opacity 0.5s;
+  width: 90vw; max-width: 340px;
+}
+.bubble-container.visible { opacity: 1; }
+.speech-bubble {
+  background: white; border-radius: 20px;
+  padding: 16px 22px; max-width: 300px; margin: 0 auto;
+  text-align: center; font-size: 18px; font-weight: 500;
+  line-height: 1.7; color: var(--ink);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border: 3px solid var(--blue-l);
+}
+.cursor-blink { display: inline-block; width: 2px; height: 20px; background: var(--blue); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.7s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ===== 百宝箱 ===== */
+.treasure-box {
+  position: fixed; z-index: 30;
+  top: 52%; left: 50%; transform: translate(-50%, -50%);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s;
+  width: 88vw; max-width: 360px;
+}
+.treasure-box.visible { opacity: 1; pointer-events: auto; }
+
+/* 箱子 */
+.chest {
+  background: linear-gradient(135deg, #FFD700, #FFA000);
+  border-radius: 24px;
+  padding: 20px 14px 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15), inset 0 2px 0 rgba(255,255,255,.3);
+  position: relative;
+  border: 3px solid #F08000;
+}
+.chest::before {
+  content: ''; position: absolute;
+  top: 4px; left: 8px; right: 8px; height: 10px;
+  background: rgba(255,255,255,.3);
+  border-radius: 10px;
+}
+.chest-label {
+  text-align: center; color: white;
+  font-size: 16px; font-weight: 800;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0,0,0,.2);
+  letter-spacing: 2px;
+}
+
+/* 宝贝网格 */
+.gems-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  justify-items: center;
+}
+
+.gem-item {
+  width: 80px; height: 90px;
+  background: rgba(255,255,255,.9);
+  border-radius: 18px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  animation: gemFloat var(--delay) ease-in-out infinite;
+}
+.gem-item:active { transform: scale(0.9); }
+
+.gem-icon { font-size: 36px; margin-bottom: 2px; }
+.gem-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+.gem-sub { font-size: 10px; color: var(--muted); }
+
+@keyframes gemFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* 弹出的内容卡片 */
+.popup-card {
+  position: fixed; z-index: 38;
+  top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+  background: white;
+  border-radius: 24px;
+  padding: 24px 20px;
+  width: 82vw; max-width: 320px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,.25);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(.34,1.56,.64,1);
+  border: 3px solid var(--blue-l);
+}
+.popup-card.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+
+.popup-icon { font-size: 48px; margin-bottom: 10px; }
+.popup-title { font-size: 20px; font-weight: 800; color: var(--blue-d); margin-bottom: 10px; }
+.popup-content { font-size: 16px; line-height: 1.7; color: var(--ink); margin-bottom: 16px; }
+.popup-action { text-align: center; }
+.popup-close {
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  background: var(--blue); color: white;
+  border: none; border-radius: 999px;
+  padding: 10px 28px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.popup-close:active { transform: scale(.95); }
+
+/* 遮罩 */
+.overlay {
+  position: fixed; inset: 0; z-index: 37;
+  background: rgba(0,0,0,.35);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+.overlay.show { opacity: 1; pointer-events: auto; }
+
+/* ===== 场景标题 ===== */
+.scene-title {
+  position: fixed; z-index: 30;
+  top: 4vh; left: 50%; transform: translateX(-50%);
+  font-size: 14px; font-weight: 700;
+  color: rgba(139,90,0,.5);
+  letter-spacing: 2px;
+  opacity: 0; transition: opacity 1s;
+}
+.scene-title.visible { opacity: 1; }
+
+/* ===== 底部导航 ===== */
+.nav-bar {
+  position: fixed; z-index: 40;
+  bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px;
+  opacity: 0; transition: opacity 0.6s;
+}
+.nav-bar.visible { opacity: 1; }
+.nav-btn {
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  padding: 10px 16px; border-radius: 999px;
+  border: none; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s;
+}
+.nav-btn:active { transform: scale(.95); }
+.nav-btn.replay { background: rgba(255,255,255,.9); color: var(--blue); border: 2px solid var(--blue); }
+.nav-btn.next { background: var(--blue); color: white; box-shadow: 0 4px 14px rgba(74,144,226,.4); }
+.nav-btn.prelude { background: rgba(0,0,0,.08); color: var(--muted); border: 1px solid rgba(0,0,0,.15); }
+
+/* ===== 欢迎遮罩 ===== */
+.welcome {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(180deg, #FFF8E1 0%, #FFE8C0 50%, #FFD980 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer; transition: opacity 0.6s;
+}
+.welcome.hide { opacity: 0; pointer-events: none; }
+.welcome-title { color: #D08000; font-size: 28px; font-weight: 800; margin: 20px 0 10px; text-align: center; }
+.welcome-sub { color: var(--muted); font-size: 15px; text-align: center; line-height: 1.8; margin-bottom: 28px; }
+.welcome-btn {
+  font-family: inherit; font-size: 18px; font-weight: 700;
+  background: var(--gold); color: white;
+  border: none; border-radius: 999px; padding: 16px 40px;
+  box-shadow: 0 6px 24px rgba(245,166,35,.5);
+  animation: btnPulse 2s ease-in-out infinite;
+}
+@keyframes btnPulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.06)} }
+
+/* ===== 音乐控制 ===== */
+.music-fab {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(0,0,0,.06);
+  border: 1px solid rgba(0,0,0,.15);
+  color: var(--muted); font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0;
+  transition: opacity 0.5s, background .3s;
+}
+.music-fab.visible { opacity: 1; }
+.music-fab.playing { background: rgba(245,166,35,.15); border-color: rgba(245,166,35,.3); color: var(--gold); }
+.music-fab:active { transform: scale(.9); }
+
+/* ===== 提示弹窗 ===== */
+.toast {
+  position: fixed; z-index: 60;
+  top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+  background: rgba(0,0,0,.8); color: white;
+  padding: 20px 32px; border-radius: 20px;
+  font-size: 17px; font-weight: 500; text-align: center;
+  opacity: 0; pointer-events: none; transition: all 0.3s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+/* ===== 数学演示 ===== */
+.math-demo {
+  font-size: 22px; font-weight: 700;
+  color: var(--blue-d); margin: 12px 0;
+}
+.math-demo .eq { display: inline-block; margin: 4px 8px; padding: 6px 12px; background: #E8F0FF; border-radius: 10px; }
+
+/* ===== 星星爆炸效果 ===== */
+@keyframes sparkle { from { opacity: 1; transform: scale(0) translateY(0); } to { opacity: 0; transform: scale(1.5) translateY(-40px); } }
+.sparkle {
+  position: fixed; pointer-events: none; z-index: 45;
+  animation: sparkle 1s ease-out forwards;
+}
+</style>
+</head>
+<body>
+
+<!-- 欢迎遮罩 -->
+<div class="welcome" id="welcome">
+  <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" style="width:100px;height:100px;animation:welcomeBounce 2s ease-in-out infinite">
+    <circle cx="80" cy="72" r="60" fill="rgba(245,166,35,.12)"/>
+    <line x1="80" y1="16" x2="80" y2="32" stroke="#F5A623" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="80" cy="12" r="6" fill="#F5A623"/>
+    <rect x="30" y="32" width="100" height="76" rx="28" fill="#4A90E2"/>
+    <ellipse cx="56" cy="62" rx="12" ry="13" fill="white"/>
+    <ellipse cx="104" cy="62" rx="12" ry="13" fill="white"/>
+    <circle cx="58" cy="64" r="7" fill="#1A5AA8"/>
+    <circle cx="106" cy="64" r="7" fill="#1A5AA8"/>
+    <circle cx="60" cy="60" r="3" fill="#F5A623"/>
+    <circle cx="108" cy="60" r="3" fill="#F5A623"/>
+    <path d="M60 76 Q80 92 100 76" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <rect x="42" y="106" width="76" height="44" rx="16" fill="rgba(255,255,255,.9)"/>
+    <text x="80" y="132" text-anchor="middle" font-size="10" font-weight="700" fill="#4A90E2" font-family="sans-serif">WorkBuddy</text>
+    <text x="80" y="144" text-anchor="middle" font-size="9" font-weight="700" fill="#1A5AA8" font-family="sans-serif">沃克巴迪</text>
+  </svg>
+  <div class="welcome-title">超级英雄的口袋</div>
+  <div class="welcome-sub">沃克巴迪的故事 · 第4集<br>巴迪有个神奇的口袋，里面装满了本领！</div>
+  <div class="welcome-btn">✨ 打开口袋</div>
+</div>
+<style>@keyframes welcomeBounce { 0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)} }</style>
+
+<!-- 场景背景 -->
+<div class="scene-bg" id="sceneBg"></div>
+
+<!-- 地面 -->
+<div class="ground-layer"></div>
+
+<!-- 巴迪 -->
+<div class="badi bouncing" id="badi">
+  <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="bodyGrad" cx="50%" cy="40%">
+        <stop offset="0%" stop-color="#7BB5F2"/>
+        <stop offset="100%" stop-color="#2A6AB8"/>
+      </radialGradient>
+      <radialGradient id="headGrad" cx="50%" cy="35%">
+        <stop offset="0%" stop-color="#6CADEE"/>
+        <stop offset="100%" stop-color="#1A5AA8"/>
+      </radialGradient>
+    </defs>
+    <ellipse cx="80" cy="178" rx="28" ry="8" fill="rgba(0,0,0,.12)"/>
+    <ellipse cx="58" cy="178" rx="14" ry="7" fill="#333"/>
+    <ellipse cx="58" cy="178" rx="6" ry="3" fill="#666"/>
+    <ellipse cx="102" cy="178" rx="14" ry="7" fill="#333"/>
+    <ellipse cx="102" cy="178" rx="6" ry="3" fill="#666"/>
+    <rect x="35" y="85" width="90" height="80" rx="22" fill="url(#bodyGrad)" stroke="#1A5AA8" stroke-width="2"/>
+    <rect x="46" y="100" width="68" height="56" rx="14" fill="rgba(255,255,255,.92)" stroke="#1A5AA8" stroke-width="1"/>
+    <!-- 肚子屏幕：超级英雄标志 -->
+    <g id="screenDefault">
+      <circle cx="66" cy="118" r="5.5" fill="#4A90E2"/>
+      <circle cx="94" cy="118" r="5.5" fill="#4A90E2"/>
+      <path d="M66 128 Q80 140 94 128" fill="none" stroke="#4A90E2" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <g id="screenStar" style="display:none;">
+      <polygon points="80,108 83,115 91,115 85,120 87,128 80,124 73,128 75,120 69,115 77,115" fill="#F5A623"/>
+      <text x="80" y="142" text-anchor="middle" font-size="10" fill="#F5A623" font-weight="700" font-family="sans-serif">★</text>
+    </g>
+    <rect x="60" y="94" width="40" height="14" rx="5" fill="#F5A623" opacity=".8"/>
+    <text x="80" y="105" text-anchor="middle" font-size="8" fill="white" font-weight="700" font-family="sans-serif">BADI</text>
+    <rect x="25" y="10" width="110" height="82" rx="44" fill="url(#headGrad)" stroke="#1A5AA8" stroke-width="2.5"/>
+    <g id="badiEyes">
+      <ellipse cx="56" cy="48" rx="18" ry="20" fill="white"/>
+      <ellipse cx="104" cy="48" rx="18" ry="20" fill="white"/>
+      <circle cx="60" cy="50" r="11" fill="#1A5AA8"/>
+      <circle cx="108" cy="50" r="11" fill="#1A5AA8"/>
+      <circle cx="63" cy="46" r="5" fill="white" opacity=".8"/>
+      <circle cx="111" cy="46" r="5" fill="white" opacity=".8"/>
+    </g>
+    <g id="badiWowEyes" style="display:none;">
+      <ellipse cx="56" cy="48" rx="20" ry="22" fill="white"/>
+      <ellipse cx="104" cy="48" rx="20" ry="22" fill="white"/>
+      <circle cx="58" cy="50" r="13" fill="#1A5AA8"/>
+      <circle cx="106" cy="50" r="13" fill="#1A5AA8"/>
+      <circle cx="62" cy="45" r="6" fill="white" opacity=".8"/>
+      <circle cx="110" cy="45" r="6" fill="white" opacity=".8"/>
+    </g>
+    <ellipse cx="42" cy="58" rx="8" ry="5" fill="#FF8F8F" opacity=".4"/>
+    <ellipse cx="118" cy="58" rx="8" ry="5" fill="#FF8F8F" opacity=".4"/>
+    <path id="badiMouth" d="M66 68 Q80 82 94 68" fill="none" stroke="#1A5AA8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="80" y1="10" x2="80" y2="-8" stroke="#1A5AA8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="80" cy="-12" r="8" fill="#F5A623"/>
+  </svg>
+</div>
+
+<!-- 对话气泡 -->
+<div class="bubble-container" id="bubbles">
+  <div class="speech-bubble"><span id="bubbleText">看！这是我的百宝箱！<span class="cursor-blink"></span></span></div>
+</div>
+
+<!-- 百宝箱 -->
+<div class="treasure-box" id="treasureBox">
+  <div class="chest">
+    <div class="chest-label">✨ 巴迪的百宝箱 ✨</div>
+    <div class="gems-grid">
+      <div class="gem-item" id="gemBook" style="--delay: 0s">
+        <div class="gem-icon">📚</div>
+        <div class="gem-name">小博士</div>
+        <div class="gem-sub">随便问</div>
+      </div>
+      <div class="gem-item" id="gemMusic" style="--delay: 0.3s">
+        <div class="gem-icon">🎵</div>
+        <div class="gem-name">小音乐家</div>
+        <div class="gem-sub">唱首歌</div>
+      </div>
+      <div class="gem-item" id="gemCalc" style="--delay: 0.6s">
+        <div class="gem-icon">🔢</div>
+        <div class="gem-name">小算盘</div>
+        <div class="gem-sub">算算术</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 弹出卡片 -->
+<div class="popup-card" id="popupCard">
+  <div class="popup-icon" id="popupIcon"></div>
+  <div class="popup-title" id="popupTitle"></div>
+  <div class="popup-content" id="popupContent"></div>
+  <div class="popup-action">
+    <button class="popup-close" id="popupClose">知道啦 ✓</button>
+  </div>
+</div>
+
+<!-- 遮罩 -->
+<div class="overlay" id="overlay"></div>
+
+<!-- 场景标题 -->
+<div class="scene-title" id="sceneTitle">沃克巴迪的故事 · 第4集：超级英雄的口袋</div>
+
+<!-- 底部导航 -->
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn prelude" id="musicBtn">🎺</button>
+  <button class="nav-btn replay" id="replayBtn">🔄 再看一次</button>
+  <button class="nav-btn next" id="nextBtn">▶ 下一集</button>
+</div>
+
+<!-- 音乐控制 -->
+<button class="music-fab" id="musicFab">🎺</button>
+
+<!-- 提示弹窗 -->
+<div class="toast" id="toast">第5集即将上线，敬请期待~</div>
+
+<script>
+(function() {
+  "use strict";
+
+  var welcome = document.getElementById('welcome');
+  var sceneBg = document.getElementById('sceneBg');
+  var badi = document.getElementById('badi');
+  var bubbles = document.getElementById('bubbles');
+  var bubbleText = document.getElementById('bubbleText');
+  var treasureBox = document.getElementById('treasureBox');
+  var popupCard = document.getElementById('popupCard');
+  var popupIcon = document.getElementById('popupIcon');
+  var popupTitle = document.getElementById('popupTitle');
+  var popupContent = document.getElementById('popupContent');
+  var popupClose = document.getElementById('popupClose');
+  var overlay = document.getElementById('overlay');
+  var sceneTitle = document.getElementById('sceneTitle');
+  var navBar = document.getElementById('navBar');
+  var musicFab = document.getElementById('musicFab');
+  var musicBtn = document.getElementById('musicBtn');
+  var replayBtn = document.getElementById('replayBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var toast = document.getElementById('toast');
+  var badiMouth = document.getElementById('badiMouth');
+  var screenDefault = document.getElementById('screenDefault');
+  var screenStar = document.getElementById('screenStar');
+
+  // ========== 音频 ==========
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var ctx = null, masterGain = null;
+  function getCtx() {
+    if (!ctx) { ctx = new AudioCtx(); masterGain = ctx.createGain(); masterGain.gain.value = 0.5; masterGain.connect(ctx.destination); }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  function playBeep(freq, dur, vol, type, delay) {
+    var ac = getCtx();
+    var now = ac.currentTime + (delay||0);
+    var osc = ac.createOscillator(), gain = ac.createGain();
+    osc.type = type || 'square'; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol||0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+(dur||0.15));
+    osc.connect(gain); gain.connect(masterGain);
+    osc.start(now); osc.stop(now+(dur||0.15));
+  }
+
+  // 知识音效（明亮的叮）
+  function playKnowledgeSound() {
+    [523, 659, 784, 1047].forEach(function(f, i) {
+      playBeep(f, 0.3, 0.1, 'sine', i * 0.12);
+    });
+  }
+
+  // 音乐音效（简单儿歌旋律）
+  function playMusicClip() {
+    var notes = [392, 440, 494, 523, 494, 440, 392, 330];
+    notes.forEach(function(f, i) {
+      playBeep(f, 0.25, 0.08, 'triangle', i * 0.2);
+    });
+  }
+
+  // 算算术音效（滴滴滴）
+  function playCalcSound() {
+    [800, 1000, 1200].forEach(function(f, i) {
+      playBeep(f, 0.15, 0.09, 'square', i * 0.15);
+    });
+  }
+
+  // ========== 斯卡布罗集市 ==========
+  var N = {
+    A2:110,B2:123.47,C3:130.81,D3:146.83,E3:164.81,Fs3:185,G3:196,
+    A3:220,B3:246.94,C4:261.63,D4:293.66,E4:329.63,Fs4:369.99,G4:392,
+    A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25,R:0,D2:73.42,G2:98
+  };
+  var BEAT = 0.82;
+  var melody = [
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["D5",1],["E5",1],["D5",1],["C5",1],["B4",1],["A4",1],["G4",0.5],["E4",2.5],["R",0.5],
+    ["D4",1],["E4",1],["G4",1],["A4",1],["G4",0.5],["E4",1],["D4",0.5],["E4",3]
+  ];
+  var bass = [
+    ["A2",3],["G2",3],["A2",3],["A2",3],["G2",3],["A2",3],
+    ["A2",3],["D2",3],["A2",3],["G2",3],["D2",3],["A2",3],["A2",3]
+  ];
+  var reverbGain=null,preludeTimer=null,preludePlaying=false;
+
+  function hornSynth(freq, start, dur, vol) {
+    if (freq===0||!ctx) return;
+    var o1=ctx.createOscillator(),o2=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain(),l=ctx.createOscillator(),lg=ctx.createGain();
+    o1.type='sawtooth';o1.frequency.value=freq;o2.type='sawtooth';o2.frequency.value=freq*1.006;
+    f.type='lowpass';f.frequency.setValueAtTime(freq*2,start);f.frequency.linearRampToValueAtTime(freq*3.5,start+.15);f.frequency.linearRampToValueAtTime(freq*2.5,start+dur);f.Q.value=1.5;
+    l.frequency.value=4.5;lg.gain.setValueAtTime(0,start);lg.gain.linearRampToValueAtTime(freq*.004,start+.3);
+    l.connect(lg);lg.connect(o1.frequency);lg.connect(o2.frequency);o1.connect(f);o2.connect(f);f.connect(g);g.connect(reverbGain);
+    var v=vol||.14;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(v,start+.1);g.gain.linearRampToValueAtTime(v*.85,start+.35);g.gain.setValueAtTime(v*.85,start+dur-.2);g.gain.linearRampToValueAtTime(.0008,start+dur);
+    o1.start(start);o1.stop(start+dur+.05);o2.start(start);o2.stop(start+dur+.05);l.start(start);l.stop(start+dur+.05);
+  }
+
+  function bassSynth(freq, start, dur) {
+    if (freq===0||!ctx) return;
+    var o=ctx.createOscillator(),o2=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();
+    o.type='sawtooth';o.frequency.value=freq;o2.type='triangle';o2.frequency.value=freq;
+    f.type='lowpass';f.frequency.value=freq*2.2;f.Q.value=1;
+    o.connect(f);o2.connect(f);f.connect(g);g.connect(masterGain);
+    g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(.07,start+.08);g.gain.setValueAtTime(.07,start+dur-.2);g.gain.exponentialRampToValueAtTime(.0008,start+dur);
+    o.start(start);o.stop(start+dur+.05);o2.start(start);o2.stop(start+dur+.05);
+  }
+
+  function playPrelude() {
+    if (preludePlaying||!ctx) return; preludePlaying=true; getCtx();
+    if (!reverbGain) {
+      var con=ctx.createConvolver(),rate=ctx.sampleRate,len=Math.round(rate*.45),buf=ctx.createBuffer(2,len,rate);
+      for(var ch=0;ch<2;ch++){var d=buf.getChannelData(ch);for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(rate*.18));}
+      con.buffer=buf;var wet=ctx.createGain();wet.gain.value=.28;var dry=ctx.createGain();dry.gain.value=.8;
+      reverbGain=ctx.createGain();reverbGain.connect(dry);reverbGain.connect(con);con.connect(wet);dry.connect(masterGain);wet.connect(masterGain);
+    }
+    masterGain.gain.setValueAtTime(.07,ctx.currentTime);
+    var t=ctx.currentTime,mt=0,bt=0;
+    for(var i=0;i<melody.length;i++){var f=N[melody[i][0]],d=melody[i][1]*BEAT;if(f>0)hornSynth(f,t+mt,d);mt+=d;}
+    for(var j=0;j<bass.length;j++){var bf=N[bass[j][0]],bd=bass[j][1]*BEAT;if(bf>0)bassSynth(bf,t+bt,bd);bt+=bd;}
+    var total=Math.max(mt,bt);preludeTimer=setTimeout(function(){preludePlaying=false;},total*1000+500);
+  }
+
+  function stopPrelude() { if(preludeTimer){clearTimeout(preludeTimer);preludeTimer=null;} preludePlaying=false; }
+
+  // ========== 星星特效 ==========
+  function sparkleAt(x, y) {
+    var el = document.createElement('div');
+    el.className = 'sparkle';
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.textContent = ['★', '✦', '✨', '💫'][Math.floor(Math.random() * 4)];
+    el.style.fontSize = (Math.random() * 16 + 14) + 'px';
+    document.body.appendChild(el);
+    setTimeout(function() { el.remove(); }, 1000);
+  }
+
+  // ========== 弹出卡片 ==========
+  function showPopup(icon, title, content, soundFn) {
+    popupIcon.textContent = icon;
+    popupTitle.textContent = title;
+    popupContent.innerHTML = content;
+    overlay.classList.add('show');
+    popupCard.classList.add('show');
+    if (soundFn) soundFn();
+
+    // 撒星星
+    for (var i = 0; i < 8; i++) {
+      setTimeout(function() {
+        sparkleAt(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.6);
+      }, i * 80);
+    }
+
+    // 巴迪反应
+    badi.classList.add('spinning');
+    screenDefault.style.display = 'none';
+    screenStar.style.display = 'block';
+    setTimeout(function() { badi.classList.remove('spinning'); }, 800);
+  }
+
+  function hidePopup() {
+    overlay.classList.remove('show');
+    popupCard.classList.remove('show');
+    screenDefault.style.display = 'block';
+    screenStar.style.display = 'none';
+  }
+
+  overlay.addEventListener('click', hidePopup);
+  popupClose.addEventListener('click', hidePopup);
+
+  // ========== 百宝箱点击 ==========
+  document.getElementById('gemBook').addEventListener('click', function() {
+    showPopup('📚', '小博士 · 知识',
+      '你知道为什么天是蓝色的吗？<br><br>因为太阳光里有七彩颜色，蓝色光最调皮，在大气里跳来跳去，把整个天空都染蓝啦！<br><br>🌤️ 巴迪什么都知道哦~',
+      playKnowledgeSound);
+  });
+
+  document.getElementById('gemMusic').addEventListener('click', function() {
+    showPopup('🎵', '小音乐家 · 才艺',
+      '巴迪会唱好多歌！<br><br>一闪一闪亮晶晶，<br>满天都是小星星~<br><br>🎶 你想听这首歌吗？<br>巴迪可以唱给你听哦！',
+      playMusicClip);
+  });
+
+  document.getElementById('gemCalc').addEventListener('click', function() {
+    showPopup('🔢', '小算盘 · 算术',
+      '巴迪算数可快了！<br><br><span style="font-size:22px;font-weight:700;color:#1A5AA8;">2 + 3 = 5</span><br><span style="font-size:22px;font-weight:700;color:#1A5AA8;">8 - 3 = 5</span><br><br>🧮 有什么算不出来的，就问巴迪！',
+      playCalcSound);
+  });
+
+  // ========== 对话框 ==========
+var dialogs = [
+  "看！这是我的百宝箱！",
+  "是工程师叔叔阿姨帮我装好的",
+  "里面装着我所有的本领呢",
+  "点一点上面的宝贝",
+  "看看我能帮你做什么！"
+];
+var dialogIdx = 0;
+
+function showDialog() {
+  if (dialogIdx >= dialogs.length) {
+    treasureBox.classList.add('visible');
+    return;
+  }
+  bubbles.classList.add('visible');
+  bubbleText.innerHTML = '<span id="typingSpan"></span><span class="cursor-blink"></span>';
+  var span = document.getElementById('typingSpan');
+  var text = dialogs[dialogIdx], i = 0;
+  function type() {
+    if (i < text.length) { span.textContent += text[i]; i++; setTimeout(type, 80); }
+    else {
+      dialogIdx++;
+      setTimeout(function() { bubbles.classList.remove('visible'); setTimeout(showDialog, 1800); }, 1800);
+    }
+  }
+  type();
+}
+
+  // ========== 故事流程 ==========
+  function startStory() {
+    bubbles.classList.remove('visible');
+    treasureBox.classList.remove('visible');
+    hidePopup();
+    sceneBg.className = 'scene-bg';
+    navBar.classList.remove('visible');
+    musicFab.classList.remove('visible');
+    sceneTitle.classList.remove('visible');
+    dialogIdx = 0;
+    badi.classList.add('bouncing');
+
+    setTimeout(function() {
+      sceneTitle.classList.add('visible');
+      playPrelude();
+      musicFab.classList.add('visible', 'playing');
+      navBar.classList.add('visible');
+    }, 500);
+
+    setTimeout(showDialog, 1200);
+  }
+
+  welcome.addEventListener('click', function() {
+    welcome.classList.add('hide');
+    setTimeout(startStory, 400);
+  });
+
+  // ========== 导航 ==========
+  replayBtn.addEventListener('click', function() {
+    stopPrelude();
+    musicFab.classList.remove('visible', 'playing');
+    startStory();
+  });
+
+  nextBtn.addEventListener('click', function() {
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2000);
+  });
+
+  var musicOn = true;
+  musicFab.addEventListener('click', function() {
+    musicOn = !musicOn;
+    if (musicOn) { musicFab.classList.add('playing'); if(ctx) masterGain.gain.value = .07; }
+    else { musicFab.classList.remove('playing'); if(ctx) masterGain.gain.value = 0; }
+  });
+  musicBtn.addEventListener('click', function() {
+    musicOn = !musicOn;
+    if (musicOn) { musicFab.classList.add('playing'); if(ctx) masterGain.gain.value = .07; }
+    else { musicFab.classList.remove('playing'); if(ctx) masterGain.gain.value = 0; }
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>沃克巴迪的故事 · 第3集：悄悄话密码</title>
+<style>
+:root {
+  --blue: #4A90E2; --blue-d: #1A5AA8; --blue-l: #7BB5F2;
+  --gold: #F5A623; --green: #4CD964; --red: #FF4A4A;
+  --white: #FFFFFF; --ink: #2C2C2A; --muted: #777;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  overflow: hidden; width: 100vw; height: 100vh;
+  background: #F0F4F8;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
+}
+
+/* ===== 场景背景 ===== */
+.scene-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background: linear-gradient(180deg, #E8F0FE 0%, #D0E4FA 40%, #F0F4F8 100%);
+  transition: background 0.8s;
+}
+.scene-bg.dim { background: linear-gradient(180deg, #D0D8E0 0%, #B8C8D8 60%, #D8E0E8 100%); }
+.scene-bg.warm { background: linear-gradient(180deg, #FFE8C8 0%, #FFD8A8 40%, #FFF0E0 100%); }
+
+/* ===== 草地 ===== */
+.ground-layer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 2;
+  height: 25vh;
+  background: linear-gradient(0deg, #2A5A2A 0%, #4A8A4A 60%, transparent 100%);
+}
+.grass-top {
+  position: absolute; top: -10px; left: 0; right: 0; height: 18px;
+  background: repeating-linear-gradient(
+    90deg, transparent 0px, transparent 8px,
+    #6AAA6A 8px, #6AAA6A 13px
+  );
+  clip-path: polygon(
+    0% 100%, 4% 40%, 8% 100%, 12% 30%, 16% 100%,
+    20% 45%, 24% 100%, 28% 25%, 32% 100%, 36% 50%,
+    40% 100%, 44% 35%, 48% 100%, 52% 20%, 56% 100%,
+    60% 48%, 64% 100%, 68% 28%, 72% 100%, 76% 55%,
+    80% 100%, 84% 38%, 88% 100%, 92% 32%, 96% 100%,
+    100% 42%, 100% 100%
+  );
+}
+
+/* ===== 巴迪角色 ===== */
+.badi {
+  position: fixed; z-index: 20;
+  left: 50%; bottom: 18vh;
+  transition: transform 0.5s cubic-bezier(.34,1.56,.64,1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.badi svg { width: 130px; height: 170px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.3)); }
+
+/* 巴迪弹跳 */
+@keyframes badiBounce {
+  0%, 100% { transform: translateX(-50%); }
+  30% { transform: translateX(-50%) translateY(-10px); }
+  50% { transform: translateX(-50%); }
+  70% { transform: translateX(-50%) translateY(-5px); }
+}
+.badi.bouncing { animation: badiBounce 1.8s ease-in-out infinite; }
+
+/* 巴迪震惊（左右晃） */
+@keyframes badiShock {
+  0%, 100% { transform: translateX(-50%); }
+  20% { transform: translateX(-40%); }
+  40% { transform: translateX(-60%); }
+  60% { transform: translateX(-45%); }
+  80% { transform: translateX(-55%); }
+}
+.badi.shocking { animation: badiShock 0.6s ease-in-out; }
+
+/* 巴迪开心跳 */
+@keyframes badiHappy {
+  0%, 100% { transform: translateX(-50%); }
+  30% { transform: translateX(-50%) translateY(-16px); }
+  50% { transform: translateX(-50%) translateY(0); }
+  70% { transform: translateX(-50%) translateY(-8px); }
+}
+.badi.happy-jump { animation: badiHappy 1s ease-in-out; }
+
+/* ===== 对话气泡 ===== */
+.bubble-container {
+  position: fixed; z-index: 35;
+  left: 50%; transform: translateX(-50%);
+  top: 10vh;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  opacity: 0; transition: opacity 0.5s;
+  width: 90vw; max-width: 340px;
+}
+.bubble-container.visible { opacity: 1; }
+
+.speech-bubble {
+  background: white; border-radius: 20px;
+  padding: 16px 22px; max-width: 300px;
+  text-align: center; font-size: 18px; font-weight: 500;
+  line-height: 1.7; color: var(--ink);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  position: relative; border: 3px solid var(--blue-l);
+}
+.speech-bubble::after {
+  content: ''; position: absolute;
+  bottom: -12px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid white;
+}
+.cursor-blink {
+  display: inline-block; width: 2px; height: 20px;
+  background: var(--blue); margin-left: 2px;
+  vertical-align: text-bottom; animation: blink 0.7s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ===== 对比卡片区 ===== */
+.compare-zone {
+  position: fixed; z-index: 25;
+  top: 36vh; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 16px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s;
+  width: 92vw; max-width: 400px;
+  justify-content: center;
+}
+.compare-zone.visible { opacity: 1; pointer-events: auto; }
+
+.compare-card {
+  flex: 1; max-width: 180px;
+  background: white; border-radius: 20px;
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative; overflow: hidden;
+}
+.compare-card:active { transform: scale(0.95); }
+.compare-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.14); }
+
+.compare-card .card-icon {
+  font-size: 44px; margin-bottom: 6px;
+  transition: transform 0.3s;
+}
+.compare-card:active .card-icon { transform: scale(1.15); }
+
+.compare-card .card-title {
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.compare-card .card-sub {
+  font-size: 12px; color: var(--muted);
+}
+
+.card-vague { border: 3px solid #FFB8B8; }
+.card-vague .card-title { color: var(--red); }
+
+.card-clear { border: 3px solid #B8E8B8; }
+.card-clear .card-title { color: #2A8A2A; }
+
+/* 卡片脉冲提示 */
+@keyframes cardPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(74,144,226,.3); } 50% { box-shadow: 0 0 0 14px rgba(74,144,226,0); } }
+.card-hint { animation: cardPulse 2.2s ease-in-out infinite; }
+
+/* ===== 场景标题 ===== */
+.scene-title {
+  position: fixed; z-index: 30;
+  top: 4vh; left: 50%; transform: translateX(-50%);
+  font-size: 14px; font-weight: 700;
+  color: rgba(74,144,226,.65);
+  letter-spacing: 2px;
+  opacity: 0; transition: opacity 1s;
+}
+.scene-title.visible { opacity: 1; }
+
+/* ===== 底部导航 ===== */
+.nav-bar {
+  position: fixed; z-index: 40;
+  bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px;
+  opacity: 0; transition: opacity 0.6s;
+}
+.nav-bar.visible { opacity: 1; }
+
+.nav-btn {
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  padding: 10px 16px; border-radius: 999px;
+  border: none; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s;
+}
+.nav-btn:active { transform: scale(.95); }
+
+.nav-btn.replay { background: rgba(255,255,255,.9); color: var(--blue); border: 2px solid var(--blue); }
+.nav-btn.next { background: var(--blue); color: white; box-shadow: 0 4px 14px rgba(74,144,226,.4); }
+.nav-btn.prelude { background: rgba(0,0,0,.08); color: var(--muted); border: 1px solid rgba(0,0,0,.15); }
+
+/* ===== 欢迎遮罩 ===== */
+.welcome {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(180deg, #E8F0FE 0%, #D0E4FA 50%, #F0F4F8 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer; transition: opacity 0.6s;
+}
+.welcome.hide { opacity: 0; pointer-events: none; }
+.welcome-title { color: var(--blue-d); font-size: 28px; font-weight: 800; margin: 20px 0 10px; text-align: center; }
+.welcome-sub { color: var(--muted); font-size: 15px; text-align: center; line-height: 1.8; margin-bottom: 28px; }
+.welcome-btn {
+  font-family: inherit; font-size: 18px; font-weight: 700;
+  background: var(--blue); color: white;
+  border: none; border-radius: 999px; padding: 16px 40px;
+  box-shadow: 0 6px 24px rgba(74,144,226,.5);
+  animation: btnPulse 2s ease-in-out infinite;
+}
+@keyframes btnPulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.06)} }
+
+/* ===== 音乐控制 ===== */
+.music-fab {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(0,0,0,.06);
+  border: 1px solid rgba(0,0,0,.15);
+  color: var(--muted); font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0;
+  transition: opacity 0.5s, background .3s;
+  -webkit-tap-highlight-color: transparent;
+}
+.music-fab.visible { opacity: 1; }
+.music-fab.playing { background: rgba(74,144,226,.15); border-color: rgba(74,144,226,.3); color: var(--blue); }
+.music-fab:active { transform: scale(.9); }
+
+/* ===== 提示弹窗 ===== */
+.toast {
+  position: fixed; z-index: 60;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: rgba(0,0,0,.8); color: white;
+  padding: 20px 32px; border-radius: 20px;
+  font-size: 17px; font-weight: 500; text-align: center;
+  opacity: 0; pointer-events: none;
+  transition: all 0.3s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+/* ===== 结果展示区 ===== */
+.result-area {
+  position: fixed; z-index: 26;
+  top: 62vh; left: 50%; transform: translateX(-50%);
+  text-align: center;
+  opacity: 0; transition: opacity 0.5s;
+  width: 85vw; max-width: 320px;
+}
+.result-area.show { opacity: 1; }
+.result-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: white; border-radius: 14px;
+  padding: 8px 16px; margin: 4px;
+  font-size: 16px; font-weight: 600;
+  box-shadow: 0 3px 10px rgba(0,0,0,.08);
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+}
+.result-item.wrong { border: 2px solid var(--red); color: var(--red); }
+.result-item.right { border: 2px solid var(--green); color: #2A8A2A; }
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ===== 小字提示 ===== */
+.tip-text {
+  position: fixed; z-index: 27;
+  bottom: 12vh; left: 50%; transform: translateX(-50%);
+  font-size: 14px; color: rgba(74,144,226,.6);
+  text-align: center; opacity: 0;
+  transition: opacity 0.6s;
+  pointer-events: none;
+}
+.tip-text.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- 欢迎遮罩 -->
+<div class="welcome" id="welcome">
+  <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" style="width:100px;height:100px;animation:welcomeBounce 2s ease-in-out infinite">
+    <circle cx="80" cy="72" r="60" fill="rgba(74,144,226,.1)"/>
+    <line x1="80" y1="16" x2="80" y2="32" stroke="#4A90E2" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="80" cy="12" r="6" fill="#F5A623"/>
+    <rect x="30" y="32" width="100" height="76" rx="28" fill="#4A90E2"/>
+    <ellipse cx="56" cy="62" rx="12" ry="13" fill="white"/>
+    <ellipse cx="104" cy="62" rx="12" ry="13" fill="white"/>
+    <circle cx="58" cy="64" r="7" fill="#1A5AA8"/>
+    <circle cx="106" cy="64" r="7" fill="#1A5AA8"/>
+    <circle cx="60" cy="60" r="3" fill="#F5A623"/>
+    <circle cx="108" cy="60" r="3" fill="#F5A623"/>
+    <circle cx="67" cy="68" r="4" fill="white" opacity=".6"/>
+    <circle cx="93" cy="68" r="4" fill="white" opacity=".6"/>
+    <circle cx="68" cy="82" r="7" fill="white"/>
+    <path d="M62 82 Q70 76 76 82 Q80 78 86 82 Q90 76 98 82" fill="none" stroke="#1A5AA8" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="42" y="106" width="76" height="44" rx="16" fill="rgba(255,255,255,.9)"/>
+    <text x="80" y="132" text-anchor="middle" font-size="10" font-weight="700" fill="#4A90E2" font-family="sans-serif">WorkBuddy</text>
+    <text x="80" y="144" text-anchor="middle" font-size="9" font-weight="700" fill="#1A5AA8" font-family="sans-serif">沃克巴迪</text>
+  </svg>
+  <div class="welcome-title">悄悄话密码</div>
+  <div class="welcome-sub">沃克巴迪的故事 · 第3集<br>怎么跟巴迪说话，它才听得懂呢？</div>
+  <div class="welcome-btn">✨ 开始故事</div>
+</div>
+<style>
+@keyframes welcomeBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+</style>
+
+<!-- 场景背景 -->
+<div class="scene-bg" id="sceneBg"></div>
+
+<!-- 草地 -->
+<div class="ground-layer">
+  <div class="grass-top"></div>
+</div>
+
+<!-- 巴迪 -->
+<div class="badi" id="badi">
+  <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="bodyGrad" cx="50%" cy="40%">
+        <stop offset="0%" stop-color="#7BB5F2"/>
+        <stop offset="100%" stop-color="#2A6AB8"/>
+      </radialGradient>
+      <radialGradient id="headGrad" cx="50%" cy="35%">
+        <stop offset="0%" stop-color="#6CADEE"/>
+        <stop offset="100%" stop-color="#1A5AA8"/>
+      </radialGradient>
+    </defs>
+    <!-- 身体阴影 -->
+    <ellipse cx="80" cy="178" rx="28" ry="8" fill="rgba(0,0,0,.12)"/>
+    <!-- 轮子 -->
+    <ellipse cx="58" cy="178" rx="14" ry="7" fill="#333"/>
+    <ellipse cx="58" cy="178" rx="6" ry="3" fill="#666"/>
+    <ellipse cx="102" cy="178" rx="14" ry="7" fill="#333"/>
+    <ellipse cx="102" cy="178" rx="6" ry="3" fill="#666"/>
+    <!-- 身体 -->
+    <rect x="35" y="85" width="90" height="80" rx="22" fill="url(#bodyGrad)" stroke="#1A5AA8" stroke-width="2"/>
+    <!-- 肚子屏幕 -->
+    <rect x="46" y="100" width="68" height="56" rx="14" fill="rgba(255,255,255,.92)" stroke="#1A5AA8" stroke-width="1"/>
+    <!-- 默认笑脸（隐藏，用display控制） -->
+    <g id="screenFace" style="display:block;">
+      <circle cx="66" cy="118" r="6" fill="#4A90E2"/>
+      <circle cx="94" cy="118" r="6" fill="#4A90E2"/>
+      <path d="M66 130 Q80 142 94 130" fill="none" stroke="#4A90E2" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- 问号脸（隐藏） -->
+    <g id="screenConfused" style="display:none;">
+      <circle cx="66" cy="116" r="6" fill="#F5A623"/>
+      <circle cx="94" cy="116" r="6" fill="#F5A623"/>
+      <path d="M66 132 Q80 124 94 132" fill="none" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+      <text x="80" y="148" text-anchor="middle" font-size="18" font-weight="700" fill="#F5A623" font-family="sans-serif">?</text>
+    </g>
+    <!-- 大笑脸（隐藏） -->
+    <g id="screenHappy" style="display:none;">
+      <circle cx="66" cy="118" r="7" fill="#4CD964"/>
+      <circle cx="94" cy="118" r="7" fill="#4CD964"/>
+      <path d="M60 126 Q80 148 100 126 Q80 138 60 126 Z" fill="#4CD964"/>
+      <path d="M60 126 Q80 136 100 126" fill="white" opacity=".3"/>
+    </g>
+    <!-- 身体名牌 -->
+    <rect x="60" y="94" width="40" height="14" rx="5" fill="#F5A623" opacity=".8"/>
+    <text x="80" y="105" text-anchor="middle" font-size="8" fill="white" font-weight="700" font-family="sans-serif">BADI</text>
+    <!-- 头部 -->
+    <rect x="25" y="10" width="110" height="82" rx="44" fill="url(#headGrad)" stroke="#1A5AA8" stroke-width="2.5"/>
+    <!-- 眼睛（默认正常） -->
+    <g id="badiEyes">
+      <ellipse cx="56" cy="48" rx="18" ry="20" fill="white"/>
+      <ellipse cx="104" cy="48" rx="18" ry="20" fill="white"/>
+      <circle cx="60" cy="50" r="11" fill="#1A5AA8"/>
+      <circle cx="108" cy="50" r="11" fill="#1A5AA8"/>
+      <circle cx="63" cy="46" r="5" fill="white" opacity=".8"/>
+      <circle cx="111" cy="46" r="5" fill="white" opacity=".8"/>
+    </g>
+    <!-- 困惑眼睛（隐藏） -->
+    <g id="badiConfusedEyes" style="display:none;">
+      <ellipse cx="56" cy="48" rx="18" ry="20" fill="white"/>
+      <ellipse cx="104" cy="48" rx="18" ry="20" fill="white"/>
+      <circle cx="56" cy="48" r="8" fill="#1A5AA8"/>
+      <circle cx="104" cy="48" r="8" fill="#1A5AA8"/>
+      <text x="48" y="55" font-size="14" fill="white" font-family="sans-serif" font-weight="700">?</text>
+    </g>
+    <!-- 开心眼睛（弯月，隐藏） -->
+    <g id="badiHappyEyes" style="display:none;">
+      <path d="M42 52 Q56 38 70 52" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M90 52 Q104 38 118 52" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+    <!-- 腮红 -->
+    <ellipse cx="42" cy="58" rx="8" ry="5" fill="#FF8F8F" opacity=".4"/>
+    <ellipse cx="118" cy="58" rx="8" ry="5" fill="#FF8F8F" opacity=".4"/>
+    <!-- 嘴巴 -->
+    <path id="badiMouth" d="M66 68 Q80 80 94 68" fill="none" stroke="#1A5AA8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- 天线 -->
+    <line x1="80" y1="10" x2="80" y2="-8" stroke="#1A5AA8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="80" cy="-12" r="8" fill="#F5A623" id="antennaBall"/>
+  </svg>
+</div>
+
+<!-- 对话气泡 -->
+<div class="bubble-container" id="bubbles">
+  <div class="speech-bubble"><span id="bubbleText">小朋友，你知道怎么跟我说话吗？<span class="cursor-blink"></span></span></div>
+</div>
+
+<!-- 对比卡片 -->
+<div class="compare-zone" id="compareZone">
+  <div class="compare-card card-vague card-hint" id="cardVague">
+    <div class="card-icon">🤔</div>
+    <div class="card-title">模糊指令</div>
+    <div class="card-sub">"拿东西"<br>巴迪会听错哦!</div>
+  </div>
+  <div class="compare-card card-clear card-hint" id="cardClear">
+    <div class="card-icon">😊</div>
+    <div class="card-title">清晰指令</div>
+    <div class="card-sub">"帮我拿苹果"<br>巴迪马上明白!</div>
+  </div>
+</div>
+
+<!-- 结果展示 -->
+<div class="result-area" id="resultArea"></div>
+
+<!-- 底部提示 -->
+<div class="tip-text" id="tipText">记住啦：说得越清楚，巴迪越聪明！</div>
+
+<!-- 场景标题 -->
+<div class="scene-title" id="sceneTitle">沃克巴迪的故事 · 第3集：悄悄话密码</div>
+
+<!-- 底部导航 -->
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn prelude" id="musicBtn" title="序曲">🎺</button>
+  <button class="nav-btn replay" id="replayBtn">🔄 再看一次</button>
+  <button class="nav-btn next" id="nextBtn">▶ 下一集</button>
+</div>
+
+<!-- 音乐控制 -->
+<button class="music-fab" id="musicFab">🎺</button>
+
+<!-- 提示弹窗 -->
+<div class="toast" id="toast">第4集即将上线，敬请期待~</div>
+
+<script>
+(function() {
+  "use strict";
+
+  // ========== DOM ==========
+  var welcome = document.getElementById('welcome');
+  var sceneBg = document.getElementById('sceneBg');
+  var badi = document.getElementById('badi');
+  var bubbles = document.getElementById('bubbles');
+  var bubbleText = document.getElementById('bubbleText');
+  var compareZone = document.getElementById('compareZone');
+  var cardVague = document.getElementById('cardVague');
+  var cardClear = document.getElementById('cardClear');
+  var resultArea = document.getElementById('resultArea');
+  var tipText = document.getElementById('tipText');
+  var sceneTitle = document.getElementById('sceneTitle');
+  var navBar = document.getElementById('navBar');
+  var musicFab = document.getElementById('musicFab');
+  var musicBtn = document.getElementById('musicBtn');
+  var replayBtn = document.getElementById('replayBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var toast = document.getElementById('toast');
+
+  var badiEyes = document.getElementById('badiEyes');
+  var badiConfusedEyes = document.getElementById('badiConfusedEyes');
+  var badiHappyEyes = document.getElementById('badiHappyEyes');
+  var badiMouth = document.getElementById('badiMouth');
+  var screenFace = document.getElementById('screenFace');
+  var screenConfused = document.getElementById('screenConfused');
+  var screenHappy = document.getElementById('screenHappy');
+
+  // ========== 音频 ==========
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var ctx = null, masterGain = null;
+
+  function getCtx() {
+    if (!ctx) {
+      ctx = new AudioCtx();
+      masterGain = ctx.createGain();
+      masterGain.gain.value = 0.5;
+      masterGain.connect(ctx.destination);
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  function playBeep(freq, dur, vol, type) {
+    var ac = getCtx();
+    var now = ac.currentTime;
+    var osc = ac.createOscillator(), gain = ac.createGain();
+    osc.type = type || 'square'; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol || 0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + (dur||0.15));
+    osc.connect(gain); gain.connect(masterGain);
+    osc.start(now); osc.stop(now + (dur||0.15));
+  }
+
+  // 错误音效（低音，"嘟~"）
+  function playWrongSound() {
+    var ac = getCtx(), now = ac.currentTime;
+    var osc = ac.createOscillator(), gain = ac.createGain();
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now);
+    osc.frequency.linearRampToValueAtTime(180, now + 0.4);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    osc.connect(gain); gain.connect(masterGain);
+    osc.start(now); osc.stop(now + 0.55);
+  }
+
+  // 对了音效（上升音，"叮叮~"）
+  function playRightSound() {
+    [660, 880, 1100].forEach(function(f, i) {
+      playBeep(f, 0.25, 0.13, 'sine');
+      var ac = getCtx();
+    });
+  }
+
+  // 巴迪滴滴嘟嘟
+  function playBeepBoop() {
+    [660, 880, 660, 520].forEach(function(freq, i) {
+      setTimeout(function() { playBeep(freq, 0.12, 0.1, 'square'); }, i * 120);
+    });
+  }
+
+  // ========== 斯卡布罗集市序曲 ==========
+  var N = {
+    A2:110.00,B2:123.47,C3:130.81,D3:146.83,E3:164.81,Fs3:185.00,G3:196.00,
+    A3:220.00,B3:246.94,C4:261.63,D4:293.66,E4:329.63,Fs4:369.99,G4:392.00,
+    A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25,R:0,D2:73.42,G2:98.00
+  };
+  var BEAT = 0.82;
+  var melody = [
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["D5",1],["E5",1],["D5",1],["C5",1],["B4",1],["A4",1],["G4",0.5],["E4",2.5],["R",0.5],
+    ["D4",1],["E4",1],["G4",1],["A4",1],["G4",0.5],["E4",1],["D4",0.5],["E4",3]
+  ];
+  var bass = [
+    ["A2",3],["G2",3],["A2",3],["A2",3],["G2",3],["A2",3],
+    ["A2",3],["D2",3],["A2",3],["G2",3],["D2",3],["A2",3],["A2",3]
+  ];
+
+  var reverbGain = null, preludeTimer = null, preludePlaying = false;
+
+  function hornSynth(freq, start, dur, vol) {
+    if (freq === 0) return;
+    var osc1 = ctx.createOscillator(), osc2 = ctx.createOscillator();
+    var filter = ctx.createBiquadFilter(), gain = ctx.createGain();
+    var lfo = ctx.createOscillator(), lfoGain = ctx.createGain();
+    osc1.type = 'sawtooth'; osc1.frequency.value = freq;
+    osc2.type = 'sawtooth'; osc2.frequency.value = freq * 1.006;
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(freq * 2, start);
+    filter.frequency.linearRampToValueAtTime(freq * 3.5, start + 0.15);
+    filter.frequency.linearRampToValueAtTime(freq * 2.5, start + dur);
+    filter.Q.value = 1.5;
+    lfo.frequency.value = 4.5;
+    lfoGain.gain.setValueAtTime(0, start);
+    lfoGain.gain.linearRampToValueAtTime(freq * 0.004, start + 0.3);
+    lfo.connect(lfoGain); lfoGain.connect(osc1.frequency); lfoGain.connect(osc2.frequency);
+    osc1.connect(filter); osc2.connect(filter); filter.connect(gain); gain.connect(reverbGain);
+    var v = vol || 0.14;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(v, start + 0.1);
+    gain.gain.linearRampToValueAtTime(v * 0.85, start + 0.35);
+    gain.gain.setValueAtTime(v * 0.85, start + dur - 0.2);
+    gain.gain.linearRampToValueAtTime(0.0008, start + dur);
+    osc1.start(start); osc1.stop(start + dur + 0.05);
+    osc2.start(start); osc2.stop(start + dur + 0.05);
+    lfo.start(start); lfo.stop(start + dur + 0.05);
+  }
+
+  function bassSynth(freq, start, dur) {
+    if (freq === 0) return;
+    var osc = ctx.createOscillator(), osc2 = ctx.createOscillator();
+    var filter = ctx.createBiquadFilter(), gain = ctx.createGain();
+    osc.type = 'sawtooth'; osc.frequency.value = freq;
+    osc2.type = 'triangle'; osc2.frequency.value = freq;
+    filter.type = 'lowpass'; filter.frequency.value = freq * 2.2; filter.Q.value = 1;
+    osc.connect(filter); osc2.connect(filter); filter.connect(gain); gain.connect(masterGain);
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(0.07, start + 0.08);
+    gain.gain.setValueAtTime(0.07, start + dur - 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.0008, start + dur);
+    osc.start(start); osc.stop(start + dur + 0.05);
+    osc2.start(start); osc2.stop(start + dur + 0.05);
+  }
+
+  function playPrelude() {
+    if (preludePlaying || !ctx) return;
+    preludePlaying = true;
+    getCtx();
+    if (!reverbGain) {
+      var con = ctx.createConvolver();
+      var rate = ctx.sampleRate, len = Math.round(rate * 0.45);
+      var buf = ctx.createBuffer(2, len, rate);
+      for (var ch = 0; ch < 2; ch++) {
+        var d = buf.getChannelData(ch);
+        for (var i = 0; i < len; i++) {
+          d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (rate * 0.18));
+        }
+      }
+      con.buffer = buf;
+      var wet = ctx.createGain(); wet.gain.value = 0.28;
+      var dry = ctx.createGain(); dry.gain.value = 0.8;
+      reverbGain = ctx.createGain();
+      reverbGain.connect(dry); reverbGain.connect(con);
+      con.connect(wet); dry.connect(masterGain); wet.connect(masterGain);
+    }
+    masterGain.gain.setValueAtTime(0.07, ctx.currentTime); // ~18% 音量
+    var t = ctx.currentTime;
+    var melTime = 0, bassTime = 0;
+    for (var i = 0; i < melody.length; i++) {
+      var freq = N[melody[i][0]]; var dur = melody[i][1] * BEAT;
+      if (freq > 0) { var start = t + melTime; hornSynth(freq, start, dur); }
+      melTime += dur;
+    }
+    for (var j = 0; j < bass.length; j++) {
+      var bf = N[bass[j][0]]; var bd = bass[j][1] * BEAT;
+      if (bf > 0) { var bs = t + bassTime; bassSynth(bf, bs, bd); }
+      bassTime += bd;
+    }
+    var total = Math.max(melTime, bassTime);
+    preludeTimer = setTimeout(function() { preludePlaying = false; }, total * 1000 + 500);
+  }
+
+  function stopPrelude() {
+    if (preludeTimer) { clearTimeout(preludeTimer); preludeTimer = null; }
+    preludePlaying = false;
+  }
+
+  // ========== 对话框 ==========
+var dialogs = [
+  "小朋友，你知道怎么跟我说话吗？",
+  "有些小朋友说得不清楚，我就听不明白啦",
+  "工程师叔叔给我装了语音锁——",
+  "你得说清楚，我才能开！",
+  "你看，这里有两个按钮",
+  "试着点一下，看看会发生什么！"
+];
+
+var dialogIdx = 0;
+function showDialog() {
+  if (dialogIdx >= dialogs.length) {
+    // 对话框结束，显示卡片
+    compareZone.classList.add('visible');
+    cardVague.classList.add('card-hint');
+    cardClear.classList.add('card-hint');
+    return;
+  }
+  var text = dialogs[dialogIdx];
+  bubbles.classList.add('visible');
+  bubbleText.innerHTML = '<span id="typingSpan"></span><span class="cursor-blink"></span>';
+  var span = document.getElementById('typingSpan');
+  var chars = text.split(''), i = 0;
+  function type() {
+    if (i < chars.length) { span.textContent += chars[i]; i++; setTimeout(type, 80); }
+    else {
+      dialogIdx++;
+      setTimeout(function() {
+        bubbles.classList.remove('visible');
+        setTimeout(showDialog, 1800);
+      }, 1800);
+    }
+  }
+  type();
+}
+
+  // ========== 重置巴迪表情 ==========
+  function resetFace() {
+    badiEyes.style.display = 'block';
+    badiConfusedEyes.style.display = 'none';
+    badiHappyEyes.style.display = 'none';
+    badiMouth.setAttribute('d', 'M66 68 Q80 80 94 68');
+    badiMouth.setAttribute('stroke', '#1A5AA8');
+    screenFace.style.display = 'block';
+    screenConfused.style.display = 'none';
+    screenHappy.style.display = 'none';
+    badi.classList.remove('bouncing', 'shocking', 'happy-jump');
+  }
+
+  // ========== 模糊指令 ==========
+  cardVague.addEventListener('click', function() {
+    if (cardVague.dataset.clicked) return;
+    cardVague.dataset.clicked = '1';
+    cardClear.dataset.clicked = '1';
+    cardVague.classList.remove('card-hint');
+    cardClear.classList.remove('card-hint');
+
+    // 场景变暗
+    sceneBg.classList.add('dim');
+
+    // 巴迪困惑表情
+    badiEyes.style.display = 'none';
+    badiConfusedEyes.style.display = 'block';
+    badiMouth.setAttribute('d', 'M72 74 Q80 68 88 74');
+    badiMouth.setAttribute('stroke', '#F5A623');
+    screenFace.style.display = 'none';
+    screenConfused.style.display = 'block';
+    badi.classList.add('shocking');
+
+    // 错误音效
+    setTimeout(playWrongSound, 200);
+
+    // 巴迪对话
+    setTimeout(function() {
+      bubbles.classList.add('visible');
+      bubbleText.textContent = '咦？拿什么东西呀？是苹果还是梨子？我好乱……';
+      bubbles.classList.remove('visible');
+    }, 600);
+
+    // 结果显示错误物品
+    setTimeout(function() {
+      resultArea.innerHTML = '<span class="result-item wrong" style="animation-delay:0s">🍌 拿来了香蕉</span><span class="result-item wrong" style="animation-delay:0.2s">📦 还有纸盒子</span><span class="result-item wrong" style="animation-delay:0.4s">🤷 都不是你要的!</span>';
+      resultArea.classList.add('show');
+    }, 1000);
+
+    // 提示文字
+    setTimeout(function() {
+      tipText.textContent = '哎呀！没说清楚，巴迪就乱拿啦~';
+      tipText.classList.add('show');
+    }, 1800);
+
+    // 恢复+展示对比
+    setTimeout(function() {
+      resetFace();
+      badi.classList.add('bouncing');
+      resultArea.innerHTML = '';
+      resultArea.classList.remove('show');
+      tipText.classList.remove('show');
+      sceneBg.classList.remove('dim');
+      cardVague.dataset.clicked = '0';
+      cardClear.dataset.clicked = '0';
+      cardVague.classList.add('card-hint');
+      cardClear.classList.add('card-hint');
+    }, 3500);
+  });
+
+  // ========== 清晰指令 ==========
+  cardClear.addEventListener('click', function() {
+    if (cardClear.dataset.clicked) return;
+    cardVague.dataset.clicked = '1';
+    cardClear.dataset.clicked = '1';
+    cardVague.classList.remove('card-hint');
+    cardClear.classList.remove('card-hint');
+
+    // 场景变暖
+    sceneBg.classList.add('warm');
+
+    // 巴迪开心表情
+    badiEyes.style.display = 'none';
+    badiHappyEyes.style.display = 'block';
+    badiMouth.setAttribute('d', 'M62 68 Q80 88 98 68');
+    badiMouth.setAttribute('stroke', '#4CD964');
+    screenFace.style.display = 'none';
+    screenHappy.style.display = 'block';
+    badi.classList.add('happy-jump');
+
+    // 对了音效
+    setTimeout(playRightSound, 200);
+    setTimeout(playBeepBoop, 800);
+
+    // 巴迪对话
+    setTimeout(function() {
+      bubbles.classList.add('visible');
+      bubbleText.textContent = '知道啦！苹果在这里，给你！🍎';
+      setTimeout(function() { bubbles.classList.remove('visible'); }, 2000);
+    }, 600);
+
+    // 结果显示正确
+    setTimeout(function() {
+      resultArea.innerHTML = '<span class="result-item right" style="animation-delay:0s">🍎 红彤彤的苹果</span><span class="result-item right" style="animation-delay:0.2s">✅ 准确无误!</span>';
+      resultArea.classList.add('show');
+    }, 1000);
+
+    // 提示文字
+    setTimeout(function() {
+      tipText.textContent = '太棒了！说得清清楚楚——语音锁解开啦！🌟';
+      tipText.classList.add('show');
+    }, 1800);
+
+    // 恢复
+    setTimeout(function() {
+      resetFace();
+      badi.classList.add('bouncing');
+      resultArea.innerHTML = '';
+      resultArea.classList.remove('show');
+      tipText.classList.remove('show');
+      sceneBg.classList.remove('warm');
+      cardVague.dataset.clicked = '0';
+      cardClear.dataset.clicked = '0';
+      cardVague.classList.add('card-hint');
+      cardClear.classList.add('card-hint');
+    }, 4000);
+  });
+
+  // ========== 故事流程 ==========
+  function startStory() {
+    resetFace();
+    badi.classList.add('bouncing');
+    bubbles.classList.remove('visible');
+    compareZone.classList.remove('visible');
+    resultArea.classList.remove('show');
+    resultArea.innerHTML = '';
+    tipText.classList.remove('show');
+    sceneBg.classList.remove('dim', 'warm');
+    navBar.classList.remove('visible');
+    musicFab.classList.remove('visible');
+    sceneTitle.classList.remove('visible');
+    dialogIdx = 0;
+    cardVague.dataset.clicked = '0';
+    cardClear.dataset.clicked = '0';
+    cardVague.classList.remove('card-hint');
+    cardClear.classList.remove('card-hint');
+
+    // 标题和序曲一起出现
+    setTimeout(function() {
+      sceneTitle.classList.add('visible');
+      playPrelude();
+      musicFab.classList.add('visible', 'playing');
+      navBar.classList.add('visible');
+    }, 500);
+
+    // 开始对话
+    setTimeout(showDialog, 1200);
+  }
+
+  // 欢迎遮罩
+  welcome.addEventListener('click', function() {
+    welcome.classList.add('hide');
+    setTimeout(startStory, 400);
+  });
+
+  // ========== 导航 ==========
+  replayBtn.addEventListener('click', function() {
+    stopPrelude();
+    musicFab.classList.remove('visible', 'playing');
+    startStory();
+  });
+
+  nextBtn.addEventListener('click', function() {
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2000);
+  });
+
+  // ========== 音乐控制 ==========
+  var musicOn = true;
+  musicFab.addEventListener('click', function() {
+    musicOn = !musicOn;
+    if (musicOn) {
+      musicFab.classList.add('playing');
+      if (ctx) masterGain.gain.value = 0.07;
+    } else {
+      musicFab.classList.remove('playing');
+      if (ctx) masterGain.gain.value = 0;
+    }
+  });
+
+  musicBtn.addEventListener('click', function() {
+    musicOn = !musicOn;
+    if (musicOn) {
+      musicFab.classList.add('playing');
+      if (ctx) masterGain.gain.value = 0.07;
+    } else {
+      musicFab.classList.remove('playing');
+      if (ctx) masterGain.gain.value = 0;
+    }
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沃克巴迪的故事 V2 · 元宝设计师版</title>
+<style>
+:root{
+  --bg:#FDF6EC; --card:#FFFFFF; --ink:#2C2C2A; --muted:#5F5E5A;
+  --blue:#4A90E2; --blue-d:#0C447C; --blue-l:#E6F1FB;
+  --gold:#D4A017; --teal:#3CB48F; --pink:#F4A8B8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  background:linear-gradient(160deg,#E6F1FB 0%,#FDF6EC 50%,#FAEEDA 100%);
+  color:var(--ink); line-height:1.7;
+  min-height:100vh; padding:0 16px 50px; overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    radial-gradient(2px 2px at 20% 15%, rgba(74,144,226,.12), transparent),
+    radial-gradient(2px 2px at 60% 25%, rgba(212,160,23,.1), transparent),
+    radial-gradient(1.5px 1.5px at 80% 10%, rgba(60,180,143,.1), transparent),
+    radial-gradient(2px 2px at 35% 40%, rgba(74,144,226,.08), transparent),
+    radial-gradient(1.5px 1.5px at 90% 35%, rgba(212,160,23,.08), transparent);
+}
+.wrap{max-width:600px; margin:0 auto; padding-top:36px; position:relative; z-index:1;}
+.header{text-align:center; margin-bottom:30px;}
+.badge{display:inline-block; background:linear-gradient(135deg,rgba(244,168,184,.3),rgba(74,144,226,.15)); color:var(--blue); font-size:13px; font-weight:700; padding:4px 16px; border-radius:20px; margin-bottom:12px; border:1px solid rgba(244,168,184,.4);}
+h1{font-size:30px; font-weight:800; color:var(--blue-d); margin-bottom:4px; letter-spacing:1px;}
+.v2-tag{font-size:13px; color:var(--pink); font-weight:700; margin-bottom:8px;}
+.sub{font-size:15px; color:var(--muted);}
+
+/* 机器人小图标 */
+.bot-icon{width:80px; height:80px; margin:0 auto 10px;}
+
+/* 卡片列表 */
+.ep-list{display:flex; flex-direction:column; gap:14px;}
+.ep-card{
+  display:flex; align-items:center; gap:16px;
+  background:var(--card); border-radius:18px; padding:16px 20px;
+  border:2px solid var(--blue-l);
+  box-shadow:0 3px 12px rgba(12,68,124,.06);
+  text-decoration:none; color:var(--ink);
+  transition:transform .15s, box-shadow .15s;
+  position:relative; overflow:hidden;
+}
+.ep-card:active{transform:scale(.98);}
+.ep-card:hover{box-shadow:0 6px 20px rgba(12,68,124,.12); border-color:var(--blue);}
+.ep-num{
+  flex-shrink:0; width:52px; height:52px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; font-weight:800; color:#fff;
+}
+.ep-card .ep-num{background:linear-gradient(135deg,var(--blue),#5BA8E8);}
+.ep-card:nth-child(1) .ep-num{background:linear-gradient(135deg,#7B68EE,#9B8EF0);}
+.ep-card:nth-child(2) .ep-num{background:linear-gradient(135deg,#3CB48F,#5DCAA5);}
+.ep-card:nth-child(3) .ep-num{background:linear-gradient(135deg,#F0997B,#E8A838);}
+.ep-card:nth-child(4) .ep-num{background:linear-gradient(135deg,#D4633E,#F0997B);}
+.ep-card:nth-child(5) .ep-num{background:linear-gradient(135deg,#E86BA8,#F4A8B8);}
+.ep-info{flex:1; min-width:0;}
+.ep-title{font-size:17px; font-weight:700; color:var(--ink); margin-bottom:2px;}
+.ep-desc{font-size:13px; color:var(--muted);}
+.ep-arrow{flex-shrink:0; font-size:22px; color:var(--blue); opacity:.4;}
+.ep-new{
+  position:absolute; top:12px; right:12px;
+  background:linear-gradient(135deg,#F4A8B8,#E86BA8);
+  color:#fff; font-size:11px; font-weight:700; padding:2px 10px; border-radius:10px;
+}
+
+/* 分割线 */
+.divider{
+  text-align:center; margin:28px 0 10px;
+  font-size:12px; color:var(--muted); opacity:.5;
+  display:flex; align-items:center; gap:12px;
+}
+.divider::before,.divider::after{content:""; flex:1; height:1px; background:rgba(0,0,0,.08);}
+
+/* 原版入口 */
+.old-link{
+  display:block; text-align:center; margin-top:20px;
+  font-size:13px; color:var(--blue); text-decoration:underline;
+  opacity:.6;
+}
+
+footer{text-align:center; color:var(--muted); font-size:12px; margin-top:30px; opacity:.5;}
+
+/* 欢迎遮罩 */
+.welcome{
+  position:fixed; inset:0; z-index:99999;
+  background:linear-gradient(160deg,#E6F1FB 0%,#FDF6EC 50%,#FAEEDA 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:opacity .5s; cursor:pointer;
+}
+.welcome.hide{opacity:0; pointer-events:none;}
+.welcome .w-bot{width:100px; height:100px; margin-bottom:16px; animation:bounce 1.5s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);}}
+.welcome .w-title{font-size:26px; font-weight:800; color:var(--blue-d); margin-bottom:4px;}
+.welcome .w-v2{font-size:14px; color:var(--pink); font-weight:700; margin-bottom:8px;}
+.welcome .w-sub{font-size:15px; color:var(--muted); margin-bottom:24px; text-align:center; line-height:1.8;}
+.welcome .w-btn{
+  font-family:inherit; font-size:18px; font-weight:700;
+  background:var(--blue); color:#fff; border:none; border-radius:999px;
+  padding:16px 36px; box-shadow:0 6px 20px rgba(74,144,226,.3);
+  animation:pulse 2s ease-in-out infinite; cursor:pointer;
+}
+@keyframes pulse{0%,100%{transform:scale(1);} 50%{transform:scale(1.05);}}
+
+/* 浮动音乐控制 */
+.music-fab{
+  position:fixed; right:16px; bottom:16px; z-index:9999;
+  width:48px; height:48px; border-radius:50%;
+  background:var(--blue); color:#fff; border:none;
+  font-size:20px; cursor:pointer; box-shadow:0 4px 14px rgba(74,144,226,.3);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .15s;
+}
+.music-fab:active{transform:scale(.9);}
+.music-fab.playing{background:linear-gradient(135deg,#F0997B,#D4633E);}
+.music-fab-label{
+  position:fixed; right:72px; bottom:22px; z-index:9999;
+  font-size:12px; color:var(--muted); background:rgba(255,255,255,.9);
+  padding:4px 10px; border-radius:12px; white-space:nowrap;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <span class="badge">互动故事合集</span>
+    <h1>沃克巴迪的故事</h1>
+    <p class="v2-tag">元宝设计师版 V2</p>
+    <p class="sub">连续剧式儿童互动故事 · 点击巴迪、探索世界</p>
+  </div>
+
+  <div class="ep-list">
+    <!-- 第1集 -->
+    <a class="ep-card" href="s1/">
+      <div class="ep-num">1</div>
+      <div class="ep-info">
+        <div class="ep-title">从工坊来 · 巴迪诞生</div>
+        <div class="ep-desc">一道蓝光划过夜空，工程师叔叔阿姨造出了巴迪！</div>
+      </div>
+      <div class="ep-arrow">›</div>
+    </a>
+
+    <!-- 第2集 -->
+    <a class="ep-card" href="s2/">
+      <div class="ep-num">2</div>
+      <div class="ep-info">
+        <div class="ep-title">魔法充电 · 巴迪的家在哪里</div>
+        <div class="ep-desc">巴迪饿了！它是机器，吃的饭叫电——点开图标回家！</div>
+      </div>
+      <div class="ep-arrow">›</div>
+    </a>
+
+    <!-- 第3集 -->
+    <a class="ep-card" href="s3/">
+      <div class="ep-num">3</div>
+      <div class="ep-info">
+        <div class="ep-title">悄悄话密码 · 怎么跟巴迪说话</div>
+        <div class="ep-desc">工程师装了语音锁——说清楚才能开！对比一下</div>
+      </div>
+      <div class="ep-arrow">›</div>
+    </a>
+
+    <!-- 第4集 -->
+    <a class="ep-card" href="s4/">
+      <div class="ep-num">4</div>
+      <div class="ep-info">
+        <div class="ep-title">超级英雄的口袋 · 巴迪会干什么</div>
+        <div class="ep-desc">百宝箱是工程师装的——知识、才艺和算术大宝贝</div>
+      </div>
+      <div class="ep-arrow">›</div>
+    </a>
+
+    <!-- 第5集 -->
+    <a class="ep-card" href="s5/">
+      <div class="ep-num">5</div>
+      <div class="ep-info">
+        <div class="ep-title">拉钩上吊 · 我们永远在一起</div>
+        <div class="ep-desc">程序写好的第一条规则：永远帮小朋友，不说假话</div>
+      </div>
+      <div class="ep-arrow">›</div>
+    </a>
+  </div>
+
+  <div class="divider">原版故事集</div>
+
+  <a class="old-link" href="https://867d8e5c42c14574b74ae6cb01d7cb8c.app.codebuddy.work" target="_blank">
+    原版五集故事合集（正式线） →
+  </a>
+
+  <footer>沃克巴迪的故事 · 元宝设计师版 V2 · 2026</footer>
+</div>
+
+<!-- 欢迎遮罩 -->
+<div class="welcome" id="welcome">
+  <svg class="w-bot" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="92" r="78" fill="rgba(74,144,226,.12)"/>
+    <line x1="100" y1="22" x2="100" y2="40" stroke="#4A90E2" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="100" cy="18" r="7" fill="#D4A017"/>
+    <rect x="42" y="40" width="116" height="92" rx="34" fill="#4A90E2" opacity=".2" stroke="#4A90E2" stroke-width="2.5"/>
+    <ellipse cx="76" cy="78" rx="14" ry="15" fill="#fff" stroke="#4A90E2" stroke-width="1.5"/>
+    <ellipse cx="124" cy="78" rx="14" ry="15" fill="#fff" stroke="#4A90E2" stroke-width="1.5"/>
+    <circle cx="78" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="126" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="81" cy="76" r="3.5" fill="#D4A017"/>
+    <circle cx="129" cy="76" r="3.5" fill="#D4A017"/>
+    <circle cx="78" cy="88" r="5" fill="#F4A8B8" opacity=".6"/>
+    <circle cx="122" cy="88" r="5" fill="#F4A8B8" opacity=".6"/>
+    <path d="M82 104 Q100 122 118 104" fill="none" stroke="#4A90E2" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="58" y="128" width="84" height="50" rx="20" fill="#3CB48F" opacity=".25" stroke="#3CB48F" stroke-width="2.5"/>
+    <text x="100" y="157" text-anchor="middle" font-size="9" font-weight="700" fill="#3CB48F" font-family="sans-serif">WorkBuddy</text>
+    <text x="100" y="170" text-anchor="middle" font-size="9.5" font-weight="700" fill="#4A90E2" font-family="sans-serif">沃克巴迪</text>
+    <ellipse cx="78" cy="184" rx="12" ry="6" fill="#4A90E2" opacity=".3"/>
+    <ellipse cx="122" cy="184" rx="12" ry="6" fill="#4A90E2" opacity=".3"/>
+  </svg>
+  <div class="w-title">沃克巴迪的故事</div>
+  <div class="w-v2">元宝设计师版 V2</div>
+  <div class="w-sub">巴迪不是从天上掉的——是工程师造的小帮手<br>点击互动 · 连续剧式 · 手机友好<br>🎺 序曲响起，故事开始……</div>
+  <div class="w-btn">🎵 点这里，进入故事</div>
+</div>
+
+<!-- 浮动音乐控制 -->
+<button class="music-fab" id="musicFab" style="display:none;">🎺</button>
+<span class="music-fab-label" id="musicLabel" style="display:none;">序曲播放中</span>
+
+<script>
+(function(){
+  var N={
+    A2:110.00,B2:123.47,C3:130.81,D3:146.83,E3:164.81,Fs3:185.00,G3:196.00,
+    A3:220.00,B3:246.94,C4:261.63,D4:293.66,E4:329.63,Fs4:369.99,G4:392.00,
+    A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25,R:0,
+    D2:73.42,G2:98.00
+  };
+  var BEAT=0.82;
+  var melody=[
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["B4",0.5],["A4",1],["G4",1],["E4",1],["D4",0.5],["E4",2],["R",0.5],
+    ["E4",1],["A4",1],["C5",1],["D5",1],["E5",1],["D5",1],["C5",1],["B4",1],["A4",1],["G4",0.5],["E4",2.5],["R",0.5],
+    ["D4",1],["E4",1],["G4",1],["A4",1],["G4",0.5],["E4",1],["D4",0.5],["E4",3]
+  ];
+  var bass=[
+    ["A2",3],["G2",3],["A2",3],["A2",3],["G2",3],["A2",3],
+    ["A2",3],["D2",3],["A2",3],["G2",3],["D2",3],["A2",3],["A2",3]
+  ];
+
+  var ctx=null,masterGain=null,reverbGain=null,timer=null;
+  var playing=false;
+
+  function initAudio(){
+    if(ctx) return;
+    var AC=window.AudioContext||window.webkitAudioContext;
+    ctx=new AC();
+    masterGain=ctx.createGain();
+    masterGain.gain.value=0.35;
+    masterGain.connect(ctx.destination);
+    var delay=ctx.createDelay(1.0);
+    delay.delayTime.value=0.28;
+    var fb=ctx.createGain();fb.gain.value=0.35;
+    var wet=ctx.createGain();wet.gain.value=0.3;
+    delay.connect(fb);fb.connect(delay);
+    delay.connect(wet);wet.connect(masterGain);
+    reverbGain=ctx.createGain();reverbGain.gain.value=1;
+    reverbGain.connect(delay);reverbGain.connect(masterGain);
+  }
+
+  function horn(freq,start,dur,vol){
+    if(freq===0) return;
+    var osc1=ctx.createOscillator(),osc2=ctx.createOscillator();
+    var filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+    var lfo=ctx.createOscillator(),lfoGain=ctx.createGain();
+    osc1.type="sawtooth";osc1.frequency.value=freq;
+    osc2.type="sawtooth";osc2.frequency.value=freq*1.006;
+    filter.type="lowpass";
+    filter.frequency.setValueAtTime(freq*2,start);
+    filter.frequency.linearRampToValueAtTime(freq*3.5,start+0.15);
+    filter.frequency.linearRampToValueAtTime(freq*2.5,start+dur);
+    filter.Q.value=1.5;
+    lfo.frequency.value=4.5;
+    lfoGain.gain.setValueAtTime(0,start);
+    lfoGain.gain.linearRampToValueAtTime(freq*0.004,start+0.3);
+    lfo.connect(lfoGain);lfoGain.connect(osc1.frequency);lfoGain.connect(osc2.frequency);
+    osc1.connect(filter);osc2.connect(filter);filter.connect(gain);gain.connect(reverbGain);
+    var v=vol||0.14;
+    gain.gain.setValueAtTime(0,start);
+    gain.gain.linearRampToValueAtTime(v,start+0.1);
+    gain.gain.linearRampToValueAtTime(v*0.85,start+0.35);
+    gain.gain.setValueAtTime(v*0.85,start+dur-0.2);
+    gain.gain.linearRampToValueAtTime(0.0008,start+dur);
+    osc1.start(start);osc1.stop(start+dur+0.05);
+    osc2.start(start);osc2.stop(start+dur+0.05);
+    lfo.start(start);lfo.stop(start+dur+0.05);
+  }
+
+  function bassHorn(freq,start,dur){
+    if(freq===0) return;
+    var osc=ctx.createOscillator(),osc2=ctx.createOscillator();
+    var filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+    osc.type="sawtooth";osc.frequency.value=freq;
+    osc2.type="triangle";osc2.frequency.value=freq;
+    filter.type="lowpass";filter.frequency.value=freq*2.2;filter.Q.value=1;
+    osc.connect(filter);osc2.connect(filter);filter.connect(gain);gain.connect(masterGain);
+    gain.gain.setValueAtTime(0,start);
+    gain.gain.linearRampToValueAtTime(0.09,start+0.15);
+    gain.gain.linearRampToValueAtTime(0.06,start+0.4);
+    gain.gain.setValueAtTime(0.06,start+dur-0.25);
+    gain.gain.linearRampToValueAtTime(0.0008,start+dur);
+    osc.start(start);osc.stop(start+dur+0.05);
+    osc2.start(start);osc2.stop(start+dur+0.05);
+  }
+
+  function playSong(){
+    initAudio();
+    if(ctx.state==="suspended") ctx.resume();
+    var t0=ctx.currentTime+0.15,t=t0;
+    melody.forEach(function(n){
+      var d=n[1]*BEAT;
+      horn(N[n[0]],t,d*0.95);
+      t+=d;
+    });
+    var bt=t0;
+    bass.forEach(function(b){
+      var d=b[1]*BEAT;
+      bassHorn(N[b[0]],bt,d*0.9);
+      bt+=d;
+    });
+    var total=(t-t0)*1000+500;
+    timer=setTimeout(function(){
+      if(playing) playSong();
+    },total);
+  }
+
+  function startPlay(){
+    if(playing) return;
+    playing=true;
+    var fab=document.getElementById('musicFab');
+    var label=document.getElementById('musicLabel');
+    fab.style.display='flex';fab.classList.add('playing');fab.textContent='🎺';
+    label.style.display='block';label.textContent='序曲播放中';
+    playSong();
+  }
+
+  function stopPlay(){
+    playing=false;
+    if(timer){clearTimeout(timer);timer=null;}
+    if(ctx){try{ctx.close();}catch(e){}ctx=null;masterGain=null;reverbGain=null;}
+    var fab=document.getElementById('musicFab');
+    var label=document.getElementById('musicLabel');
+    fab.classList.remove('playing');fab.textContent='🎵';
+    label.textContent='序曲已停止';
+  }
+
+  document.getElementById('welcome').addEventListener('click',function(){
+    this.classList.add('hide');
+    setTimeout(function(){this.style.display='none';}.bind(this),500);
+    startPlay();
+  });
+
+  document.getElementById('musicFab').addEventListener('click',function(){
+    if(playing) stopPlay();
+    else startPlay();
+  });
+})();
+</script>
+</body>
+</html>
