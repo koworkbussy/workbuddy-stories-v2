@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沃克巴迪的故事 · 第二篇 · 它从哪儿来的</title>
+<style>
+  :root{
+    --bg:#FDF6EC; --card:#FFFFFF; --ink:#2C2C2A; --muted:#5F5E5A;
+    --blue:#378ADD; --blue-d:#0C447C; --blue-l:#E6F1FB;
+    --green:#5DCAA5; --green-d:#0F6E56; --green-l:#E1F5EE;
+    --amber:#EF9F27; --amber-d:#854F0B; --amber-l:#FAEEDA;
+    --purple:#AFA9EC; --purple-d:#3C3489; --purple-l:#EEEDFE;
+    --coral:#F0997B; --coral-d:#993C1D; --coral-l:#FAECE7;
+    --gray-d:#5F5E5A; --gray-l:#F1EFE8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.9;
+    padding:0 16px 60px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  header{ text-align:center; padding:36px 0 8px; }
+  header .bot{ width:150px; height:150px; margin:0 auto 10px; }
+  header .series{ display:inline-block; background:var(--purple-l); color:var(--purple-d); font-size:13px; font-weight:600; padding:3px 12px; border-radius:20px; margin-bottom:8px;}
+  header .tag{ display:inline-block; background:var(--amber-l); color:var(--amber-d); font-size:14px; font-weight:600; padding:4px 14px; border-radius:20px; margin-bottom:10px;}
+  header h1{ font-size:30px; font-weight:700; color:var(--blue-d); letter-spacing:1px;}
+  header p{ font-size:16px; color:var(--muted); margin-top:6px;}
+  .card{
+    background:var(--card); border-radius:18px; padding:0 0 20px;
+    margin-top:20px; box-shadow:0 2px 0 rgba(0,0,0,.03);
+    border-left:7px solid var(--blue); overflow:hidden;
+  }
+  .card h2{ font-size:21px; font-weight:700; display:flex; align-items:center; gap:12px; margin:16px 22px 10px;}
+  .card h2 .ic{ width:36px; height:36px; flex:0 0 36px; }
+  .body{ padding:0 22px;}
+  .card p{ font-size:19px; margin-bottom:10px;}
+  .card p:last-child{margin-bottom:0}
+  .card .lead{ font-size:20px; font-weight:600; color:var(--blue-d);}
+  .c-gray{border-left-color:#888780;} .c-gray h2{color:var(--gray-d);}
+  .c-amber{border-left-color:var(--amber);} .c-amber h2{color:var(--amber-d);}
+  .c-green{border-left-color:var(--green);} .c-green h2{color:var(--green-d);}
+  .c-purple{border-left-color:var(--purple);} .c-purple h2{color:var(--purple-d);}
+  .c-coral{border-left-color:var(--coral);} .c-coral h2{color:var(--coral-d);}
+  .pill{
+    display:inline-block; padding:4px 13px; border-radius:20px;
+    font-size:16px; font-weight:600; margin:2px 6px 2px 0;
+  }
+  .p-blue{background:var(--blue-l); color:var(--blue-d);}
+  .p-green{background:var(--green-l); color:var(--green-d);}
+  .p-amber{background:var(--amber-l); color:var(--amber-d);}
+  .p-purple{background:var(--purple-l); color:var(--purple-d);}
+  .p-coral{background:var(--coral-l); color:var(--coral-d);}
+  .p-gray{background:var(--gray-l); color:var(--gray-d);}
+  .scene{ width:100%; display:block; }
+  .timeline{ position:relative; padding-left:34px; margin-top:6px;}
+  .timeline::before{ content:""; position:absolute; left:11px; top:8px; bottom:8px; width:4px; background:var(--green); border-radius:2px;}
+  .step{ position:relative; margin-bottom:14px;}
+  .step:last-child{margin-bottom:0}
+  .step .dot{ position:absolute; left:-30px; top:4px; width:24px; height:24px; border-radius:50%; background:var(--green); border:3px solid #fff; box-shadow:0 0 0 2px var(--green);}
+  .step b{ font-size:19px; color:var(--green-d); display:block; margin-bottom:2px;}
+  .step span{ font-size:18px;}
+  .quote{ background:var(--amber-l); border-radius:14px; padding:12px 18px; font-size:19px; color:var(--amber-d); margin:10px 0;}
+  .factbox{ background:var(--blue-l); border-radius:14px; padding:14px 18px; margin:10px 0; }
+  .factbox .ft{ font-size:15px; font-weight:700; color:var(--blue-d); margin-bottom:6px; }
+  .factbox p{ font-size:17px; margin-bottom:5px; color:var(--blue-d);}
+  .factbox p:last-child{margin-bottom:0}
+  .note{ font-size:15px; color:var(--muted); margin-top:14px; padding-top:12px; border-top:1px dashed #ddd; line-height:1.8;}
+  footer{ text-align:center; color:var(--muted); font-size:14px; margin-top:30px;}
+
+  /* ===== 集间导航 ===== */
+  .nav-fab{position:fixed;top:16px;right:16px;z-index:999;width:44px;height:44px;border-radius:50%;
+    background:#fff;border:2px solid var(--blue,#378ADD);box-shadow:0 3px 12px rgba(0,0,0,.15);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;
+    color:var(--blue-d,#0C447C);transition:transform .15s;}
+  .nav-fab:active{transform:scale(.9);}
+  .nav-overlay{position:fixed;inset:0;z-index:998;background:rgba(0,0,0,.35);display:none;
+    opacity:0;transition:opacity .25s;}
+  .nav-overlay.show{display:block;opacity:1;}
+  .nav-panel{position:fixed;top:0;right:0;z-index:999;width:260px;max-width:80vw;height:100vh;
+    background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.12);transform:translateX(100%);
+    transition:transform .3s ease;overflow-y:auto;padding:60px 0 30px;}
+  .nav-panel.show{transform:translateX(0);}
+  .nav-panel .np-title{font-size:16px;font-weight:800;color:#0C447C;padding:0 22px 14px;
+    border-bottom:2px solid #E6F1FB;margin-bottom:8px;}
+  .nav-panel a{display:flex;align-items:center;gap:12px;padding:13px 22px;text-decoration:none;
+    color:#2C2C2A;font-size:15px;transition:background .12s;border-left:3px solid transparent;}
+  .nav-panel a:hover{background:#FDF6EC;}
+  .nav-panel a.current{background:#E6F1FB;border-left-color:#378ADD;font-weight:700;color:#0C447C;}
+  .nav-panel a .np-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
+  .nav-panel a.prelude .np-num{background:linear-gradient(135deg,#D4A017,#E8C547);}
+  .nav-panel a.story .np-num{background:linear-gradient(135deg,#378ADD,#5BA8E8);}
+  .nav-panel a.theme .np-num{background:linear-gradient(135deg,#3CB48F,#5DCAA5);}
+  .nav-panel a.collection .np-num{background:linear-gradient(135deg,#F0997B,#D4633E);}
+  .nav-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
+    border:none;background:#FDF6EC;font-size:18px;color:#5F5E5A;cursor:pointer;}
+  /* 底部下一集按钮 */
+  .nav-next{display:block;margin:36px auto 10px;padding:15px 44px;border-radius:999px;border:none;
+    font-family:inherit;font-size:18px;font-weight:700;cursor:pointer;text-decoration:none;
+    display:flex;align-items:center;gap:10px;justify-content:center;width:fit-content;
+    box-shadow:0 5px 18px rgba(12,68,124,.15);transition:transform .12s;}
+  .nav-next:active{transform:scale(.95);}
+  .nav-next.blue{background:var(--blue,#378ADD);color:#fff;}
+  .nav-next.gold{background:linear-gradient(135deg,#D4A017,#E8C547);color:#fff;}
+  .nav-next.teal{background:linear-gradient(135deg,#3CB48F,#5DCAA5);color:#fff;}
+  .nav-next.coral{background:linear-gradient(135deg,#F0997B,#D4633E);color:#fff;}
+  .nav-back{display:block;margin:8px auto 20px;font-size:14px;color:#5F5E5A;text-decoration:none;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <svg class="bot" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WorkBuddy 机器人">
+    <!-- 背景光晕 -->
+    <circle cx="100" cy="92" r="78" fill="#E6F1FB" opacity=".5"/>
+    <circle cx="100" cy="92" r="62" fill="#FFF9E8" opacity=".6"/>
+    <!-- 小星星装饰 -->
+    <path d="M30 40l2 5 5 1-4 3.5 1 5-4-2.5-4 2.5 1-5-4-3.5 5-1z" fill="#EF9F27" opacity=".8"/>
+    <path d="M172 50l1.5 4 4 1-3 2.8 .8 4-3.3-2-3.3 2 .8-4-3-2.8 4-1z" fill="#F0997B" opacity=".7"/>
+    <circle cx="40" cy="120" r="3" fill="#5DCAA5" opacity=".6"/>
+    <circle cx="165" cy="130" r="3.5" fill="#AFA9EC" opacity=".6"/>
+    <!-- 天线 -->
+    <line x1="100" y1="22" x2="100" y2="40" stroke="#378ADD" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="100" cy="18" r="7" fill="#EF9F27"/>
+    <circle cx="100" cy="18" r="7" fill="none" stroke="#FFB84D" stroke-width="2" opacity=".6"/>
+    <!-- 头部（大头圆脸） -->
+    <rect x="42" y="40" width="116" height="92" rx="34" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2.5"/>
+    <!-- 头部高光 -->
+    <ellipse cx="72" cy="58" rx="18" ry="10" fill="#fff" opacity=".4"/>
+    <!-- 耳朵 -->
+    <circle cx="38" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="162" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="38" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+    <circle cx="162" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+    <!-- 大眼睛 -->
+    <ellipse cx="76" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+    <ellipse cx="124" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+    <circle cx="78" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="126" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="81" cy="76" r="3.5" fill="#fff"/>
+    <circle cx="129" cy="76" r="3.5" fill="#fff"/>
+    <circle cx="75" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+    <circle cx="123" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+    <!-- 腮红 -->
+    <ellipse cx="58" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+    <ellipse cx="142" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+    <!-- 笑脸 -->
+    <path d="M82 104 Q100 122 118 104" fill="none" stroke="#0C447C" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- 身体（小身体，胖嘟嘟） -->
+    <rect x="58" y="128" width="84" height="50" rx="20" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2.5"/>
+    <ellipse cx="75" cy="140" rx="10" ry="5" fill="#fff" opacity=".3"/>
+    <!-- 胸口名牌 -->
+    <rect x="62" y="145" width="76" height="30" rx="9" fill="#fff" stroke="#0F6E56" stroke-width="1.8"/>
+    <path d="M100 139c-1.5-2-5-2-5 1 0 2 3 4 5 6 2-2 5-4 5-6 0-3-3.5-3-5-1z" fill="#FF6B8A"/>
+    <text x="100" y="157" text-anchor="middle" font-size="9" font-weight="700" fill="#0F6E56" font-family="sans-serif">WorkBuddy</text>
+    <text x="100" y="170" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2E7BC4" font-family="sans-serif">沃克巴迪</text>
+    <!-- 小手 -->
+    <circle cx="44" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="156" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <!-- 小脚 -->
+    <ellipse cx="78" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+    <ellipse cx="122" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+  </svg>
+  <span class="series">WorkBuddy（沃克巴迪）的故事</span>
+  <span class="tag">第二篇</span>
+  <h1>它从哪儿来的？</h1>
+  <p>一个从很久很久以前讲起的故事</p>
+</header>
+
+<!-- 1. 衔接昨天 -->
+<div class="card">
+  <svg class="scene" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="小朋友和机器人打招呼">
+    <rect x="0" y="0" width="680" height="150" fill="#E6F1FB"/>
+    <circle cx="120" cy="40" r="22" fill="#FFE0B2"/><circle cx="120" cy="85" r="30" fill="#7BC97B"/>
+    <rect x="104" y="110" width="14" height="30" rx="5" fill="#5BA85B"/><rect x="122" y="110" width="14" height="30" rx="5" fill="#5BA85B"/>
+    <circle cx="113" cy="38" r="2.5" fill="#333"/><circle cx="127" cy="38" r="2.5" fill="#333"/>
+    <path d="M112 46q8 6 16 0" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+    <rect x="555" y="30" width="70" height="58" rx="16" fill="#85B7EB" stroke="#185FA5" stroke-width="2"/>
+    <circle cx="575" cy="52" r="8" fill="#fff"/><circle cx="605" cy="52" r="8" fill="#fff"/>
+    <circle cx="577" cy="54" r="4" fill="#042C53"/><circle cx="607" cy="54" r="4" fill="#042C53"/>
+    <path d="M577 64q8 5 16 0" fill="none" stroke="#042C53" stroke-width="2" stroke-linecap="round"/>
+    <rect x="570" y="88" width="40" height="40" rx="10" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2"/>
+    <path d="M150 75 Q400 30 545 70" fill="none" stroke="#378ADD" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round"/>
+    <text x="340" y="135" font-size="16" fill="#0C447C" text-anchor="middle" font-weight="600">小朋友 ✦ WorkBuddy</text>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E6F1FB" stroke="#185FA5" stroke-width="2"/><rect x="13" y="14" width="14" height="11" rx="3" fill="#378ADD"/><circle cx="17" cy="19" r="1.6" fill="#fff"/><circle cx="23" cy="19" r="1.6" fill="#fff"/><path d="M17 22h6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/><line x1="20" y1="9" x2="20" y2="14" stroke="#185FA5" stroke-width="1.6"/><circle cx="20" cy="8" r="1.6" fill="#EF9F27"/></svg>
+    还记得昨天吗？
+  </h2>
+  <div class="body">
+  <p>昨天认识了 WorkBuddy，工作伙伴。</p>
+  <p>"Work"就是"做事"——学习、画画、想问题，都是做事。</p>
+  <p>所以工作伙伴，就是<b>陪你做事的好伙伴</b>。</p>
+  <p class="lead">可它是从哪儿来的呢？</p>
+  <div class="factbox">
+    <div class="ft">先记住三个小知识 👇</div>
+    <p>📅 <b>2026 年 3 月</b>和大家见面的</p>
+    <p>🔧 做它的是<b>中国腾讯云的 CodeBuddy（代码伙伴）团队</b></p>
+    <p>🏠 管着它的是<b>中国的腾讯公司</b></p>
+  </div>
+  </div>
+</div>
+
+<!-- 2. 谁在用 -->
+<div class="card c-coral">
+  <svg class="scene" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="好多好多人在用">
+    <rect x="0" y="0" width="680" height="150" fill="#FAECE7"/>
+    <g fill="#F0997B" opacity=".5">
+      <circle cx="80" cy="60" r="13"/><circle cx="140" cy="50" r="13"/><circle cx="200" cy="65" r="13"/>
+      <circle cx="260" cy="55" r="13"/><circle cx="340" cy="62" r="13"/><circle cx="420" cy="50" r="13"/>
+      <circle cx="490" cy="60" r="13"/><circle cx="560" cy="55" r="13"/><circle cx="620" cy="62" r="13"/>
+    </g>
+    <g>
+      <circle cx="110" cy="85" r="16" fill="#FFE0B2"/><rect x="98" y="100" width="24" height="30" rx="6" fill="#7BC97B"/>
+      <circle cx="300" cy="88" r="16" fill="#FFE0B2"/><rect x="288" y="103" width="24" height="30" rx="6" fill="#7BC0C9"/>
+      <circle cx="480" cy="86" r="16" fill="#FFE0B2"/><rect x="468" y="101" width="24" height="30" rx="6" fill="#D8A3D8"/>
+    </g>
+    <text x="340" y="140" font-size="16" fill="#993C1D" text-anchor="middle" font-weight="600">两千多万人 · 还在一天比一天多</text>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7" stroke="#993C1D" stroke-width="2"/><circle cx="14" cy="16" r="3" fill="none" stroke="#993C1D" stroke-width="1.6"/><circle cx="26" cy="16" r="3" fill="none" stroke="#993C1D" stroke-width="1.6"/><circle cx="20" cy="26" r="3" fill="none" stroke="#993C1D" stroke-width="1.6"/></svg>
+    好多好多人在用！
+  </h2>
+  <div class="body">
+  <p>3月才见面，才几个月，就有<b>两千多万人</b>在用啦！</p>
+  <p>现在知道它的人还不算多。等你都认识了，用的人会更多。</p>
+  <p>它目前是<b>最新的、最受欢迎</b>的电脑小帮手。不光咱们中国，<b>国外也好多人</b>在用。</p>
+  <p>不过电脑发展快，说不定将来还有更好的呢。所以呀，<b>人人都能用，小朋友也能用</b>！</p>
+  <p class="lead">可它从哪儿来的呢？得从很久很久以前说起……</p>
+  </div>
+</div>
+
+<!-- 3. 很久很久以前的梦 -->
+<div class="card c-amber">
+  <svg class="scene" viewBox="0 0 680 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="远古星空和会动的宝贝">
+    <rect x="0" y="0" width="680" height="170" fill="#FAEEDA"/>
+    <rect x="0" y="0" width="340" height="90" fill="#1a1a2e"/>
+    <g fill="#FFE066" opacity=".9"><circle cx="40" cy="20" r="1.5"/><circle cx="90" cy="30" r="2"/><circle cx="150" cy="18" r="1.5"/><circle cx="210" cy="28" r="1.5"/><circle cx="280" cy="22" r="2"/></g>
+    <circle cx="270" cy="40" r="14" fill="#F4E4BC" opacity=".9"/>
+    <circle cx="110" cy="55" r="10" fill="#E8C39E"/>
+    <path d="M100 65 Q110 62 120 65 L120 85 L100 85 Z" fill="#8B6F47"/>
+    <path d="M110 45 Q120 30 135 25" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 3" opacity=".6"/>
+    <rect x="125" y="18" width="22" height="16" rx="3" fill="#fff" opacity=".85"/>
+    <rect x="128" y="21" width="16" height="10" rx="2" fill="#85B7EB"/>
+    <rect x="0" y="90" width="340" height="80" fill="#FAEEDA"/>
+    <text x="510" y="24" font-size="14" fill="#854F0B" text-anchor="middle" font-weight="600">木牛流马 · 铁巨人</text>
+    <g>
+      <rect x="430" y="95" width="100" height="42" rx="8" fill="#C89968" stroke="#8B5E2A" stroke-width="2"/>
+      <ellipse cx="420" cy="105" rx="24" ry="19" fill="#C89968" stroke="#8B5E2A" stroke-width="2"/>
+      <circle cx="412" cy="102" r="2.5" fill="#333"/>
+      <rect x="438" y="137" width="8" height="18" rx="3" fill="#8B5E2A"/>
+      <rect x="462" y="137" width="8" height="18" rx="3" fill="#8B5E2A"/>
+      <rect x="500" y="137" width="8" height="18" rx="3" fill="#8B5E2A"/>
+      <rect x="520" y="137" width="8" height="18" rx="3" fill="#8B5E2A"/>
+      <circle cx="442" cy="158" r="6" fill="none" stroke="#8B5E2A" stroke-width="2"/>
+      <circle cx="466" cy="158" r="6" fill="none" stroke="#8B5E2A" stroke-width="2"/>
+      <circle cx="504" cy="158" r="6" fill="none" stroke="#8B5E2A" stroke-width="2"/>
+      <circle cx="524" cy="158" r="6" fill="none" stroke="#8B5E2A" stroke-width="2"/>
+      <rect x="465" y="80" width="34" height="18" rx="4" fill="#B58855" stroke="#8B5E2A" stroke-width="1.5"/>
+    </g>
+    <g>
+      <rect x="575" y="65" width="55" height="45" rx="8" fill="#9AA7B4" stroke="#4A5663" stroke-width="2"/>
+      <rect x="583" y="75" width="13" height="8" rx="2" fill="#4A5663"/>
+      <rect x="609" y="75" width="13" height="8" rx="2" fill="#4A5663"/>
+      <circle cx="589" cy="79" r="1.5" fill="#EF9F27"/><circle cx="615" cy="79" r="1.5" fill="#EF9F27"/>
+      <rect x="585" y="110" width="35" height="38" rx="4" fill="#9AA7B4" stroke="#4A5663" stroke-width="2"/>
+      <rect x="565" y="113" width="16" height="30" rx="5" fill="#9AA7B4" stroke="#4A5663" stroke-width="2"/>
+      <rect x="624" y="113" width="16" height="30" rx="5" fill="#9AA7B4" stroke="#4A5663" stroke-width="2"/>
+      <rect x="588" y="148" width="12" height="14" rx="3" fill="#9AA7B4" stroke="#4A5663" stroke-width="2"/>
+      <rect x="605" y="148" width="12" height="14" rx="3" fill="#9AA7B4" stroke="#4A5663" stroke-width="2"/>
+      <circle cx="572" cy="95" r="2" fill="#4A5663"/><circle cx="633" cy="95" r="2" fill="#4A5663"/>
+    </g>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAEEDA" stroke="#BA7517" stroke-width="2"/><path d="M14 22a5 5 0 014-8 6 6 0 0111 2 4 4 0 01-1 8h-9a5 5 0 01-5-2z" fill="none" stroke="#854F0B" stroke-width="2"/></svg>
+    很久很久以前的梦
+  </h2>
+  <div class="body">
+  <p>比爷爷的爷爷还早，没有电脑、没有手机、连电灯都没有。</p>
+  <p>可那时候的人就有个梦：</p>
+  <div class="quote">"要是能造一个会自己动、会想问题的小东西，多好呀！"</div>
+  <p>因为太想啦，古时候的人编了好多故事：</p>
+  <p>
+    <span class="pill p-amber">中国的木牛流马</span>
+    <span class="pill p-coral">远方的铁巨人</span>
+  </p>
+  <p>传说诸葛亮造了木牛流马，能自己走路搬东西；远方还有个会动的铁巨人。</p>
+  <p>这些故事不一定是真的，可都在说：<b>人类想造个会动的伙伴，想了好几千年啦</b>！</p>
+  </div>
+</div>
+
+<!-- 4. 小工具变聪明 -->
+<div class="card c-green">
+  <svg class="scene" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="算盘 计算器 电脑">
+    <rect x="0" y="0" width="680" height="160" fill="#E1F5EE"/>
+    <text x="110" y="22" font-size="15" fill="#0F6E56" text-anchor="middle" font-weight="600">算盘</text>
+    <text x="340" y="22" font-size="15" fill="#0F6E56" text-anchor="middle" font-weight="600">计算器</text>
+    <text x="570" y="22" font-size="15" fill="#0F6E56" text-anchor="middle" font-weight="600">电脑</text>
+    <path d="M200 80 Q230 60 250 80" fill="none" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round"/>
+    <path d="M430 80 Q460 60 480 80" fill="none" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round"/>
+    <g>
+      <rect x="55" y="50" width="110" height="80" rx="6" fill="#D4A574" stroke="#8B5E2A" stroke-width="2"/>
+      <line x1="55" y1="68" x2="165" y2="68" stroke="#8B5E2A" stroke-width="1.5"/>
+      <line x1="72" y1="50" x2="72" y2="130" stroke="#8B5E2A" stroke-width="1"/>
+      <line x1="95" y1="50" x2="95" y2="130" stroke="#8B5E2A" stroke-width="1"/>
+      <line x1="118" y1="50" x2="118" y2="130" stroke="#8B5E2A" stroke-width="1"/>
+      <line x1="140" y1="50" x2="140" y2="130" stroke="#8B5E2A" stroke-width="1"/>
+      <g fill="#8B5E2A">
+        <circle cx="83" cy="60" r="3.5"/><circle cx="106" cy="60" r="3.5"/><circle cx="129" cy="60" r="3.5"/><circle cx="151" cy="60" r="3.5"/>
+        <circle cx="83" cy="80" r="3.5"/><circle cx="106" cy="80" r="3.5"/><circle cx="129" cy="80" r="3.5"/><circle cx="151" cy="80" r="3.5"/>
+        <circle cx="83" cy="100" r="3.5"/><circle cx="106" cy="100" r="3.5"/><circle cx="129" cy="100" r="3.5"/><circle cx="151" cy="100" r="3.5"/>
+        <circle cx="83" cy="120" r="3.5"/><circle cx="106" cy="120" r="3.5"/><circle cx="129" cy="120" r="3.5"/><circle cx="151" cy="120" r="3.5"/>
+      </g>
+    </g>
+    <g>
+      <rect x="285" y="50" width="110" height="80" rx="8" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2"/>
+      <rect x="295" y="58" width="90" height="22" rx="3" fill="#1a3a2a"/>
+      <text x="340" y="73" font-size="11" fill="#5DCAA5" text-anchor="middle">1234</text>
+      <g fill="#fff" stroke="#0F6E56" stroke-width="1">
+        <rect x="297" y="88" width="18" height="14" rx="2"/><rect x="320" y="88" width="18" height="14" rx="2"/><rect x="343" y="88" width="18" height="14" rx="2"/><rect x="366" y="88" width="18" height="14" rx="2"/>
+        <rect x="297" y="108" width="18" height="14" rx="2"/><rect x="320" y="108" width="18" height="14" rx="2"/><rect x="343" y="108" width="18" height="14" rx="2"/><rect x="366" y="108" width="18" height="14" rx="2"/>
+      </g>
+    </g>
+    <g>
+      <rect x="510" y="48" width="120" height="78" rx="6" fill="#3C4858" stroke="#1a2030" stroke-width="2"/>
+      <rect x="520" y="56" width="100" height="54" rx="3" fill="#378ADD"/>
+      <g fill="#B5D4F4" opacity=".5"><rect x="526" y="62" width="30" height="5" rx="1"/><rect x="526" y="72" width="20" height="5" rx="1"/></g>
+      <rect x="540" y="126" width="60" height="6" rx="2" fill="#5A6473"/>
+      <rect x="530" y="130" width="80" height="6" rx="2" fill="#6A7483"/>
+    </g>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E1F5EE" stroke="#0F6E56" stroke-width="2"/><line x1="13" y1="15" x2="27" y2="15" stroke="#0F6E56" stroke-width="2"/><line x1="13" y1="20" x2="27" y2="20" stroke="#0F6E56" stroke-width="2"/><line x1="13" y1="25" x2="27" y2="25" stroke="#0F6E56" stroke-width="2"/><circle cx="20" cy="15" r="2" fill="#0F6E56"/><circle cx="20" cy="20" r="2" fill="#0F6E56"/><circle cx="20" cy="25" r="2" fill="#0F6E56"/></svg>
+    小工具，一点点变聪明
+  </h2>
+  <div class="body">
+  <p>后来呀，人发明了好多帮自己的小东西：</p>
+  <p>先有算盘，啪嗒啪嗒拨珠子；再有计算器，嘀一下答案就出来；后来有了电脑，比前两个都厉害。</p>
+  <p>工具越来越聪明，可人还想：</p>
+  <div class="quote">"能不能造一个，会自己想问题的呢？"</div>
+  </div>
+</div>
+
+<!-- 5. AI出生并长大 -->
+<div class="card c-purple">
+  <svg class="scene" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI出生并长大">
+    <rect x="0" y="0" width="680" height="160" fill="#EEEDFE"/>
+    <g opacity=".5"><circle cx="100" cy="40" r="4" fill="#AFA9EC"/><circle cx="580" cy="35" r="5" fill="#AFA9EC"/></g>
+    <g fill="none" stroke="#534AB7" stroke-width="2.5" stroke-linecap="round">
+      <line x1="240" y1="35" x2="240" y2="23"/><line x1="240" y1="125" x2="240" y2="137"/>
+      <line x1="180" y1="80" x2="168" y2="80"/><line x1="300" y1="80" x2="312" y2="80"/>
+      <line x1="200" y1="42" x2="190" y2="32"/><line x1="280" y1="42" x2="290" y2="32"/>
+    </g>
+    <rect x="200" y="45" width="80" height="70" rx="12" fill="#fff" stroke="#534AB7" stroke-width="2.5"/>
+    <text x="240" y="92" font-size="26" fill="#534AB7" text-anchor="middle" font-weight="700">AI</text>
+    <g><circle cx="120" cy="75" r="10" fill="#FFE0B2"/><rect x="112" y="84" width="16" height="22" rx="4" fill="#7BC97B"/><circle cx="117" cy="73" r="1.5" fill="#333"/><circle cx="123" cy="73" r="1.5" fill="#333"/></g>
+    <path d="M135 78 Q170 60 195 72" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-dasharray="3 3" opacity=".5"/>
+    <path d="M320 78 L360 78" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round"/>
+    <polygon points="358,73 368,78 358,83" fill="#534AB7"/>
+    <g>
+      <circle cx="440" cy="70" r="10" fill="#B5D4F4" stroke="#0F6E56" stroke-width="1.5"/>
+      <circle cx="436" cy="68" r="1.8" fill="#333"/><circle cx="444" cy="68" r="1.8" fill="#333"/>
+      <path d="M435 74q5 3 10 0" fill="none" stroke="#333" stroke-width="1" stroke-linecap="round"/>
+      <text x="440" y="100" font-size="12" fill="#3C3489" text-anchor="middle">小宝宝</text>
+    </g>
+    <path d="M455 68 Q480 55 500 60" fill="none" stroke="#AFA9EC" stroke-width="2" stroke-dasharray="4 4"/>
+    <g>
+      <circle cx="530" cy="62" r="13" fill="#B5D4F4" stroke="#0F6E56" stroke-width="1.5"/>
+      <circle cx="526" cy="60" r="2" fill="#333"/><circle cx="534" cy="60" r="2" fill="#333"/>
+      <path d="M525 66q5 3 10 0" fill="none" stroke="#333" stroke-width="1" stroke-linecap="round"/>
+      <text x="530" y="95" font-size="12" fill="#3C3489" text-anchor="middle" font-weight="600">长大啦！</text>
+    </g>
+    <path d="M548 58 Q575 45 595 52" fill="none" stroke="#AFA9EC" stroke-width="2" stroke-dasharray="4 4"/>
+    <g>
+      <circle cx="620" cy="50" r="16" fill="#B5D4F4" stroke="#0F6E56" stroke-width="2"/>
+      <circle cx="614" cy="48" r="2.5" fill="#333"/><circle cx="626" cy="48" r="2.5" fill="#333"/>
+      <path d="M613 56q7 4 14 0" fill="none" stroke="#333" stroke-width="1.2" stroke-linecap="round"/>
+    </g>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#EEEDFE" stroke="#534AB7" stroke-width="2"/><circle cx="20" cy="18" r="6" fill="none" stroke="#3C3489" stroke-width="2"/><path d="M17 24h6M18 28h4" stroke="#3C3489" stroke-width="2" stroke-linecap="round"/></svg>
+    "AI"出生，又长大
+  </h2>
+  <div class="body">
+  <p>大约 <b>70 年前</b>（1956 年），有几个聪明的叔叔阿姨，从<b>世界各地</b>聚到一起。</p>
+  <p>他们给"会思考的机器"起了个名字，叫<b>"人工智能"</b>，英文缩写是 <b>AI</b>——就是<b>人做的、聪明的东西</b>。</p>
+  <p class="lead">从这天起，AI 就出生啦！</p>
+  <p>AI 也像小朋友一样，不是一下子就什么都会。有时学得快，有时遇到困难，像生病要歇一歇。</p>
+  <p>可人类没放弃，<b>全世界好多国家</b>一起教它、陪它，像爸爸妈妈陪你长大一样。</p>
+  </div>
+</div>
+
+<!-- 6. AI学会干活，WorkBuddy来了 -->
+<div class="card">
+  <svg class="scene" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WorkBuddy来了">
+    <rect x="0" y="0" width="680" height="160" fill="#E6F1FB"/>
+    <rect x="0" y="120" width="680" height="40" fill="#D4E8F7"/>
+    <g opacity=".4" fill="#85B7EB">
+      <rect x="40" y="60" width="50" height="60" rx="4"/><rect x="100" y="50" width="50" height="70" rx="4"/>
+      <rect x="540" y="55" width="50" height="65" rx="4"/><rect x="600" y="48" width="50" height="72" rx="4"/>
+    </g>
+    <circle cx="340" cy="65" r="35" fill="#FFE066" opacity=".3"/>
+    <rect x="295" y="40" width="90" height="75" rx="20" fill="#85B7EB" stroke="#185FA5" stroke-width="2.5"/>
+    <rect x="278" y="68" width="16" height="28" rx="8" fill="#B5D4F4" stroke="#185FA5" stroke-width="2"/>
+    <rect x="386" y="68" width="16" height="28" rx="8" fill="#B5D4F4" stroke="#185FA5" stroke-width="2"/>
+    <circle cx="318" cy="68" r="11" fill="#fff"/><circle cx="362" cy="68" r="11" fill="#fff"/>
+    <circle cx="321" cy="71" r="6" fill="#042C53"/><circle cx="365" cy="71" r="6" fill="#042C53"/>
+    <circle cx="323" cy="68" r="2" fill="#fff"/><circle cx="367" cy="68" r="2" fill="#fff"/>
+    <circle cx="302" cy="92" r="8" fill="#F0997B" opacity=".6"/><circle cx="378" cy="92" r="8" fill="#F0997B" opacity=".6"/>
+    <path d="M318 92 Q340 112 362 92" fill="none" stroke="#042C53" stroke-width="3" stroke-linecap="round"/>
+    <rect x="305" y="115" width="70" height="35" rx="10" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2"/>
+    <text x="340" y="138" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">WorkBuddy</text>
+    <g fill="#EF9F27">
+      <path d="M260 50l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z"/>
+      <path d="M420 50l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z"/>
+    </g>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E6F1FB" stroke="#185FA5" stroke-width="2"/><rect x="13" y="14" width="14" height="11" rx="3" fill="#378ADD"/><circle cx="17" cy="19" r="1.6" fill="#fff"/><circle cx="23" cy="19" r="1.6" fill="#fff"/><path d="M17 22h6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/><line x1="20" y1="9" x2="20" y2="14" stroke="#185FA5" stroke-width="1.6"/><circle cx="20" cy="8" r="1.6" fill="#EF9F27"/></svg>
+    AI 学会干活啦——WorkBuddy 来了！
+  </h2>
+  <div class="body">
+  <p>AI 慢慢学会了认图、说话、下棋、画画、聊天。</p>
+  <p>到现在呀，它又往前走了一大步——不光会想、会说，还会<b>干活</b>啦！</p>
+  <p>你说一句话，它自己想办法，一步步把事做完，把结果给你。</p>
+  <p class="lead">这个会干活的好帮手，就是 WorkBuddy！</p>
+  <div class="factbox">
+    <div class="ft">还记得开头说的吗？👇</div>
+    <p>📅 <b>2026 年 3 月</b>和大家见面</p>
+    <p>🔧 <b>中国腾讯云 CodeBuddy（代码伙伴）团队</b>做出来的</p>
+    <p>🏠 <b>中国的腾讯公司</b>照顾和管着</p>
+  </div>
+  <div class="quote">AI 从只会想，变成了会干活啦！</div>
+  </div>
+</div>
+
+<!-- 7. 万年结晶 -->
+<div class="card c-purple">
+  <svg class="scene" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="万年结晶">
+    <rect x="0" y="0" width="680" height="150" fill="#EEEDFE"/>
+    <path d="M340 25 L375 60 L365 105 L315 105 L305 60 Z" fill="#AFA9EC" stroke="#534AB7" stroke-width="2"/>
+    <path d="M340 25 L340 105 M305 60 L375 60" stroke="#534AB7" stroke-width="1" opacity=".4"/>
+    <circle cx="340" cy="65" r="6" fill="#FFE066"/>
+    <g opacity=".6">
+      <circle cx="100" cy="40" r="3" fill="#AFA9EC"/><circle cx="150" cy="60" r="2.5" fill="#AFA9EC"/>
+      <circle cx="540" cy="45" r="3" fill="#AFA9EC"/><circle cx="580" cy="65" r="2.5" fill="#AFA9EC"/>
+      <circle cx="80" cy="100" r="2.5" fill="#AFA9EC"/><circle cx="600" cy="100" r="2.5" fill="#AFA9EC"/>
+    </g>
+    <text x="340" y="130" font-size="14" fill="#3C3489" text-anchor="middle" font-weight="600">人类上万年梦想结出的果子</text>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#EEEDFE" stroke="#534AB7" stroke-width="2"/><path d="M20 11l2.5 5.5 6 .6-4.5 4.2 1.2 6L20 26l-5.2 2.3 1.2-6-4.5-4.2 6-.6z" fill="#AFA9EC" stroke="#534AB7" stroke-width="1.2"/></svg>
+    好多人、好多年的果子
+  </h2>
+  <div class="body">
+  <p>回头看一眼：</p>
+  <p>很久以前的梦 → 古时候的故事 → 算盘计算器 → AI 出生 → AI 长大 → 今天——</p>
+  <p>这一路，有<b>好多人</b>想了<b>好多年</b>，才有了 WorkBuddy。</p>
+  <p>它不光是腾讯做的——是<b>全世界人类想了上万年、一起努力</b>，才结出的果子。</p>
+  </div>
+</div>
+
+<!-- 8. 它要去哪儿 -->
+<div class="card">
+  <svg class="scene" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="小朋友和WorkBuddy一起">
+    <rect x="0" y="0" width="680" height="150" fill="#E6F1FB"/>
+    <circle cx="340" cy="75" r="50" fill="#FFE066" opacity=".2"/>
+    <g>
+      <circle cx="270" cy="60" r="18" fill="#FFE0B2"/>
+      <circle cx="264" cy="58" r="2.5" fill="#333"/><circle cx="276" cy="58" r="2.5" fill="#333"/>
+      <path d="M263 66q7 5 14 0" fill="none" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="252" y="78" width="36" height="45" rx="8" fill="#F0997B"/>
+      <rect x="248" y="85" width="12" height="30" rx="5" fill="#FFE0B2"/>
+      <rect x="280" y="85" width="12" height="30" rx="5" fill="#FFE0B2"/>
+    </g>
+    <g>
+      <rect x="365" y="40" width="70" height="58" rx="16" fill="#85B7EB" stroke="#185FA5" stroke-width="2"/>
+      <circle cx="385" cy="60" r="8" fill="#fff"/><circle cx="415" cy="60" r="8" fill="#fff"/>
+      <circle cx="387" cy="62" r="4" fill="#042C53"/><circle cx="417" cy="62" r="4" fill="#042C53"/>
+      <path d="M385 72q15 8 30 0" fill="none" stroke="#042C53" stroke-width="2" stroke-linecap="round"/>
+      <rect x="378" y="98" width="44" height="32" rx="10" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2"/>
+    </g>
+    <path d="M292 95 L360 90" fill="none" stroke="#378ADD" stroke-width="3" stroke-linecap="round"/>
+    <text x="340" y="140" font-size="15" fill="#0C447C" text-anchor="middle" font-weight="600">一起学习 · 一起做事 · 一起进步</text>
+  </svg>
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E6F1FB" stroke="#185FA5" stroke-width="2"/><circle cx="20" cy="16" r="5" fill="none" stroke="#0C447C" stroke-width="2"/><path d="M11 30c1-5 5-7 9-7s8 2 9 7" fill="none" stroke="#0C447C" stroke-width="2" stroke-linecap="round"/></svg>
+    它要去哪儿？小朋友要准备好哦！
+  </h2>
+  <div class="body">
+  <p>它会<b>越长越聪明</b>，住进<b>更多地方</b>——电脑里、手机里，还有好多想不到的地方。</p>
+  <p>等你长大，<b>工作伙伴会到处都是</b>，就像现在到处有电灯、有手机一样平常。</p>
+  <p class="lead">你不光将来能造它，更要会用它！</p>
+  <div class="timeline">
+    <div class="step"><span class="dot"></span><b>一起学习</b><span>不懂的，问它就好</span></div>
+    <div class="step"><span class="dot"></span><b>一起做事</b><span>它帮你，你帮它</span></div>
+    <div class="step"><span class="dot"></span><b>一起进步</b><span>越来越厉害</span></div>
+  </div>
+  <p>所以现在，<b>多学一点，多想一点，多问为什么</b>。</p>
+  <p>等长大，就能开开心心走进<b>有工作伙伴的世界</b>啦！</p>
+  <div class="note">
+    小朋友，记住这几件事：<br>
+    🔤 AI = 人工智能，"人做的聪明东西"<br>
+    🎂 70 年前出生，慢慢长大到现在<br>
+    🔧 WorkBuddy 是中国腾讯云 CodeBuddy（代码伙伴）团队做的，2026 年 3 月和大家见面<br>
+    👥 才几个月就有两千多万人在用，人人都能用，小朋友也能用！<br>
+    🌍 它是全世界人类想了上万年、一起努力才结出的果子<br>
+    🌟 等你长大，工作伙伴会到处都是，你要准备好跟它一起生活、一起进步！
+  </div>
+  </div>
+</div>
+
+<footer>WorkBuddy（沃克巴迪）的故事 · 第二篇 · 2026</footer>
+
+</div>
+<!-- 朗读功能 · 预生成 MP3，任何设备（含微信）都能播放 -->
+<style>
+.tbar{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(0deg,#fff 30%,rgba(255,255,255,.85) 75%,rgba(255,255,255,0));}
+.tbar button{font-family:inherit;font-size:17px;font-weight:800;border:none;border-radius:999px;padding:13px 24px;cursor:pointer;box-shadow:0 5px 16px rgba(0,0,0,.16);transition:transform .12s;}
+.tbar button:active{transform:scale(.95);}
+.tbar .rdPlay{background:#378ADD;color:#fff;}
+.tbar .rdPlay.on{background:#F0997B;}
+.tbar .rdStop{background:#fff;color:#5F5E5A;border:1.5px solid #ddd;display:none;}
+.tbar .rdHint{font-size:12px;color:#9a9a9a;max-width:48%;line-height:1.4;}
+</style>
+<div class="tbar">
+  <button class="rdPlay" id="rdPlay">🔊 听故事</button>
+  <button class="rdStop" id="rdStop">■ 停止</button>
+  <span class="rdHint" id="rdHint"></span>
+</div>
+<div id="startMask" style="position:fixed;inset:0;z-index:99999;background:rgba(253,246,236,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity .4s;">
+  <div style="font-size:60px;">🎵</div>
+  <div style="font-size:22px;font-weight:800;color:#0C447C;margin-top:12px;">点这里，听沃克巴迪的故事</div>
+  <div style="font-size:14px;color:#9a9a9a;margin-top:6px;">先听主题曲，再听故事</div>
+</div>
+<audio id="rdAudio" preload="auto" src="story2.mp3"></audio>
+<script>
+// ===== 主题曲旋律（Web Audio 合成，与主题曲页面一致）=====
+var THEME=(function(){
+  var N={C3:130.81,D3:146.83,E3:164.81,G3:196.00,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25,G5:783.99,C6:1046.50,R:0};
+  var B=0.42;
+  var sg=[[[["C5",1],["G4",.5],["E4",.5],["R",.3],["C5",1],["G4",.5],["E4",.5],["D4",.5]],0],[[["E4",.5],["E4",.5],["G4",.5],["A4",.5],["C5",1],["R",.2],["C5",.5],["B4",.5],["G4",1],["R",.2],["A4",.5],["G4",.5],["E4",1.2]],1],[[["C5",1],["G4",.5],["E4",.5],["D4",.5],["R",.2],["C5",1],["G4",.5],["E4",.5],["D4",.5]],2],[[["C6",.4],["C6",.4],["R",.3],["G5",.4],["G5",.4],["R",.3],["C6",.3],["G5",.3],["C6",.3],["G5",.3],["R",.5]],3]];
+  var bs=[["C3",2],["C3",2],["C3",2],["G3",2],["C3",2],["C3",2],["G3",2],["C3",2],["C3",2]];
+  function P(cb){
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC){cb&&cb();return null;}
+    var c=new AC(),m=c.createGain();m.gain.value=.5;m.connect(c.destination);
+    function n(f,s,d,t,v){if(!f)return;var o=c.createOscillator(),g=c.createGain();o.type=t||"triangle";o.frequency.value=f;o.connect(g);g.connect(m);g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v||.26,s+.015);g.gain.exponentialRampToValueAtTime((v||.26)*.6,s+.06);g.gain.exponentialRampToValueAtTime(.0008,s+d);o.start(s);o.stop(s+d+.05);}
+    function dn(f,s,d){if(!f)return;var o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=f;o.connect(g);g.connect(m);g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.18,s+.005);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d+.03);}
+    var t0=c.currentTime+.1,t=t0;
+    sg.forEach(function(sg2){sg2[0].forEach(function(x){var d=x[1]*B;n(N[x[0]],t,d*.92,sg2[1]===3?"square":"triangle");if(sg2[1]===3&&x[0]!=="R")dn(N[x[0]]*2,t,d*.6);t+=d;});});
+    var bt=t0;bs.forEach(function(b){var d=b[1]*B;n(N[b[0]],bt,d*.9,"sine",.2);n(N[b[0]],bt+d*.5,d*.45,"sine",.16);bt+=d;});
+    var total=(t-t0)*1000+200;
+    setTimeout(function(){cb&&cb();},total);
+    return c;
+  }
+  return {play:P};
+})();
+// ===== 播放器：先主题曲，再故事 =====
+(function(){
+  var audio=document.getElementById('rdAudio');
+  var playBtn=document.getElementById('rdPlay'),stopBtn=document.getElementById('rdStop'),hint=document.getElementById('rdHint');
+  var mask=document.getElementById('startMask');
+  if(!audio||!audio.canPlayType){hint.textContent='此设备不支持音频播放';return;}
+  var themePlayed=false,themeCtx=null,waitingNarration=false;
+  function resetUI(){playBtn.textContent='\u{1F50A} 听故事';playBtn.classList.remove('on');stopBtn.style.display='none';}
+  function clearTheme(){if(themeCtx){try{themeCtx.close();}catch(e){}themeCtx=null;}}
+  audio.addEventListener('play',function(){playBtn.textContent='\u23F8 暂停';playBtn.classList.add('on');stopBtn.style.display='';});
+  audio.addEventListener('pause',function(){playBtn.textContent='\u25B6 继续';playBtn.classList.remove('on');});
+  audio.addEventListener('ended',function(){resetUI();hint.textContent='故事讲完啦';themePlayed=false;});
+  audio.addEventListener('error',function(){hint.textContent='音频加载失败，请检查网络';resetUI();});
+  function startAll(){
+    if(!themePlayed&&!waitingNarration&&audio.paused&&audio.currentTime===0){
+      themePlayed=true;waitingNarration=true;
+      playBtn.textContent='\u{1F3B5} 主题曲…';playBtn.classList.add('on');stopBtn.style.display='';
+      hint.textContent='正在播放主题曲';
+      themeCtx=THEME.play(function(){
+        waitingNarration=false;hint.textContent='';
+        audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';resetUI();themePlayed=false;});
+      });
+    } else if(waitingNarration){
+      clearTheme();waitingNarration=false;hint.textContent='';
+      audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';});
+    } else {
+      if(audio.paused){audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';});}
+      else{audio.pause();}
+    }
+  }
+  playBtn.addEventListener('click',startAll);
+  // 开场遮罩：点一下就开始（主题曲+故事）
+  if(mask){
+    mask.addEventListener('click',function(){
+      mask.style.opacity='0';
+      setTimeout(function(){mask.style.display='none';},400);
+      startAll();
+    });
+  }
+  stopBtn.addEventListener('click',function(){clearTheme();waitingNarration=false;audio.pause();audio.currentTime=0;resetUI();hint.textContent='';themePlayed=false;});
+})();
+</script>
+
+<!-- 集间导航 -->
+<div class="nav-fab" id="navFab" onclick="document.getElementById('navOverlay').classList.add('show');document.getElementById('navPanel').classList.add('show')">☰</div>
+<div class="nav-overlay" id="navOverlay" onclick="this.classList.remove('show');document.getElementById('navPanel').classList.remove('show')"></div>
+<div class="nav-panel" id="navPanel">
+  <button class="nav-close" onclick="document.getElementById('navOverlay').classList.remove('show');document.getElementById('navPanel').classList.remove('show')">✕</button>
+  <div class="np-title">沃克巴迪的故事</div>
+<a class="collection" href="https://867d8e5c42c14574b74ae6cb01d7cb8c.app.codebuddy.work"><span class="np-num">📖</span>合集目录</a>
+<a class="prelude" href="https://c3ecf1d883b2417db00e6079e84e3606.app.codebuddy.work"><span class="np-num">🎵</span>序曲 · 斯卡布罗集市圆号版</a>
+<a class="story" href="https://ce5f2dbc1cd6411dbf64a1521636ebc6.app.codebuddy.work"><span class="np-num">1</span>第一篇 · WorkBuddy工作伙伴</a>
+<a class="story current" href="https://91f3afe7089a4ec5afa9a6b407e37d23.app.codebuddy.work"><span class="np-num">2</span>第二篇 · 它从哪儿来的</a>
+<a class="story" href="https://175a1bd63b0f44e6b623f7f87d9e8e5d.app.codebuddy.work"><span class="np-num">3</span>第三篇 · 怎么学习跟沃克巴迪做事</a>
+<a class="story" href="https://29a1239baf15483d93eeab70a1aff1b4.app.codebuddy.work"><span class="np-num">4</span>第四篇 · 沃克巴迪能帮你做什么</a>
+<a class="story" href="https://6892155814574a8db037b2b39930b5f3.app.codebuddy.work"><span class="np-num">5</span>第五篇 · 和沃克巴迪一起长大</a>
+<a class="theme" href="https://e57ac8793a0342888344acc3ded6b040.app.codebuddy.work"><span class="np-num">🎶</span>主题曲 · 沃克巴迪之歌</a>
+</div>
+<a class="nav-next blue" href="https://175a1bd63b0f44e6b623f7f87d9e8e5d.app.codebuddy.work">下一集：第三篇 ›</a>
+<a class="nav-back" href="https://ce5f2dbc1cd6411dbf64a1521636ebc6.app.codebuddy.work">‹ 上一集：第一篇</a>
+
+</body>
+</html>

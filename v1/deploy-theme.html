@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沃克巴迪的故事 · 主题曲</title>
+<style>
+  :root{
+    --bg:#FDF6EC; --card:#FFFFFF; --ink:#2C2C2A; --muted:#5F5E5A;
+    --blue:#378ADD; --blue-d:#0C447C; --blue-l:#E6F1FB;
+    --green:#5DCAA5; --green-d:#0F6E56; --green-l:#E1F5EE;
+    --amber:#EF9F27; --amber-l:#FAEEDA;
+    --purple:#AFA9EC; --purple-d:#3C3489; --purple-l:#EEEDFE;
+    --coral:#F0997B; --coral-l:#FAECE7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:linear-gradient(160deg,#E6F1FB 0%,#FDF6EC 50%,#FAEEDA 100%);
+    color:var(--ink); line-height:1.7;
+    min-height:100vh; padding:0 16px 40px;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:560px; margin:0 auto; text-align:center; padding-top:30px;}
+  .title-row{ display:inline-block; background:var(--purple-l); color:var(--purple-d); font-size:14px; font-weight:700; padding:4px 16px; border-radius:20px; margin-bottom:14px;}
+  h1{ font-size:30px; font-weight:800; color:var(--blue-d); margin-bottom:6px; letter-spacing:1px;}
+  .sub{ font-size:16px; color:var(--muted); margin-bottom:24px;}
+
+  /* 机器人区 */
+  .stage{
+    position:relative; height:220px; margin:0 auto 10px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .bot-wrap{
+    width:170px; height:170px;
+    transition:transform .15s ease;
+    transform-origin:bottom center;
+  }
+  .bot-wrap.bounce{ animation:bounce .5s ease infinite; }
+  @keyframes bounce{
+    0%,100%{ transform:translateY(0) scale(1); }
+    50%{ transform:translateY(-14px) scale(1.04); }
+  }
+  /* 浮动音符 */
+  .float-note{
+    position:absolute; font-size:26px; opacity:0;
+    pointer-events:none; animation:floatUp 1.6s ease-out forwards;
+  }
+  @keyframes floatUp{
+    0%{ opacity:0; transform:translateY(20px) scale(.6); }
+    20%{ opacity:1; }
+    100%{ opacity:0; transform:translateY(-90px) scale(1.3) rotate(20deg); }
+  }
+
+  /* 歌词卡片 */
+  .lyrics{
+    background:var(--card); border-radius:20px; padding:28px 24px;
+    margin-top:16px; box-shadow:0 4px 20px rgba(0,0,0,.06);
+    border:2px solid var(--blue-l);
+    min-height:200px; display:flex; flex-direction:column;
+    justify-content:center;
+  }
+  .lyrics .line{
+    font-size:26px; font-weight:700; color:var(--muted);
+    margin:8px 0; transition:all .3s ease;
+    opacity:.4;
+  }
+  .lyrics .line.active{
+    color:var(--blue-d); opacity:1;
+    transform:scale(1.06);
+    text-shadow:0 2px 8px rgba(55,138,221,.2);
+  }
+  .lyrics .line.beep{ color:var(--amber); }
+  .lyrics .line.beep.active{ color:var(--amber); }
+
+  /* 播放按钮 */
+  .controls{ margin-top:24px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+  .btn{
+    font-family:inherit; font-size:18px; font-weight:800;
+    border:none; border-radius:999px; padding:15px 30px;
+    cursor:pointer; box-shadow:0 5px 16px rgba(0,0,0,.16);
+    transition:transform .12s; display:flex; align-items:center; gap:8px;
+  }
+  .btn:active{ transform:scale(.95); }
+  .btn-play{ background:var(--blue); color:#fff; }
+  .btn-play.on{ background:var(--coral); }
+  .btn-stop{ background:#fff; color:var(--muted); border:1.5px solid #ddd; display:none;}
+  .btn-loop{ background:var(--green-l); color:var(--green-d); border:1.5px solid var(--green); }
+
+  .hint{ font-size:13px; color:#9a9a9a; margin-top:14px; line-height:1.6;}
+  footer{ text-align:center; color:var(--muted); font-size:13px; margin-top:28px;}
+
+  /* 音波 */
+  .wave{ display:flex; gap:4px; align-items:center; justify-content:center; height:30px; margin-top:8px;}
+  .wave span{ width:5px; height:8px; background:var(--blue); border-radius:3px; opacity:.3;}
+  .wave.on span{ animation:wave .6s ease-in-out infinite; }
+  .wave span:nth-child(2){animation-delay:.1s}
+  .wave span:nth-child(3){animation-delay:.2s}
+  .wave span:nth-child(4){animation-delay:.15s}
+  .wave span:nth-child(5){animation-delay:.25s}
+  .wave span:nth-child(6){animation-delay:.1s}
+  .wave span:nth-child(7){animation-delay:.3s}
+  @keyframes wave{ 0%,100%{height:8px} 50%{height:26px} }
+
+  /* ===== 集间导航 ===== */
+  .nav-fab{position:fixed;top:16px;right:16px;z-index:999;width:44px;height:44px;border-radius:50%;
+    background:#fff;border:2px solid var(--blue,#378ADD);box-shadow:0 3px 12px rgba(0,0,0,.15);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;
+    color:var(--blue-d,#0C447C);transition:transform .15s;}
+  .nav-fab:active{transform:scale(.9);}
+  .nav-overlay{position:fixed;inset:0;z-index:998;background:rgba(0,0,0,.35);display:none;
+    opacity:0;transition:opacity .25s;}
+  .nav-overlay.show{display:block;opacity:1;}
+  .nav-panel{position:fixed;top:0;right:0;z-index:999;width:260px;max-width:80vw;height:100vh;
+    background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.12);transform:translateX(100%);
+    transition:transform .3s ease;overflow-y:auto;padding:60px 0 30px;}
+  .nav-panel.show{transform:translateX(0);}
+  .nav-panel .np-title{font-size:16px;font-weight:800;color:#0C447C;padding:0 22px 14px;
+    border-bottom:2px solid #E6F1FB;margin-bottom:8px;}
+  .nav-panel a{display:flex;align-items:center;gap:12px;padding:13px 22px;text-decoration:none;
+    color:#2C2C2A;font-size:15px;transition:background .12s;border-left:3px solid transparent;}
+  .nav-panel a:hover{background:#FDF6EC;}
+  .nav-panel a.current{background:#E6F1FB;border-left-color:#378ADD;font-weight:700;color:#0C447C;}
+  .nav-panel a .np-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
+  .nav-panel a.prelude .np-num{background:linear-gradient(135deg,#D4A017,#E8C547);}
+  .nav-panel a.story .np-num{background:linear-gradient(135deg,#378ADD,#5BA8E8);}
+  .nav-panel a.theme .np-num{background:linear-gradient(135deg,#3CB48F,#5DCAA5);}
+  .nav-panel a.collection .np-num{background:linear-gradient(135deg,#F0997B,#D4633E);}
+  .nav-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
+    border:none;background:#FDF6EC;font-size:18px;color:#5F5E5A;cursor:pointer;}
+  /* 底部下一集按钮 */
+  .nav-next{display:block;margin:36px auto 10px;padding:15px 44px;border-radius:999px;border:none;
+    font-family:inherit;font-size:18px;font-weight:700;cursor:pointer;text-decoration:none;
+    display:flex;align-items:center;gap:10px;justify-content:center;width:fit-content;
+    box-shadow:0 5px 18px rgba(12,68,124,.15);transition:transform .12s;}
+  .nav-next:active{transform:scale(.95);}
+  .nav-next.blue{background:var(--blue,#378ADD);color:#fff;}
+  .nav-next.gold{background:linear-gradient(135deg,#D4A017,#E8C547);color:#fff;}
+  .nav-next.teal{background:linear-gradient(135deg,#3CB48F,#5DCAA5);color:#fff;}
+  .nav-next.coral{background:linear-gradient(135deg,#F0997B,#D4633E);color:#fff;}
+  .nav-back{display:block;margin:8px auto 20px;font-size:14px;color:#5F5E5A;text-decoration:none;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="title-row">WorkBuddy 主题曲</span>
+  <h1>沃克巴迪之歌</h1>
+  <p class="sub">沃克巴迪的故事 · 主题曲</p>
+
+  <!-- 机器人舞台 -->
+  <div class="stage" id="stage">
+    <div class="bot-wrap" id="botWrap">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WorkBuddy 机器人" style="width:100%;height:100%">
+        <circle cx="100" cy="92" r="78" fill="#E6F1FB" opacity=".5"/>
+        <circle cx="100" cy="92" r="62" fill="#FFF9E8" opacity=".6"/>
+        <path d="M30 40l2 5 5 1-4 3.5 1 5-4-2.5-4 2.5 1-5-4-3.5 5-1z" fill="#EF9F27" opacity=".8"/>
+        <path d="M172 50l1.5 4 4 1-3 2.8 .8 4-3.3-2-3.3 2 .8-4-3-2.8 4-1z" fill="#F0997B" opacity=".7"/>
+        <circle cx="40" cy="120" r="3" fill="#5DCAA5" opacity=".6"/>
+        <circle cx="165" cy="130" r="3.5" fill="#AFA9EC" opacity=".6"/>
+        <line x1="100" y1="22" x2="100" y2="40" stroke="#378ADD" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="100" cy="18" r="7" fill="#EF9F27"/>
+        <circle cx="100" cy="18" r="7" fill="none" stroke="#FFB84D" stroke-width="2" opacity=".6"/>
+        <rect x="42" y="40" width="116" height="92" rx="34" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2.5"/>
+        <ellipse cx="72" cy="58" rx="18" ry="10" fill="#fff" opacity=".4"/>
+        <circle cx="38" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+        <circle cx="162" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+        <circle cx="38" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+        <circle cx="162" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+        <ellipse cx="76" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+        <ellipse cx="124" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+        <circle cx="78" cy="80" r="8" fill="#0C447C"/>
+        <circle cx="126" cy="80" r="8" fill="#0C447C"/>
+        <circle cx="81" cy="76" r="3.5" fill="#fff"/>
+        <circle cx="129" cy="76" r="3.5" fill="#fff"/>
+        <circle cx="75" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+        <circle cx="123" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+        <ellipse cx="58" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+        <ellipse cx="142" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+        <path d="M82 104 Q100 122 118 104" fill="none" stroke="#0C447C" stroke-width="3.5" stroke-linecap="round"/>
+        <rect x="58" y="128" width="84" height="50" rx="20" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2.5"/>
+        <ellipse cx="75" cy="140" rx="10" ry="5" fill="#fff" opacity=".3"/>
+        <rect x="62" y="145" width="76" height="30" rx="9" fill="#fff" stroke="#0F6E56" stroke-width="1.8"/>
+        <path d="M100 139c-1.5-2-5-2-5 1 0 2 3 4 5 6 2-2 5-4 5-6 0-3-3.5-3-5-1z" fill="#FF6B8A"/>
+        <text x="100" y="157" text-anchor="middle" font-size="9" font-weight="700" fill="#0F6E56" font-family="sans-serif">WorkBuddy</text>
+        <text x="100" y="170" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2E7BC4" font-family="sans-serif">沃克巴迪</text>
+        <circle cx="44" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+        <circle cx="156" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+        <ellipse cx="78" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+        <ellipse cx="122" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="wave" id="wave">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- 歌词 -->
+  <div class="lyrics" id="lyrics">
+    <div class="line" data-idx="0">沃克巴迪</div>
+    <div class="line" data-idx="1">我的好朋友，好伙伴，好帮手</div>
+    <div class="line" data-idx="2">Work buddy, Work buddy</div>
+  </div>
+
+  <!-- 控制 -->
+  <div class="controls">
+    <button class="btn btn-play" id="playBtn">🎵 播放主题曲</button>
+    <button class="btn btn-stop" id="stopBtn">■ 停止</button>
+    <button class="btn btn-loop" id="loopBtn">🔁 循环：关</button>
+  </div>
+  <p class="hint">点播放就能听啦～机器人会跟着节奏蹦跶</p>
+
+  <footer>WorkBuddy（沃克巴迪）的故事 · 主题曲 · 2026</footer>
+</div>
+
+<script>
+(function(){
+  // ===== 音符频率表 =====
+  var N = {
+    C3:130.81,D3:146.83,E3:164.81,F3:174.61,G3:196.00,A3:220.00,B3:246.94,
+    C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,
+    C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880.00,B5:987.77,
+    C6:1046.50, R:0  // R = 休止符
+  };
+
+  // ===== 歌曲数据 =====
+  // 每段: { text, notes:[ [音符,拍数], ... ] }
+  // 1拍 = 0.42 秒（约 142 BPM，欢快）
+  var BEAT = 0.42;
+
+  var song = [
+    { idx:0, text:"沃克巴，沃克巴迪", notes:[
+      ["C5",1],["G4",0.5],["E4",0.5],["R",0.3],
+      ["C5",1],["G4",0.5],["E4",0.5],["D4",0.5]
+    ]},
+    { idx:1, text:"我的好朋友，好伙伴，好帮手", notes:[
+      ["E4",0.5],["E4",0.5],["G4",0.5],["A4",0.5],["C5",1],["R",0.2],
+      ["C5",0.5],["B4",0.5],["G4",1],["R",0.2],
+      ["A4",0.5],["G4",0.5],["E4",1.2]
+    ]},
+    { idx:2, text:"Work buddy, Work buddy", notes:[
+      ["C5",1],["G4",0.5],["E4",0.5],["D4",0.5],["R",0.2],
+      ["C5",1],["G4",0.5],["E4",0.5],["D4",0.5]
+    ]},
+    { idx:3, text:"滴滴，滴滴", notes:[
+      ["C6",0.4],["C6",0.4],["R",0.3],
+      ["G5",0.4],["G5",0.4],["R",0.3],
+      ["C6",0.3],["G5",0.3],["C6",0.3],["G5",0.3],["R",0.5]
+    ]}
+  ];
+
+  // 低音（每段配一个根音，弹两下）
+  var bass = [
+    ["C3",2],["C3",2],          // 沃克巴 → C
+    ["C3",2],["G3",2],["C3",2], // 我的好朋友 → C G C
+    ["C3",2],["G3",2],          // Work buddy → C G
+    ["C3",2],["C3",2]           // 滴滴 → C
+  ];
+
+  var ctx=null, masterGain=null, timer=null, loopTimer=null;
+  var playing=false, loop=false;
+
+  function initAudio(){
+    if(ctx) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC();
+    masterGain = ctx.createGain();
+    masterGain.gain.value = 0.5;
+    masterGain.connect(ctx.destination);
+  }
+
+  // 播放一个音符（带 ADSR 包络）
+  function note(freq, start, dur, type, vol){
+    if(freq===0) return; // 休止
+    var osc = ctx.createOscillator();
+    var env = ctx.createGain();
+    osc.type = type || "triangle";
+    osc.frequency.value = freq;
+    osc.connect(env);
+    env.connect(masterGain);
+    var v = vol || 0.28;
+    env.gain.setValueAtTime(0, start);
+    env.gain.linearRampToValueAtTime(v, start + 0.015);
+    env.gain.exponentialRampToValueAtTime(v*0.6, start + 0.06);
+    env.gain.exponentialRampToValueAtTime(0.0008, start + dur);
+    osc.start(start);
+    osc.stop(start + dur + 0.05);
+  }
+
+  // 高音点缀（铃声，给滴泖段加亮）
+  function ding(freq, start, dur){
+    var osc = ctx.createOscillator();
+    var env = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    osc.connect(env);
+    env.connect(masterGain);
+    env.gain.setValueAtTime(0, start);
+    env.gain.linearRampToValueAtTime(0.18, start + 0.005);
+    env.gain.exponentialRampToValueAtTime(0.001, start + dur);
+    osc.start(start);
+    osc.stop(start + dur + 0.03);
+  }
+
+  // 简单打击（嗒嗒声）
+  function hat(start, vol){
+    var bufferSize = ctx.sampleRate * 0.05;
+    var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for(var i=0;i<bufferSize;i++){ data[i] = (Math.random()*2-1) * Math.pow(1 - i/bufferSize, 3); }
+    var src = ctx.createBufferSource();
+    var env = ctx.createGain();
+    var filter = ctx.createBiquadFilter();
+    filter.type = "highpass";
+    filter.frequency.value = 6000;
+    src.buffer = buffer;
+    src.connect(filter); filter.connect(env); env.connect(masterGain);
+    env.gain.setValueAtTime(vol||0.12, start);
+    env.gain.exponentialRampToValueAtTime(0.001, start + 0.05);
+    src.start(start);
+    src.stop(start + 0.06);
+  }
+
+  function playSong(){
+    initAudio();
+    if(ctx.state === "suspended") ctx.resume();
+
+    var t0 = ctx.currentTime + 0.1;
+    var t = t0;
+    var lineStartTimes = [];
+
+    // 主旋律
+    song.forEach(function(seg){
+      lineStartTimes.push({idx:seg.idx, time:t});
+      seg.notes.forEach(function(n){
+        var dur = n[1] * BEAT;
+        // 滴滴段用方波（更电子、更像机器人）
+        var tp = (seg.idx===3) ? "square" : "triangle";
+        var vol = (seg.idx===3) ? 0.22 : 0.26;
+        note(N[n[0]], t, dur*0.92, tp, vol);
+        // 滴滴段加铃声点缀
+        if(seg.idx===3 && n[0]!=="R"){
+          ding(N[n[0]]*2, t, dur*0.6);
+        }
+        t += dur;
+      });
+    });
+
+    // 低音
+    var bt = t0;
+    bass.forEach(function(b){
+      var dur = b[1] * BEAT;
+      note(N[b[0]], bt, dur*0.9, "sine", 0.2);
+      note(N[b[0]], bt + dur*0.5, dur*0.45, "sine", 0.16); // 跳一下
+      bt += dur;
+    });
+
+    // 打击（每拍一下）
+    var totalBeats = (t - t0) / BEAT;
+    for(var b=0; b<totalBeats; b+=1){
+      hat(t0 + b*BEAT, 0.08);
+    }
+
+    var totalDur = t - t0;
+
+    // 歌词高亮 + 机器人蹦跶 + 浮动音符
+    lineStartTimes.forEach(function(ls, i){
+      var nextTime = (i < lineStartTimes.length-1) ? lineStartTimes[i+1].time : t;
+      var delay = (ls.time - ctx.currentTime) * 1000;
+      var lineDelay = (nextTime - ctx.currentTime) * 1000;
+      setTimeout(function(){
+        highlightLine(ls.idx);
+        spawnNote();
+      }, Math.max(0,delay));
+    });
+
+    // 停止
+    timer = setTimeout(function(){
+      stopPlay(false);
+      if(loop){
+        loopTimer = setTimeout(playSong, 600);
+      }
+    }, totalDur*1000 + 200);
+  }
+
+  function highlightLine(idx){
+    var lines = document.querySelectorAll("#lyrics .line");
+    lines.forEach(function(l){
+      l.classList.toggle("active", parseInt(l.dataset.idx)===idx);
+    });
+  }
+
+  function clearHighlight(){
+    document.querySelectorAll("#lyrics .line").forEach(function(l){ l.classList.remove("active"); });
+  }
+
+  // 浮动音符
+  var notes = ["🎵","🎶","♬","♪","✨","🤖"];
+  function spawnNote(){
+    var stage = document.getElementById("stage");
+    var el = document.createElement("div");
+    el.className = "float-note";
+    el.textContent = notes[Math.floor(Math.random()*notes.length)];
+    el.style.left = (30 + Math.random()*60) + "%";
+    el.style.bottom = "60px";
+    stage.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 1700);
+  }
+
+  function startPlay(){
+    if(playing) return;
+    playing = true;
+    document.getElementById("playBtn").textContent = "⏸ 暂停";
+    document.getElementById("playBtn").classList.add("on");
+    document.getElementById("stopBtn").style.display = "";
+    document.getElementById("botWrap").classList.add("bounce");
+    document.getElementById("wave").classList.add("on");
+    playSong();
+  }
+
+  function stopPlay(manual){
+    playing = false;
+    if(timer){ clearTimeout(timer); timer=null; }
+    if(loopTimer){ clearTimeout(loopTimer); loopTimer=null; }
+    if(ctx){ try{ ctx.close(); }catch(e){} ctx=null; masterGain=null; }
+    document.getElementById("playBtn").textContent = "🎵 播放主题曲";
+    document.getElementById("playBtn").classList.remove("on");
+    document.getElementById("stopBtn").style.display = "none";
+    document.getElementById("botWrap").classList.remove("bounce");
+    document.getElementById("wave").classList.remove("on");
+    if(manual) clearHighlight();
+    else {
+      // 播完保留最后一句高亮一下
+      setTimeout(clearHighlight, 800);
+    }
+  }
+
+  document.getElementById("playBtn").addEventListener("click", function(){
+    if(playing){ stopPlay(true); }
+    else { startPlay(); }
+  });
+  document.getElementById("stopBtn").addEventListener("click", function(){ stopPlay(true); });
+  document.getElementById("loopBtn").addEventListener("click", function(){
+    loop = !loop;
+    this.textContent = loop ? "🔁 循环：开" : "🔁 循环：关";
+    if(!loop && loopTimer){ clearTimeout(loopTimer); loopTimer=null; }
+  });
+})();
+</script>
+
+<!-- 集间导航 -->
+<div class="nav-fab" id="navFab" onclick="document.getElementById('navOverlay').classList.add('show');document.getElementById('navPanel').classList.add('show')">☰</div>
+<div class="nav-overlay" id="navOverlay" onclick="this.classList.remove('show');document.getElementById('navPanel').classList.remove('show')"></div>
+<div class="nav-panel" id="navPanel">
+  <button class="nav-close" onclick="document.getElementById('navOverlay').classList.remove('show');document.getElementById('navPanel').classList.remove('show')">✕</button>
+  <div class="np-title">沃克巴迪的故事</div>
+<a class="collection" href="https://867d8e5c42c14574b74ae6cb01d7cb8c.app.codebuddy.work"><span class="np-num">📖</span>合集目录</a>
+<a class="prelude" href="https://c3ecf1d883b2417db00e6079e84e3606.app.codebuddy.work"><span class="np-num">🎵</span>序曲 · 斯卡布罗集市圆号版</a>
+<a class="story" href="https://ce5f2dbc1cd6411dbf64a1521636ebc6.app.codebuddy.work"><span class="np-num">1</span>第一篇 · WorkBuddy工作伙伴</a>
+<a class="story" href="https://91f3afe7089a4ec5afa9a6b407e37d23.app.codebuddy.work"><span class="np-num">2</span>第二篇 · 它从哪儿来的</a>
+<a class="story" href="https://175a1bd63b0f44e6b623f7f87d9e8e5d.app.codebuddy.work"><span class="np-num">3</span>第三篇 · 怎么学习跟沃克巴迪做事</a>
+<a class="story" href="https://29a1239baf15483d93eeab70a1aff1b4.app.codebuddy.work"><span class="np-num">4</span>第四篇 · 沃克巴迪能帮你做什么</a>
+<a class="story" href="https://6892155814574a8db037b2b39930b5f3.app.codebuddy.work"><span class="np-num">5</span>第五篇 · 和沃克巴迪一起长大</a>
+<a class="theme current" href="https://e57ac8793a0342888344acc3ded6b040.app.codebuddy.work"><span class="np-num">🎶</span>主题曲 · 沃克巴迪之歌</a>
+</div>
+<a class="nav-next coral" href="https://867d8e5c42c14574b74ae6cb01d7cb8c.app.codebuddy.work">回到合集目录 📖</a>
+<a class="nav-back" href="https://6892155814574a8db037b2b39930b5f3.app.codebuddy.work">‹ 上一集：第五篇</a>
+
+</body>
+</html>

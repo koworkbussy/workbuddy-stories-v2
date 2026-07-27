@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沃克巴迪的故事 · 第三篇 · 怎么学习跟沃克巴迪做事</title>
+<style>
+  :root{
+    --bg:#FDF6EC; --card:#FFFFFF; --ink:#2C2C2A; --muted:#5F5E5A;
+    --blue:#378ADD; --blue-d:#0C447C; --blue-l:#E6F1FB;
+    --green:#5DCAA5; --green-d:#0F6E56; --green-l:#E1F5EE;
+    --amber:#EF9F27; --amber-d:#854F0B; --amber-l:#FAEEDA;
+    --purple:#AFA9EC; --purple-d:#3C3489; --purple-l:#EEEDFE;
+    --coral:#F0997B; --coral-d:#993C1D; --coral-l:#FAECE7;
+    --gray-d:#5F5E5A; --gray-l:#F1EFE8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.9;
+    padding:0 16px 60px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  header{ text-align:center; padding:36px 0 8px; }
+  header .bot{ width:150px; height:150px; margin:0 auto 10px; }
+  header .series{ display:inline-block; background:var(--purple-l); color:var(--purple-d); font-size:13px; font-weight:600; padding:3px 12px; border-radius:20px; margin-bottom:8px;}
+  header .tag{ display:inline-block; background:var(--amber-l); color:var(--amber-d); font-size:14px; font-weight:600; padding:4px 14px; border-radius:20px; margin-bottom:10px;}
+  header h1{ font-size:28px; font-weight:700; color:var(--blue-d); letter-spacing:1px;}
+  header p{ font-size:16px; color:var(--muted); margin-top:6px;}
+  .card{
+    background:var(--card); border-radius:18px; padding:24px 24px 20px;
+    margin-top:20px; box-shadow:0 2px 0 rgba(0,0,0,.03);
+    border-left:7px solid var(--blue); overflow:hidden;
+  }
+  .card h2{ font-size:20px; font-weight:700; display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+  .card h2 .ic{ width:34px; height:34px; flex:0 0 34px; }
+  .scene{ width:100%; height:auto; margin:0 0 16px; border-radius:14px; display:block;}
+  .card p{ font-size:19px; margin-bottom:11px; line-height:1.85;}
+  .card p:last-child{margin-bottom:0}
+  .card .lead{ font-size:21px; font-weight:700; color:var(--blue-d);}
+  .refrain{ font-size:20px; font-weight:600; color:var(--green-d); background:var(--green-l); border-radius:12px; padding:10px 18px; margin:12px 0; text-align:center;}
+  .c-blue{border-left-color:var(--blue);} .c-blue h2{color:var(--blue-d);}
+  .c-gray{border-left-color:#888780;} .c-gray h2{color:var(--gray-d);}
+  .c-amber{border-left-color:var(--amber);} .c-amber h2{color:var(--amber-d);}
+  .c-green{border-left-color:var(--green);} .c-green h2{color:var(--green-d);}
+  .c-purple{border-left-color:var(--purple);} .c-purple h2{color:var(--purple-d);}
+  .c-coral{border-left-color:var(--coral);} .c-coral h2{color:var(--coral-d);}
+  .pill{
+    display:inline-block; padding:4px 13px; border-radius:20px;
+    font-size:16px; font-weight:600; margin:2px 6px 2px 0;
+  }
+  .p-blue{background:var(--blue-l); color:var(--blue-d);}
+  .p-green{background:var(--green-l); color:var(--green-d);}
+  .p-amber{background:var(--amber-l); color:var(--amber-d);}
+  .p-purple{background:var(--purple-l); color:var(--purple-d);}
+  .p-coral{background:var(--coral-l); color:var(--coral-d);}
+  .demo{
+    background:linear-gradient(135deg,#EFF8FF 0%,#E1F5EE 100%);
+    border-radius:16px; padding:18px; margin:16px 0;
+    border:2px solid var(--green);
+  }
+  .demo .dtitle{ font-size:16px; font-weight:700; color:var(--green-d); margin-bottom:12px;}
+  .btnrow{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
+  .dbtn{
+    background:var(--blue-d); color:#fff; border:none; cursor:pointer;
+    padding:10px 18px; border-radius:22px; font-size:15px; font-weight:600;
+    transition:all .2s;
+  }
+  .dbtn:hover{ background:var(--blue); transform:translateY(-1px);}
+  .dbtn.active{ background:var(--green-d);}
+  .dlog{ min-height:60px;}
+  .dbub{ max-width:88%; padding:10px 15px; border-radius:14px; font-size:16px; margin-bottom:8px; line-height:1.6;}
+  .dbub.in{ background:#fff; color:var(--ink); border:1px solid #D9E3EC; align-self:flex-end; margin-left:auto;}
+  .dbub.think{ background:#E8EEF5; color:var(--muted); font-style:italic; align-self:flex-start;}
+  .dbub.out{ background:var(--green-d); color:#fff; align-self:flex-start;}
+  .dstep{ font-size:14px; color:var(--green-d); font-weight:600; margin:6px 0 4px; padding-left:4px;}
+  .dresult{ background:#fff; border:2px dashed var(--green); border-radius:12px; padding:12px; margin:6px 0;}
+  .dresult .rl{ font-size:14px; color:var(--green-d); font-weight:700; margin-bottom:4px;}
+  .fadein{ animation:fi .5s ease both;}
+  @keyframes fi{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .warm{ background:var(--amber-l); border-radius:14px; padding:14px 20px; font-size:18px; margin:14px 0; color:var(--amber-d); line-height:1.8;}
+  .warm b{ color:var(--amber-d);}
+  .twoparty{ display:flex; gap:14px; margin:14px 0; }
+  .twoparty > div{ flex:1; border-radius:14px; padding:16px 16px 14px; }
+  .tp-other{ background:var(--gray-l); }
+  .tp-buddy{ background:var(--green-l); border:2px solid var(--green);}
+  .twoparty .who{ font-size:15px; font-weight:700; margin-bottom:8px; }
+  .tp-other .who{ color:var(--gray-d); }
+  .tp-buddy .who{ color:var(--green-d); }
+  .twoparty p{ font-size:17px; margin-bottom:5px; line-height:1.6;}
+  footer{ text-align:center; color:var(--muted); font-size:14px; padding:30px 0 10px;}
+
+  /* ===== 集间导航 ===== */
+  .nav-fab{position:fixed;top:16px;right:16px;z-index:999;width:44px;height:44px;border-radius:50%;
+    background:#fff;border:2px solid var(--blue,#378ADD);box-shadow:0 3px 12px rgba(0,0,0,.15);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;
+    color:var(--blue-d,#0C447C);transition:transform .15s;}
+  .nav-fab:active{transform:scale(.9);}
+  .nav-overlay{position:fixed;inset:0;z-index:998;background:rgba(0,0,0,.35);display:none;
+    opacity:0;transition:opacity .25s;}
+  .nav-overlay.show{display:block;opacity:1;}
+  .nav-panel{position:fixed;top:0;right:0;z-index:999;width:260px;max-width:80vw;height:100vh;
+    background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.12);transform:translateX(100%);
+    transition:transform .3s ease;overflow-y:auto;padding:60px 0 30px;}
+  .nav-panel.show{transform:translateX(0);}
+  .nav-panel .np-title{font-size:16px;font-weight:800;color:#0C447C;padding:0 22px 14px;
+    border-bottom:2px solid #E6F1FB;margin-bottom:8px;}
+  .nav-panel a{display:flex;align-items:center;gap:12px;padding:13px 22px;text-decoration:none;
+    color:#2C2C2A;font-size:15px;transition:background .12s;border-left:3px solid transparent;}
+  .nav-panel a:hover{background:#FDF6EC;}
+  .nav-panel a.current{background:#E6F1FB;border-left-color:#378ADD;font-weight:700;color:#0C447C;}
+  .nav-panel a .np-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
+  .nav-panel a.prelude .np-num{background:linear-gradient(135deg,#D4A017,#E8C547);}
+  .nav-panel a.story .np-num{background:linear-gradient(135deg,#378ADD,#5BA8E8);}
+  .nav-panel a.theme .np-num{background:linear-gradient(135deg,#3CB48F,#5DCAA5);}
+  .nav-panel a.collection .np-num{background:linear-gradient(135deg,#F0997B,#D4633E);}
+  .nav-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
+    border:none;background:#FDF6EC;font-size:18px;color:#5F5E5A;cursor:pointer;}
+  /* 底部下一集按钮 */
+  .nav-next{display:block;margin:36px auto 10px;padding:15px 44px;border-radius:999px;border:none;
+    font-family:inherit;font-size:18px;font-weight:700;cursor:pointer;text-decoration:none;
+    display:flex;align-items:center;gap:10px;justify-content:center;width:fit-content;
+    box-shadow:0 5px 18px rgba(12,68,124,.15);transition:transform .12s;}
+  .nav-next:active{transform:scale(.95);}
+  .nav-next.blue{background:var(--blue,#378ADD);color:#fff;}
+  .nav-next.gold{background:linear-gradient(135deg,#D4A017,#E8C547);color:#fff;}
+  .nav-next.teal{background:linear-gradient(135deg,#3CB48F,#5DCAA5);color:#fff;}
+  .nav-next.coral{background:linear-gradient(135deg,#F0997B,#D4633E);color:#fff;}
+  .nav-back{display:block;margin:8px auto 20px;font-size:14px;color:#5F5E5A;text-decoration:none;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<header>
+  <svg class="bot" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WorkBuddy 机器人">
+    <circle cx="100" cy="92" r="78" fill="#E6F1FB" opacity=".5"/>
+    <circle cx="100" cy="92" r="62" fill="#FFF9E8" opacity=".6"/>
+    <path d="M30 40l2 5 5 1-4 3.5 1 5-4-2.5-4 2.5 1-5-4-3.5 5-1z" fill="#EF9F27" opacity=".8"/>
+    <path d="M172 50l1.5 4 4 1-3 2.8 .8 4-3.3-2-3.3 2 .8-4-3-2.8 4-1z" fill="#F0997B" opacity=".7"/>
+    <circle cx="40" cy="120" r="3" fill="#5DCAA5" opacity=".6"/>
+    <circle cx="165" cy="130" r="3.5" fill="#AFA9EC" opacity=".6"/>
+    <line x1="100" y1="22" x2="100" y2="40" stroke="#378ADD" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="100" cy="18" r="7" fill="#EF9F27"/>
+    <circle cx="100" cy="18" r="7" fill="none" stroke="#FFB84D" stroke-width="2" opacity=".6"/>
+    <rect x="42" y="40" width="116" height="92" rx="34" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2.5"/>
+    <ellipse cx="72" cy="58" rx="18" ry="10" fill="#fff" opacity=".4"/>
+    <circle cx="38" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="162" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="38" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+    <circle cx="162" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+    <ellipse cx="76" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+    <ellipse cx="124" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+    <circle cx="78" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="126" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="81" cy="76" r="3.5" fill="#fff"/>
+    <circle cx="129" cy="76" r="3.5" fill="#fff"/>
+    <circle cx="75" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+    <circle cx="123" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+    <ellipse cx="58" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+    <ellipse cx="142" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+    <path d="M82 104 Q100 122 118 104" fill="none" stroke="#0C447C" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="58" y="128" width="84" height="50" rx="20" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2.5"/>
+    <ellipse cx="75" cy="140" rx="10" ry="5" fill="#fff" opacity=".3"/>
+    <rect x="62" y="145" width="76" height="30" rx="9" fill="#fff" stroke="#0F6E56" stroke-width="1.8"/>
+    <path d="M100 139c-1.5-2-5-2-5 1 0 2 3 4 5 6 2-2 5-4 5-6 0-3-3.5-3-5-1z" fill="#FF6B8A"/>
+    <text x="100" y="157" text-anchor="middle" font-size="9" font-weight="700" fill="#0F6E56" font-family="sans-serif">WorkBuddy</text>
+    <text x="100" y="170" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2E7BC4" font-family="sans-serif">沃克巴迪</text>
+    <circle cx="44" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="156" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <ellipse cx="78" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+    <ellipse cx="122" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+  </svg>
+  <span class="series">WorkBuddy（沃克巴迪）的故事</span>
+  <span class="tag">第三篇</span>
+  <h1>怎么学习跟沃克巴迪做事？</h1>
+  <p>它不光会说话，还会自己动手帮你做事</p>
+</header>
+
+<!-- 1. 还记得吗 -->
+<div class="card c-blue">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E6F1FB" stroke="#0C447C" stroke-width="2"/><path d="M14 14c0-3 3-5 6-5s6 2 6 5-3 4-6 4-6-1-6 3" fill="none" stroke="#0C447C" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="28" r="1.5" fill="#0C447C"/></svg>
+    还记得吗？
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="小朋友和沃克巴迪回顾">
+    <rect width="600" height="130" rx="14" fill="#E6F1FB"/>
+    <circle cx="120" cy="80" r="30" fill="#FFD9B3"/><rect x="105" y="100" width="30" height="22" rx="8" fill="#5DCAA5"/>
+    <circle cx="113" cy="76" r="3" fill="#333"/><circle cx="127" cy="76" r="3" fill="#333"/><path d="M112 88q8 6 16 0" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+    <rect x="280" y="55" width="50" height="40" rx="6" fill="#FF6B8A"/><rect x="275" y="50" width="60" height="8" rx="3" fill="#EF9F27"/><rect x="290" y="95" width="30" height="6" rx="3" fill="#5DCAA5"/>
+    <text x="305" y="82" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">1·2</text>
+    <rect x="190" y="60" width="55" height="42" rx="6" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="206" cy="70" r="4" fill="#0C447C"/><circle cx="224" cy="70" r="4" fill="#0C447C"/><path d="M204 82q12 8 24 0" fill="none" stroke="#0C447C" stroke-width="2" stroke-linecap="round"/>
+    <rect x="198" y="98" width="40" height="20" rx="7" fill="#5DCAA5"/>
+    <path d="M250 90 Q330 60 410 95" fill="none" stroke="#EF9F27" stroke-width="3" stroke-dasharray="6 6"/>
+    <rect x="430" y="45" width="120" height="75" rx="14" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2.5"/>
+    <circle cx="470" cy="75" r="6" fill="#0C447C"/><circle cx="510" cy="75" r="6" fill="#0C447C"/><path d="M468 92q22 10 44 0" fill="none" stroke="#0C447C" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="460" y="103" width="60" height="14" rx="5" fill="#5DCAA5"/>
+    <text x="490" y="113" text-anchor="middle" font-size="8" font-weight="700" fill="#0F6E56">沃克巴迪</text>
+    <path d="M420 92l8-4 8 4" fill="none" stroke="#2E7BC4" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>
+  <p>前两回，我们认识了沃克巴迪。</p>
+  <p>它从哪儿来，我们知道了。它是做事的好伙伴，我们也知道了。</p>
+  <p>可有一件事，我们还不知道——</p>
+  <p class="lead">你会跟它一起做事吗？</p>
+  <p>今天呀，就来学一学。</p>
+</div>
+
+<!-- 2. 会说话的朋友有很多 -->
+<div class="card c-coral">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7" stroke="#993C1D" stroke-width="2"/><path d="M12 15h16v8a3 3 0 0 1-3 3h-7l-4 3v-3h-2z" fill="#fff" stroke="#993C1D" stroke-width="1.5"/><circle cx="16" cy="19" r="1.2" fill="#993C1D"/><circle cx="20" cy="19" r="1.2" fill="#993C1D"/><circle cx="24" cy="19" r="1.2" fill="#993C1D"/></svg>
+    会说话的朋友，可不少
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="会说话的朋友们">
+    <rect width="600" height="130" rx="14" fill="#FAECE7"/>
+    <path d="M60 35h90v45H95l-15 12v-12H60z" fill="#fff" stroke="#993C1D" stroke-width="2"/>
+    <ellipse cx="90" cy="52" rx="10" ry="12" fill="#F0997B"/><circle cx="86" cy="50" r="2.5" fill="#fff"/><circle cx="94" cy="50" r="2.5" fill="#fff"/>
+    <text x="120" y="60" font-size="12" fill="#993C1D">豆包</text>
+    <path d="M210 30h90v45h-40l-15 12v-12h-35z" fill="#fff" stroke="#3C3489" stroke-width="2"/>
+    <circle cx="240" cy="52" r="11" fill="#EF9F27"/><text x="240" y="56" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">元</text>
+    <text x="265" y="56" font-size="12" fill="#3C3489">元宝</text>
+    <path d="M360 40h80v40h-30l-12 10v-10h-38z" fill="#fff" stroke="#0C447C" stroke-width="2"/>
+    <text x="392" y="64" text-anchor="middle" font-size="16" fill="#0C447C" font-weight="700">?</text>
+    <text x="412" y="64" font-size="12" fill="#0C447C">还有</text>
+    <circle cx="510" cy="55" r="22" fill="#E6F1FB" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="503" cy="51" r="3.5" fill="#0C447C"/><circle cx="517" cy="51" r="3.5" fill="#0C447C"/><path d="M502 62q8 6 16 0" fill="none" stroke="#0C447C" stroke-width="2" stroke-linecap="round"/>
+    <path d="M480 95q30 -10 60 0" fill="none" stroke="#888780" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="300" y="118" text-anchor="middle" font-size="13" fill="#993C1D">都会说话呀 · 你问我答</text>
+  </svg>
+  <p>手机里呀，你也许见过别的会说话的朋友——</p>
+  <p>
+    <span class="pill p-coral">豆包</span>
+    <span class="pill p-purple">元宝</span>
+    <span class="pill p-blue">还有别的</span>
+  </p>
+  <p>你问它一句，它答你一句。像不像一个<b>会讲故事的故事机</b>？</p>
+  <p class="lead">那沃克巴迪，跟它们哪儿不一样呢？</p>
+</div>
+
+<!-- 3. 别人动嘴，它动手 -->
+<div class="card c-green">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E1F5EE" stroke="#0F6E56" stroke-width="2"/><path d="M15 12c0-1 1-2 2-2s2 1 2 2v6m0-6c0-1 1-2 2-2s2 1 2 2v6m0-3c0-1 1-2 2-2s2 1 2 2v7c0 3-2 5-5 5h-2c-2 0-4-1-5-3l-3-5c-1-1 0-3 2-2l2 2" fill="#fff" stroke="#0F6E56" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    别人动嘴，它动手
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="动嘴和动手对比">
+    <rect width="600" height="130" rx="14" fill="#E1F5EE"/>
+    <line x1="300" y1="20" x2="300" y2="110" stroke="#5DCAA5" stroke-width="2" stroke-dasharray="5 5"/>
+    <text x="150" y="32" text-anchor="middle" font-size="14" fill="#5F5E5A" font-weight="700">别的朋友</text>
+    <ellipse cx="150" cy="72" rx="34" ry="26" fill="#F1EFE8" stroke="#888780" stroke-width="2"/>
+    <path d="M130 72q20 18 40 0" fill="#fff" stroke="#888780" stroke-width="2"/>
+    <path d="M126 72q24 -14 48 0" fill="#9E8B7A" stroke="#888780" stroke-width="2"/>
+    <text x="150" y="113" text-anchor="middle" font-size="11" fill="#888780">"先画圆…再画三角…"</text>
+    <text x="450" y="32" text-anchor="middle" font-size="14" fill="#0F6E56" font-weight="700">沃克巴迪</text>
+    <rect x="430" y="48" width="44" height="40" rx="12" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="444" cy="62" r="4" fill="#0C447C"/><circle cx="460" cy="62" r="4" fill="#0C447C"/><path d="M443 73q7 5 14 0" fill="none" stroke="#0C447C" stroke-width="1.8" stroke-linecap="round"/>
+    <rect x="438" y="84" width="28" height="14" rx="5" fill="#5DCAA5"/>
+    <circle cx="500" cy="92" r="20" fill="#fff" stroke="#2E7BC4" stroke-width="2"/>
+    <path d="M488 80l4-8 4 8z" fill="#FFD9B3" stroke="#2E7BC4" stroke-width="1.5"/><path d="M504 80l4-8 4 8z" fill="#FFD9B3" stroke="#2E7BC4" stroke-width="1.5"/>
+    <circle cx="496" cy="92" r="3" fill="#FF9E9E"/><circle cx="504" cy="92" r="3" fill="#FF9E9E"/><path d="M494 98q6 4 12 0" fill="none" stroke="#2E7BC4" stroke-width="1.5"/>
+    <path d="M520 92q10 0 10 -8" fill="none" stroke="#2E7BC4" stroke-width="2"/>
+    <path d="M470 70l-6 -10" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="450" y="120" text-anchor="middle" font-size="11" fill="#0F6E56" font-weight="700">唰唰唰——画好啦！</text>
+  </svg>
+  <p>你说"画只小猫"——</p>
+  <div class="twoparty">
+    <div class="tp-other">
+      <div class="who">别的朋友 ✋只会说</div>
+      <p>"你先画个圆……再画两个三角……"</p>
+      <p style="color:var(--muted);font-size:15px">画呀？还得你自己画。</p>
+    </div>
+    <div class="tp-buddy">
+      <div class="who">沃克巴迪 ✋自己画</div>
+      <p>"好嘞，我来！"</p>
+      <p style="color:var(--green-d);font-size:15px">唰唰唰——画好啦，给你！</p>
+    </div>
+  </div>
+  <p>看出来没？别的朋友<b>告诉你怎么做</b>，沃克巴迪<b>替你做出来</b>。</p>
+  <p class="lead">会说话，更会做事——这就是它最特别的地方。</p>
+</div>
+
+<!-- 4. 为什么它能动手 -->
+<div class="card c-purple">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><rect x="6" y="8" width="28" height="20" rx="3" fill="#EEEDFE" stroke="#3C3489" stroke-width="2"/><rect x="9" y="11" width="22" height="14" rx="1.5" fill="#fff" stroke="#3C3489" stroke-width="1.3"/><path d="M16 28h8M14 32h12" stroke="#3C3489" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="18" r="3" fill="#AFA9EC"/></svg>
+    它为什么能动手？
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="沃克巴迪住在电脑里">
+    <rect width="600" height="130" rx="14" fill="#EEEDFE"/>
+    <path d="M230 25L420 25L420 105L230 105z" fill="#A8D4F5" stroke="#3C3489" stroke-width="2.5"/>
+    <path d="M210 25l20 0 0 80 -20 0z" fill="#7FB3E8" stroke="#3C3489" stroke-width="2"/>
+    <rect x="250" y="38" width="150" height="55" rx="8" fill="#fff" stroke="#3C3489" stroke-width="2"/>
+    <rect x="295" y="95" width="60" height="8" rx="3" fill="#9CC8F0"/>
+    <circle cx="325" cy="62" r="16" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2"/>
+    <circle cx="320" cy="58" r="3" fill="#0C447C"/><circle cx="330" cy="58" r="3" fill="#0C447C"/><path d="M319 66q6 4 12 0" fill="none" stroke="#0C447C" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M325 50v-4M325 46a3 3 0 1 0 0.1 0" fill="#EF9F27"/>
+    <path d="M325 78l0 6" stroke="#0F6E56" stroke-width="2"/>
+    <circle cx="260" cy="115" r="6" fill="#F0997B"/><circle cx="395" cy="115" r="6" fill="#AFA9EC"/>
+    <path d="M150 60q-30 0 -30 30q0 25 30 25q15 0 15 -15" fill="none" stroke="#3C3489" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M155 50l8 8 -8 8" fill="none" stroke="#3C3489" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="115" y="125" font-size="11" fill="#3C3489">住进来</text>
+    <text x="490" y="65" text-anchor="middle" font-size="12" fill="#3C3489">看得见你的画</text>
+    <text x="490" y="83" text-anchor="middle" font-size="12" fill="#3C3489">开得了软件</text>
+    <text x="490" y="101" text-anchor="middle" font-size="12" fill="#3C3489">动得了手</text>
+    <circle cx="445" cy="60" r="4" fill="#5DCAA5"/><circle cx="445" cy="78" r="4" fill="#378ADD"/><circle cx="445" cy="96" r="4" fill="#EF9F27"/>
+  </svg>
+  <p>因为呀——它<b>住在你的电脑里</b>。</p>
+  <p>别的朋友住在手机里、住在网上。能聊天，可<b>够不着你电脑里的东西</b>。</p>
+  <p>沃克巴迪不一样。它住在你家电脑里，就像一个住进你家的小朋友：</p>
+  <p>
+    <span class="pill p-purple">看得见你的画</span>
+    <span class="pill p-blue">会开电脑上的软件</span>
+    <span class="pill p-green">能自己动手做</span>
+  </p>
+  <p>住在你家的小朋友，能拿起画笔，能帮你拼积木。</p>
+  <div class="refrain">住进来了，才帮得上忙呀。</div>
+</div>
+
+<!-- 5. 打开它，说句话 -->
+<div class="card c-blue">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><rect x="5" y="6" width="30" height="22" rx="3" fill="#E6F1FB" stroke="#0C447C" stroke-width="2"/><rect x="8" y="9" width="24" height="14" rx="1.5" fill="#fff"/><rect x="11" y="23" width="18" height="3" rx="1" fill="#9CC8F0"/><path d="M16 15h10M16 19h7" stroke="#0C447C" stroke-width="1.5" stroke-linecap="round"/><circle cx="20" cy="32" r="1.5" fill="#0C447C"/></svg>
+    打开它，跟它说句话
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="电脑上的小窗口">
+    <rect width="600" height="130" rx="14" fill="#E6F1FB"/>
+    <rect x="200" y="20" width="240" height="90" rx="10" fill="#0C447C"/>
+    <rect x="212" y="32" width="216" height="64" rx="5" fill="#fff"/>
+    <circle cx="222" cy="40" r="3" fill="#FF6B8A"/><circle cx="232" cy="40" r="3" fill="#EF9F27"/><circle cx="242" cy="40" r="3" fill="#5DCAA5"/>
+    <rect x="224" y="52" width="120" height="34" rx="8" fill="#F1EFE8" stroke="#2E7BC4" stroke-width="1.5"/>
+    <rect x="230" y="60" width="70" height="6" rx="3" fill="#A8D4F5"/>
+    <rect x="230" y="70" width="50" height="6" rx="3" fill="#A8D4F5"/>
+    <rect x="352" y="58" width="60" height="20" rx="10" fill="#5DCAA5"/>
+    <text x="382" y="72" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">发送</text>
+    <rect x="430" y="108" width="14" height="6" rx="2" fill="#0C447C"/>
+    <rect x="410" y="114" width="54" height="6" rx="2" fill="#0C447C"/>
+    <circle cx="130" cy="75" r="16" fill="#FFD9B3"/>
+    <circle cx="125" cy="72" r="2" fill="#333"/><circle cx="135" cy="72" r="2" fill="#333"/><path d="M124 80q6 4 12 0" fill="none" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M148 75l20 0" stroke="#2E7BC4" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4"/>
+    <path d="M168 71l8 4 -8 4" fill="none" stroke="#2E7BC4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="300" y="125" text-anchor="middle" font-size="12" fill="#0C447C">在小框框里告诉它，你想干啥</text>
+  </svg>
+  <p>在电脑上打开沃克巴迪，你会看到一个小窗口。</p>
+  <p>窗口里有个<b>小框框</b>——就像跟它说悄悄话的地方。</p>
+  <p>你想让它干啥，就在框框里告诉它。会打字就打字，会说话就说话，都行。</p>
+  <p>它听见了，接住了，就动手帮你做。</p>
+  <p class="lead">就这么简单——跟它说话，不用怕，就像跟好朋友说一样。</p>
+</div>
+
+<!-- 6. 它怎么听、怎么想、怎么做（互动演示） -->
+<div class="card c-green">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E1F5EE" stroke="#0F6E56" stroke-width="2"/><path d="M12 16a8 8 0 0 1 16 0" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round"/><circle cx="14" cy="16" r="1.5" fill="#0F6E56"/><circle cx="26" cy="16" r="1.5" fill="#0F6E56"/><path d="M14 24h12" stroke="#0F6E56" stroke-width="2" stroke-linecap="round"/></svg>
+    你说一句，它听、它想、它做
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="沃克巴迪举手我来">
+    <rect width="600" height="130" rx="14" fill="#E1F5EE"/>
+    <circle cx="300" cy="65" r="40" fill="#fff" stroke="#0F6E56" stroke-width="2.5"/>
+    <rect x="278" y="40" width="44" height="34" rx="11" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="290" cy="52" r="4" fill="#0C447C"/><circle cx="310" cy="52" r="4" fill="#0C447C"/><path d="M289 62q11 7 22 0" fill="none" stroke="#0C447C" stroke-width="2" stroke-linecap="round"/>
+    <rect x="286" y="72" width="28" height="12" rx="4" fill="#5DCAA5"/>
+    <path d="M278 44l-12 -18" stroke="#2E7BC4" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="264" cy="24" r="6" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <path d="M270 30l6 -4" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M120 50q0 30 30 30l40 0" fill="none" stroke="#EF9F27" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 5"/>
+    <path d="M188 80l8 4 -8 4z" fill="#EF9F27"/>
+    <text x="140" y="45" font-size="13" fill="#854F0B" font-weight="700">你说</text>
+    <path d="M480 80q0 -30 -30 -30l-90 0" fill="none" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 5"/>
+    <path d="M362 50l-8 -4 8 -4z" fill="#5DCAA5"/>
+    <text x="430" y="105" text-anchor="middle" font-size="13" fill="#0F6E56" font-weight="700">它做出来</text>
+    <text x="300" y="120" text-anchor="middle" font-size="12" fill="#0F6E56">听 → 想 → 做</text>
+  </svg>
+  <p>光说可不行，咱们来试试！点下面一个按钮，看看会怎样：</p>
+  <div class="demo">
+    <div class="dtitle">👇 点一个，看看沃克巴迪怎么动手</div>
+    <div class="btnrow">
+      <button class="dbtn" onclick="showDemo(0)">画一只小猫</button>
+      <button class="dbtn" onclick="showDemo(1)">数数有几朵花</button>
+      <button class="dbtn" onclick="showDemo(2)">讲个睡前故事</button>
+    </div>
+    <div class="dlog" id="dlog">
+      <p style="color:var(--muted);font-size:15px;">点上面的按钮，沃克巴迪就要动手啦～</p>
+    </div>
+  </div>
+  <p>看见没？它不光回你几个字——</p>
+  <p class="lead">它真把东西做出来了，给你看。</p>
+  <p>这就是沃克巴迪跟别的朋友，最大的不一样。</p>
+</div>
+
+<!-- 7. 跟它说话，有门道 -->
+<div class="card c-amber">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAEEDA" stroke="#854F0B" stroke-width="2"/><path d="M20 11l2.2 5 5.3.5-4 3.6 1.1 5.2L20 27.5l-4.6 2.3 1.1-5.2-4-3.6 5.3-.5z" fill="#EF9F27" stroke="#854F0B" stroke-width="1.2"/></svg>
+    跟它说话，有门道
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="说话三个小门道">
+    <rect width="600" height="130" rx="14" fill="#FAEEDA"/>
+    <circle cx="130" cy="60" r="34" fill="#fff" stroke="#EF9F27" stroke-width="2.5"/>
+    <path d="M118 50q12 -8 24 0" fill="none" stroke="#854F0B" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="130" cy="60" r="3" fill="#854F0B"/>
+    <path d="M114 70h32" stroke="#854F0B" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="130" y="108" text-anchor="middle" font-size="14" fill="#854F0B" font-weight="700">说清楚</text>
+    <circle cx="300" cy="60" r="34" fill="#fff" stroke="#EF9F27" stroke-width="2.5"/>
+    <rect x="280" y="48" width="16" height="24" rx="3" fill="#A8D4F5"/><rect x="302" y="44" width="16" height="28" rx="3" fill="#5DCAA5"/>
+    <text x="300" y="108" text-anchor="middle" font-size="14" fill="#854F0B" font-weight="700">说一件</text>
+    <circle cx="470" cy="60" r="34" fill="#fff" stroke="#EF9F27" stroke-width="2.5"/>
+    <path d="M458 54q6 -6 12 0q6 6 12 0" fill="none" stroke="#854F0B" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M458 66q6 6 12 0q6 -6 12 0" fill="none" stroke="#854F0B" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="470" y="108" text-anchor="middle" font-size="14" fill="#854F0B" font-weight="700">换说法</text>
+    <path d="M170 60l26 0M338 60l28 0" stroke="#EF9F27" stroke-width="2" stroke-dasharray="4 4"/>
+  </svg>
+  <p>跟沃克巴迪说话呀，跟交朋友一样，也有小门道：</p>
+  <p><b>说清楚。</b>"帮我画只小猫"——它一下就懂。"画一个"——它得猜，猜得准不准，说不准。</p>
+  <p><b>说一件。</b>画猫就先画猫，画完了再让它讲故事。一口气说太多，它也忙不过来。</p>
+  <p><b>没听懂，换个说法。</b>它没听明白，不是它笨。换个说法再说一遍，它可能就"哦！"明白了。</p>
+  <div class="warm">
+    跟它说话呀，就像学骑自行车——<br>
+    一开始歪歪扭扭，摔两下没关系。<br>
+    <b>多骑几次，就稳啦。</b>
+  </div>
+</div>
+
+<!-- 8. 今天第一次 -->
+<div class="card c-purple">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#EEEDFE" stroke="#3C3489" stroke-width="2"/><path d="M14 22c0-3 3-5 6-5s6 2 6 5" fill="none" stroke="#3C3489" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="16" r="1.5" fill="#3C3489"/><circle cx="23" cy="16" r="1.5" fill="#3C3489"/><path d="M16 26h8" stroke="#3C3489" stroke-width="2" stroke-linecap="round"/></svg>
+    今天，第一次
+  </h2>
+  <svg class="scene" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="小朋友和沃克巴迪一起走向未来">
+    <rect width="600" height="130" rx="14" fill="#EEEDFE"/>
+    <path d="M450 100A70 70 0 0 1 560 100" fill="none" stroke="#F0997B" stroke-width="5"/>
+    <path d="M455 100A65 65 0 0 1 555 100" fill="none" stroke="#EF9F27" stroke-width="5"/>
+    <path d="M460 100A60 60 0 0 1 550 100" fill="none" stroke="#5DCAA5" stroke-width="5"/>
+    <path d="M465 100A55 55 0 0 1 545 100" fill="none" stroke="#A8D4F5" stroke-width="5"/>
+    <circle cx="500" cy="95" r="18" fill="#FFD9B3"/><circle cx="495" cy="92" r="2" fill="#333"/><circle cx="505" cy="92" r="2" fill="#333"/><path d="M494 100q6 4 12 0" fill="none" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="488" y="112" width="24" height="12" rx="5" fill="#F0997B"/>
+    <circle cx="200" cy="80" r="22" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="192" cy="76" r="4" fill="#0C447C"/><circle cx="208" cy="76" r="4" fill="#0C447C"/><path d="M191 88q9 6 18 0" fill="none" stroke="#0C447C" stroke-width="2" stroke-linecap="round"/>
+    <rect x="190" y="100" width="20" height="14" rx="5" fill="#5DCAA5"/>
+    <text x="200" y="110" text-anchor="middle" font-size="7" font-weight="700" fill="#0F6E56">沃克巴迪</text>
+    <path d="M222 92q60 5 130 8" fill="none" stroke="#5DCAA5" stroke-width="3" stroke-dasharray="5 5"/>
+    <path d="M470 108l-10 -4 10 -4z" fill="#5DCAA5"/>
+    <text x="300" y="60" text-anchor="middle" font-size="14" fill="#3C3489" font-weight="700">一起学习，一起做事</text>
+    <circle cx="80" cy="40" r="4" fill="#EF9F27" opacity=".7"/><circle cx="120" cy="25" r="3" fill="#F0997B" opacity=".7"/><circle cx="380" cy="35" r="4" fill="#5DCAA5" opacity=".7"/>
+  </svg>
+  <p>今天，你第一次学了——怎么跟沃克巴迪做事。</p>
+  <p>它不光会说话，还会自己动手帮你做事。别人告诉你怎么做，它替你做出来。</p>
+  <p>画画、讲故事、数数、答"为什么"——你学这些，它都陪着你。</p>
+  <p>沃克巴迪呀，就是你<b>学习做事的伙伴</b>。</p>
+  <p class="lead">这是你走进有沃克巴迪的世界，迈出的第一步。</p>
+  <div class="warm">
+    记住这几句话，就够了：<br>
+    🤖 它住在电脑里，能动手帮你做事<br>
+    💬 找到小框框，告诉它你想干啥<br>
+    ✋ 它听了，想了，就自己做出来给你<br>
+    🗣️ 说清楚，说一件，没听懂换个说法<br>
+    ⭐ 多试几次，就会越来越顺<br>
+    🌱 沃克巴迪，就是你学习做事的伙伴
+  </div>
+</div>
+
+<footer>WorkBuddy（沃克巴迪）的故事 · 第三篇 · 2026</footer>
+
+</div>
+
+<script>
+const demos = [
+  {
+    steps: [
+      {type:'in', text:'帮我画一只小猫'},
+      {type:'think', text:'沃克巴迪听见了，正在想……'},
+      {type:'dstep', text:'① 它想：小猫要有圆圆的脑袋、三角耳朵、长长的尾巴'},
+      {type:'dstep', text:'② 它自己动手，一笔一笔画起来'},
+      {type:'out', text:'好啦，小猫画好了！给你看看～'},
+      {type:'result', label:'它画出来的', html:'🐱 一只圆圆脑袋、三角耳朵的小猫！'},
+      {type:'in', text:'真好看！再画一朵花陪它'},
+      {type:'out', text:'好嘞，马上画！🌸'}
+    ]
+  },
+  {
+    steps: [
+      {type:'in', text:'帮我数数这里有几朵花'},
+      {type:'think', text:'沃克巴迪听见了，正在数……'},
+      {type:'dstep', text:'① 它真的去数：一朵、两朵、三朵……'},
+      {type:'dstep', text:'② 它数完，自己算出答案'},
+      {type:'out', text:'我数好啦，一共 5 朵花！🌷🌷🌷🌷🌷'},
+      {type:'result', label:'它数出来的', html:'5 朵花（它一个一个数给你看）'},
+      {type:'in', text:'那再加 3 朵是多少？'},
+      {type:'out', text:'5 加 3 等于 8 哦！现在有 8 朵花啦～'}
+    ]
+  },
+  {
+    steps: [
+      {type:'in', text:'讲个睡前故事，要有小猫'},
+      {type:'think', text:'沃克巴迪听见了，正在想故事……'},
+      {type:'dstep', text:'① 它自己编：小猫叫什么？去哪儿？遇到谁？'},
+      {type:'dstep', text:'② 它一句一句讲出来'},
+      {type:'out', text:'从前有只小猫叫团团，它发现一朵会说话的花……'},
+      {type:'result', label:'它讲的故事', html:'"团团问花：你为什么会说话呀？花说：因为有人愿意听我说呀。" ——它把整个故事都讲完啦'},
+      {type:'in', text:'好好听！明天接着讲好不好？'},
+      {type:'out', text:'好呀，明天讲团团遇见月亮的故事～🌙'}
+    ]
+  }
+];
+
+function showDemo(i){
+  const log = document.getElementById('dlog');
+  log.innerHTML = '';
+  document.querySelectorAll('.dbtn').forEach((b,n)=>b.classList.toggle('active', n===i));
+  const d = demos[i];
+  let n = 0;
+  function next(){
+    if(n >= d.steps.length) return;
+    const s = d.steps[n];
+    const el = document.createElement('div');
+    el.className = 'fadein';
+    if(s.type==='in'){ el.className='dbub in fadein'; el.textContent='你说的：'+s.text; }
+    else if(s.type==='think'){ el.className='dbub think fadein'; el.textContent=s.text; }
+    else if(s.type==='dstep'){ el.className='dstep fadein'; el.textContent=s.text; }
+    else if(s.type==='out'){ el.className='dbub out fadein'; el.textContent='沃克巴迪：'+s.text; }
+    else if(s.type==='result'){
+      el.className='dresult fadein';
+      el.innerHTML = '<div class="rl">'+s.label+'</div>'+s.html;
+    }
+    log.appendChild(el);
+    n++;
+    setTimeout(next, 900);
+  }
+  next();
+}
+</script>
+<!-- 朗读功能 · 预生成 MP3，任何设备（含微信）都能播放 -->
+<style>
+.tbar{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(0deg,#fff 30%,rgba(255,255,255,.85) 75%,rgba(255,255,255,0));}
+.tbar button{font-family:inherit;font-size:17px;font-weight:800;border:none;border-radius:999px;padding:13px 24px;cursor:pointer;box-shadow:0 5px 16px rgba(0,0,0,.16);transition:transform .12s;}
+.tbar button:active{transform:scale(.95);}
+.tbar .rdPlay{background:#378ADD;color:#fff;}
+.tbar .rdPlay.on{background:#F0997B;}
+.tbar .rdStop{background:#fff;color:#5F5E5A;border:1.5px solid #ddd;display:none;}
+.tbar .rdHint{font-size:12px;color:#9a9a9a;max-width:48%;line-height:1.4;}
+</style>
+<div class="tbar">
+  <button class="rdPlay" id="rdPlay">🔊 听故事</button>
+  <button class="rdStop" id="rdStop">■ 停止</button>
+  <span class="rdHint" id="rdHint"></span>
+</div>
+<div id="startMask" style="position:fixed;inset:0;z-index:99999;background:rgba(253,246,236,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity .4s;">
+  <div style="font-size:60px;">🎵</div>
+  <div style="font-size:22px;font-weight:800;color:#0C447C;margin-top:12px;">点这里，听沃克巴迪的故事</div>
+  <div style="font-size:14px;color:#9a9a9a;margin-top:6px;">先听主题曲，再听故事</div>
+</div>
+<audio id="rdAudio" preload="auto" src="story3.mp3"></audio>
+<script>
+// ===== 主题曲旋律（Web Audio 合成，与主题曲页面一致）=====
+var THEME=(function(){
+  var N={C3:130.81,D3:146.83,E3:164.81,G3:196.00,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25,G5:783.99,C6:1046.50,R:0};
+  var B=0.42;
+  var sg=[[[["C5",1],["G4",.5],["E4",.5],["R",.3],["C5",1],["G4",.5],["E4",.5],["D4",.5]],0],[[["E4",.5],["E4",.5],["G4",.5],["A4",.5],["C5",1],["R",.2],["C5",.5],["B4",.5],["G4",1],["R",.2],["A4",.5],["G4",.5],["E4",1.2]],1],[[["C5",1],["G4",.5],["E4",.5],["D4",.5],["R",.2],["C5",1],["G4",.5],["E4",.5],["D4",.5]],2],[[["C6",.4],["C6",.4],["R",.3],["G5",.4],["G5",.4],["R",.3],["C6",.3],["G5",.3],["C6",.3],["G5",.3],["R",.5]],3]];
+  var bs=[["C3",2],["C3",2],["C3",2],["G3",2],["C3",2],["C3",2],["G3",2],["C3",2],["C3",2]];
+  function P(cb){
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC){cb&&cb();return null;}
+    var c=new AC(),m=c.createGain();m.gain.value=.5;m.connect(c.destination);
+    function n(f,s,d,t,v){if(!f)return;var o=c.createOscillator(),g=c.createGain();o.type=t||"triangle";o.frequency.value=f;o.connect(g);g.connect(m);g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v||.26,s+.015);g.gain.exponentialRampToValueAtTime((v||.26)*.6,s+.06);g.gain.exponentialRampToValueAtTime(.0008,s+d);o.start(s);o.stop(s+d+.05);}
+    function dn(f,s,d){if(!f)return;var o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=f;o.connect(g);g.connect(m);g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.18,s+.005);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d+.03);}
+    var t0=c.currentTime+.1,t=t0;
+    sg.forEach(function(sg2){sg2[0].forEach(function(x){var d=x[1]*B;n(N[x[0]],t,d*.92,sg2[1]===3?"square":"triangle");if(sg2[1]===3&&x[0]!=="R")dn(N[x[0]]*2,t,d*.6);t+=d;});});
+    var bt=t0;bs.forEach(function(b){var d=b[1]*B;n(N[b[0]],bt,d*.9,"sine",.2);n(N[b[0]],bt+d*.5,d*.45,"sine",.16);bt+=d;});
+    var total=(t-t0)*1000+200;
+    setTimeout(function(){cb&&cb();},total);
+    return c;
+  }
+  return {play:P};
+})();
+// ===== 播放器：先主题曲，再故事 =====
+(function(){
+  var audio=document.getElementById('rdAudio');
+  var playBtn=document.getElementById('rdPlay'),stopBtn=document.getElementById('rdStop'),hint=document.getElementById('rdHint');
+  var mask=document.getElementById('startMask');
+  if(!audio||!audio.canPlayType){hint.textContent='此设备不支持音频播放';return;}
+  var themePlayed=false,themeCtx=null,waitingNarration=false;
+  function resetUI(){playBtn.textContent='\u{1F50A} 听故事';playBtn.classList.remove('on');stopBtn.style.display='none';}
+  function clearTheme(){if(themeCtx){try{themeCtx.close();}catch(e){}themeCtx=null;}}
+  audio.addEventListener('play',function(){playBtn.textContent='\u23F8 暂停';playBtn.classList.add('on');stopBtn.style.display='';});
+  audio.addEventListener('pause',function(){playBtn.textContent='\u25B6 继续';playBtn.classList.remove('on');});
+  audio.addEventListener('ended',function(){resetUI();hint.textContent='故事讲完啦';themePlayed=false;});
+  audio.addEventListener('error',function(){hint.textContent='音频加载失败，请检查网络';resetUI();});
+  function startAll(){
+    if(!themePlayed&&!waitingNarration&&audio.paused&&audio.currentTime===0){
+      themePlayed=true;waitingNarration=true;
+      playBtn.textContent='\u{1F3B5} 主题曲…';playBtn.classList.add('on');stopBtn.style.display='';
+      hint.textContent='正在播放主题曲';
+      themeCtx=THEME.play(function(){
+        waitingNarration=false;hint.textContent='';
+        audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';resetUI();themePlayed=false;});
+      });
+    } else if(waitingNarration){
+      clearTheme();waitingNarration=false;hint.textContent='';
+      audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';});
+    } else {
+      if(audio.paused){audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';});}
+      else{audio.pause();}
+    }
+  }
+  playBtn.addEventListener('click',startAll);
+  // 开场遮罩：点一下就开始（主题曲+故事）
+  if(mask){
+    mask.addEventListener('click',function(){
+      mask.style.opacity='0';
+      setTimeout(function(){mask.style.display='none';},400);
+      startAll();
+    });
+  }
+  stopBtn.addEventListener('click',function(){clearTheme();waitingNarration=false;audio.pause();audio.currentTime=0;resetUI();hint.textContent='';themePlayed=false;});
+})();
+</script>
+
+<!-- 集间导航 -->
+<div class="nav-fab" id="navFab" onclick="document.getElementById('navOverlay').classList.add('show');document.getElementById('navPanel').classList.add('show')">☰</div>
+<div class="nav-overlay" id="navOverlay" onclick="this.classList.remove('show');document.getElementById('navPanel').classList.remove('show')"></div>
+<div class="nav-panel" id="navPanel">
+  <button class="nav-close" onclick="document.getElementById('navOverlay').classList.remove('show');document.getElementById('navPanel').classList.remove('show')">✕</button>
+  <div class="np-title">沃克巴迪的故事</div>
+<a class="collection" href="https://867d8e5c42c14574b74ae6cb01d7cb8c.app.codebuddy.work"><span class="np-num">📖</span>合集目录</a>
+<a class="prelude" href="https://c3ecf1d883b2417db00e6079e84e3606.app.codebuddy.work"><span class="np-num">🎵</span>序曲 · 斯卡布罗集市圆号版</a>
+<a class="story" href="https://ce5f2dbc1cd6411dbf64a1521636ebc6.app.codebuddy.work"><span class="np-num">1</span>第一篇 · WorkBuddy工作伙伴</a>
+<a class="story" href="https://91f3afe7089a4ec5afa9a6b407e37d23.app.codebuddy.work"><span class="np-num">2</span>第二篇 · 它从哪儿来的</a>
+<a class="story current" href="https://175a1bd63b0f44e6b623f7f87d9e8e5d.app.codebuddy.work"><span class="np-num">3</span>第三篇 · 怎么学习跟沃克巴迪做事</a>
+<a class="story" href="https://29a1239baf15483d93eeab70a1aff1b4.app.codebuddy.work"><span class="np-num">4</span>第四篇 · 沃克巴迪能帮你做什么</a>
+<a class="story" href="https://6892155814574a8db037b2b39930b5f3.app.codebuddy.work"><span class="np-num">5</span>第五篇 · 和沃克巴迪一起长大</a>
+<a class="theme" href="https://e57ac8793a0342888344acc3ded6b040.app.codebuddy.work"><span class="np-num">🎶</span>主题曲 · 沃克巴迪之歌</a>
+</div>
+<a class="nav-next blue" href="https://29a1239baf15483d93eeab70a1aff1b4.app.codebuddy.work">下一集：第四篇 ›</a>
+<a class="nav-back" href="https://91f3afe7089a4ec5afa9a6b407e37d23.app.codebuddy.work">‹ 上一集：第二篇</a>
+
+</body>
+</html>

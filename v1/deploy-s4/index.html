@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沃克巴迪的故事 · 第四篇 · 沃克巴迪能帮你做什么</title>
+<style>
+  :root{
+    --bg:#FDF6EC; --card:#FFFFFF; --ink:#2C2C2A; --muted:#5F5E5A;
+    --blue:#378ADD; --blue-d:#0C447C; --blue-l:#E6F1FB;
+    --green:#5DCAA5; --green-d:#0F6E56; --green-l:#E1F5EE;
+    --amber:#EF9F27; --amber-l:#FAEEDA;
+    --purple:#AFA9EC; --purple-d:#3C3489; --purple-l:#EEEDFE;
+    --coral:#F0997B; --coral-l:#FAECE7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.85;
+    padding:0 16px 60px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  header{ text-align:center; padding:36px 0 8px; }
+  header .bot{ width:170px; height:170px; margin:0 auto 10px; }
+  header .series{ display:inline-block; background:var(--purple-l); color:var(--purple-d); font-size:13px; font-weight:600; padding:3px 12px; border-radius:20px; margin-bottom:8px;}
+  header .tag{ display:inline-block; background:var(--amber-l); color:#854F0B; font-size:14px; font-weight:600; padding:4px 14px; border-radius:20px; margin-bottom:10px;}
+  header h1{ font-size:30px; font-weight:700; color:var(--blue-d); letter-spacing:1px;}
+  header p{ font-size:16px; color:var(--muted); margin-top:6px;}
+  .card{
+    background:var(--card); border-radius:18px; padding:24px 24px 22px;
+    margin-top:20px; box-shadow:0 2px 0 rgba(0,0,0,.03);
+    border-left:7px solid var(--blue);
+  }
+  .card h2{ font-size:22px; font-weight:700; display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+  .card h2 .ic{ width:40px; height:40px; flex:0 0 40px; }
+  .card p{ font-size:19px; margin-bottom:12px;}
+  .card p:last-child{margin-bottom:0}
+  .card .lead{ font-size:20px; font-weight:600; color:var(--blue-d);}
+  .c-purple{border-left-color:var(--purple);} .c-purple h2{color:var(--purple-d);}
+  .c-green{border-left-color:var(--green);} .c-green h2{color:var(--green-d);}
+  .c-amber{border-left-color:var(--amber);} .c-amber h2{color:#854F0B;}
+  .c-coral{border-left-color:var(--coral);} .c-coral h2{color:#993C1D;}
+  .pill{
+    display:inline-block; padding:3px 12px; border-radius:20px;
+    font-size:16px; font-weight:600; margin:2px 6px 2px 0;
+  }
+  .p-blue{background:var(--blue-l); color:var(--blue-d);}
+  .p-green{background:var(--green-l); color:var(--green-d);}
+  .p-amber{background:var(--amber-l); color:#854F0B;}
+  .p-purple{background:var(--purple-l); color:var(--purple-d);}
+  .p-coral{background:var(--coral-l); color:#993C1D;}
+  .split{ display:flex; gap:14px; flex-wrap:wrap; margin:10px 0;}
+  .split > div{ flex:1 1 150px; background:var(--blue-l); border-radius:14px; padding:14px 16px;}
+  .split > div b{ display:block; font-size:19px; color:var(--blue-d); margin-bottom:4px;}
+  .split > div span{ font-size:17px; color:var(--muted);}
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px;}
+  .grid .it{ background:var(--amber-l); border-radius:14px; padding:16px; display:flex; gap:12px; align-items:center;}
+  .grid .it .ic{ width:38px; height:38px; flex:0 0 38px;}
+  .grid .it b{ font-size:18px; color:#854F0B;}
+  .grid .it span{ font-size:16px; color:var(--muted); display:block;}
+  .vs{ display:flex; gap:16px; flex-wrap:wrap; margin:10px 0;}
+  .vs > div{ flex:1 1 200px; border-radius:14px; padding:16px 18px;}
+  .vs .bad{ background:#FBEAEA; border:2px dashed #D44;}
+  .vs .good{ background:var(--green-l); border:2px solid var(--green);}
+  .vs .bad b{ color:#C33; }
+  .vs .good b{ color:var(--green-d); }
+  .vs > div b{ font-size:18px; display:block; margin-bottom:6px;}
+  .vs > div span{ font-size:17px; color:var(--muted);}
+  .note{ font-size:15px; color:var(--muted); margin-top:16px; padding-top:14px; border-top:1px dashed #ddd; line-height:1.7;}
+  footer{ text-align:center; color:var(--muted); font-size:14px; margin-top:30px;}
+
+  /* ===== 集间导航 ===== */
+  .nav-fab{position:fixed;top:16px;right:16px;z-index:999;width:44px;height:44px;border-radius:50%;
+    background:#fff;border:2px solid var(--blue,#378ADD);box-shadow:0 3px 12px rgba(0,0,0,.15);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;
+    color:var(--blue-d,#0C447C);transition:transform .15s;}
+  .nav-fab:active{transform:scale(.9);}
+  .nav-overlay{position:fixed;inset:0;z-index:998;background:rgba(0,0,0,.35);display:none;
+    opacity:0;transition:opacity .25s;}
+  .nav-overlay.show{display:block;opacity:1;}
+  .nav-panel{position:fixed;top:0;right:0;z-index:999;width:260px;max-width:80vw;height:100vh;
+    background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.12);transform:translateX(100%);
+    transition:transform .3s ease;overflow-y:auto;padding:60px 0 30px;}
+  .nav-panel.show{transform:translateX(0);}
+  .nav-panel .np-title{font-size:16px;font-weight:800;color:#0C447C;padding:0 22px 14px;
+    border-bottom:2px solid #E6F1FB;margin-bottom:8px;}
+  .nav-panel a{display:flex;align-items:center;gap:12px;padding:13px 22px;text-decoration:none;
+    color:#2C2C2A;font-size:15px;transition:background .12s;border-left:3px solid transparent;}
+  .nav-panel a:hover{background:#FDF6EC;}
+  .nav-panel a.current{background:#E6F1FB;border-left-color:#378ADD;font-weight:700;color:#0C447C;}
+  .nav-panel a .np-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
+  .nav-panel a.prelude .np-num{background:linear-gradient(135deg,#D4A017,#E8C547);}
+  .nav-panel a.story .np-num{background:linear-gradient(135deg,#378ADD,#5BA8E8);}
+  .nav-panel a.theme .np-num{background:linear-gradient(135deg,#3CB48F,#5DCAA5);}
+  .nav-panel a.collection .np-num{background:linear-gradient(135deg,#F0997B,#D4633E);}
+  .nav-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;
+    border:none;background:#FDF6EC;font-size:18px;color:#5F5E5A;cursor:pointer;}
+  /* 底部下一集按钮 */
+  .nav-next{display:block;margin:36px auto 10px;padding:15px 44px;border-radius:999px;border:none;
+    font-family:inherit;font-size:18px;font-weight:700;cursor:pointer;text-decoration:none;
+    display:flex;align-items:center;gap:10px;justify-content:center;width:fit-content;
+    box-shadow:0 5px 18px rgba(12,68,124,.15);transition:transform .12s;}
+  .nav-next:active{transform:scale(.95);}
+  .nav-next.blue{background:var(--blue,#378ADD);color:#fff;}
+  .nav-next.gold{background:linear-gradient(135deg,#D4A017,#E8C547);color:#fff;}
+  .nav-next.teal{background:linear-gradient(135deg,#3CB48F,#5DCAA5);color:#fff;}
+  .nav-next.coral{background:linear-gradient(135deg,#F0997B,#D4633E);color:#fff;}
+  .nav-back{display:block;margin:8px auto 20px;font-size:14px;color:#5F5E5A;text-decoration:none;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <svg class="bot" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WorkBuddy 机器人">
+    <circle cx="100" cy="92" r="78" fill="#E6F1FB" opacity=".5"/>
+    <circle cx="100" cy="92" r="62" fill="#FFF9E8" opacity=".6"/>
+    <path d="M30 40l2 5 5 1-4 3.5 1 5-4-2.5-4 2.5 1-5-4-3.5 5-1z" fill="#EF9F27" opacity=".8"/>
+    <path d="M172 50l1.5 4 4 1-3 2.8 .8 4-3.3-2-3.3 2 .8-4-3-2.8 4-1z" fill="#F0997B" opacity=".7"/>
+    <circle cx="40" cy="120" r="3" fill="#5DCAA5" opacity=".6"/>
+    <circle cx="165" cy="130" r="3.5" fill="#AFA9EC" opacity=".6"/>
+    <line x1="100" y1="22" x2="100" y2="40" stroke="#378ADD" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="100" cy="18" r="7" fill="#EF9F27"/>
+    <circle cx="100" cy="18" r="7" fill="none" stroke="#FFB84D" stroke-width="2" opacity=".6"/>
+    <rect x="42" y="40" width="116" height="92" rx="34" fill="#A8D4F5" stroke="#2E7BC4" stroke-width="2.5"/>
+    <ellipse cx="72" cy="58" rx="18" ry="10" fill="#fff" opacity=".4"/>
+    <circle cx="38" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="162" cy="82" r="11" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="38" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+    <circle cx="162" cy="82" r="5" fill="#2E7BC4" opacity=".3"/>
+    <ellipse cx="76" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+    <ellipse cx="124" cy="78" rx="14" ry="15" fill="#fff" stroke="#2E7BC4" stroke-width="1.5"/>
+    <circle cx="78" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="126" cy="80" r="8" fill="#0C447C"/>
+    <circle cx="81" cy="76" r="3.5" fill="#fff"/>
+    <circle cx="129" cy="76" r="3.5" fill="#fff"/>
+    <circle cx="75" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+    <circle cx="123" cy="83" r="1.5" fill="#fff" opacity=".7"/>
+    <ellipse cx="58" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+    <ellipse cx="142" cy="100" rx="9" ry="6" fill="#FF9E9E" opacity=".55"/>
+    <path d="M82 104 Q100 122 118 104" fill="none" stroke="#0C447C" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="58" y="128" width="84" height="50" rx="20" fill="#5DCAA5" stroke="#0F6E56" stroke-width="2.5"/>
+    <ellipse cx="75" cy="140" rx="10" ry="5" fill="#fff" opacity=".3"/>
+    <rect x="62" y="145" width="76" height="30" rx="9" fill="#fff" stroke="#0F6E56" stroke-width="1.8"/>
+    <path d="M100 139c-1.5-2-5-2-5 1 0 2 3 4 5 6 2-2 5-4 5-6 0-3-3.5-3-5-1z" fill="#FF6B8A"/>
+    <text x="100" y="157" text-anchor="middle" font-size="9" font-weight="700" fill="#0F6E56" font-family="sans-serif">WorkBuddy</text>
+    <text x="100" y="170" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2E7BC4" font-family="sans-serif">沃克巴迪</text>
+    <circle cx="44" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <circle cx="156" cy="150" r="10" fill="#B5D4F4" stroke="#2E7BC4" stroke-width="2"/>
+    <ellipse cx="78" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+    <ellipse cx="122" cy="184" rx="12" ry="6" fill="#2E7BC4"/>
+  </svg>
+  <span class="series">WorkBuddy（沃克巴迪）的故事</span>
+  <span class="tag">第四篇</span>
+  <h1>沃克巴迪能帮你做什么？</h1>
+  <p>它不光会说话，还会做很多很多事</p>
+</header>
+
+<!-- 1. 回顾 -->
+<div class="card c-purple">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#EEEDFE" stroke="#534AB7" stroke-width="2"/><path d="M13 20a7 7 0 1114 0 7 7 0 11-14 0M20 13v7l4 2" fill="none" stroke="#534AB7" stroke-width="2.2" stroke-linecap="round"/></svg>
+    还记得吗？
+  </h2>
+  <p class="lead">前三回，我们认识了沃克巴迪。</p>
+  <p>它叫什么、从哪来、怎么说话——都学会啦。</p>
+  <p>可是，<b>它到底能帮你做什么呀？</b></p>
+  <p>今天就一件一件说给你听。</p>
+</div>
+
+<!-- 2. 陪学习 -->
+<div class="card c-green">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E1F5EE" stroke="#0F6E56" stroke-width="2"/><path d="M20 11l8 4v8c0 5-4 8-8 10-4-2-8-5-8-10v-4z" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linejoin="round"/><path d="M16 20l3 3 5-5" fill="none" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    它能陪你学习
+  </h2>
+  <p>你问它<b>"为什么"</b>，它什么都能答上几句。</p>
+  <p>背<b>三字经</b>忘了？它接着提醒你，还讲故事帮你懂。</p>
+  <p>写完作业给它看，它帮你<b>找错</b>。</p>
+  <div class="split">
+    <div style="background:var(--green-l)">
+      <b style="color:var(--green-d)">问为什么</b>
+      <span>什么都能答，像会说话的百科全书。</span>
+    </div>
+    <div style="background:var(--green-l)">
+      <b style="color:var(--green-d)">帮你检查</b>
+      <span>作业写完给它看，找找错。</span>
+    </div>
+    <div style="background:var(--green-l)">
+      <b style="color:var(--green-d)">陪你背书</b>
+      <span>三字经、古诗，陪你背、讲故事。</span>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 陪创造 -->
+<div class="card c-amber">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAEEDA" stroke="#854F0B" stroke-width="2"/><path d="M14 26c2-6 6-10 12-12-2 6-6 10-12 12z" fill="none" stroke="#854F0B" stroke-width="2"/><circle cx="14" cy="26" r="1.6" fill="#854F0B"/><path d="M22 14l4 4" stroke="#854F0B" stroke-width="2" stroke-linecap="round"/></svg>
+    它能陪你创造
+  </h2>
+  <p>你说<b>"画只月亮上的小猫"</b>——唰，画好啦！</p>
+  <p>你说<b>"编个小恐龙的故事"</b>——唰唰唰，写好啦！</p>
+  <div class="grid">
+    <div class="it"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAEEDA"/><path d="M14 26c2-6 6-10 12-12-2 6-6 10-12 12z" fill="none" stroke="#854F0B" stroke-width="2.2" stroke-linejoin="round"/></svg><div><b>画画</b><span>你说什么它画什么</span></div></div>
+    <div class="it"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAEEDA"/><path d="M13 14h14v12H13z M13 18h14 M17 14v12" fill="none" stroke="#854F0B" stroke-width="2"/></svg><div><b>写故事</b><span>编故事、写儿歌</span></div></div>
+    <div class="it"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAEEDA"/><path d="M20 12v16 M12 20h16" stroke="#854F0B" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>做计划</b><span>帮你安排要做的事</span></div></div>
+    <div class="it"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAEEDA"/><circle cx="18" cy="18" r="6" fill="none" stroke="#854F0B" stroke-width="2"/><path d="M23 23l5 5" stroke="#854F0B" stroke-width="2.4" stroke-linecap="round"/></svg><div><b>找资料</b><span>帮你查、帮你整理</span></div></div>
+  </div>
+  <p style="margin-top:14px">你说想法，它帮你<b>做出来</b>。</p>
+</div>
+
+<!-- 陪你玩 -->
+<div class="card c-coral">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7" stroke="#993C1D" stroke-width="2"/><circle cx="15" cy="26" r="3.5" fill="#993C1D"/><rect x="17.5" y="12" width="2.5" height="14" fill="#993C1D"/><path d="M17.5 12l8-2v3.5" fill="none" stroke="#993C1D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    它还能陪你玩
+  </h2>
+  <p>它不光会学习，<b>还会玩</b>！</p>
+  <p>"唱首歌吧"——它就唱给你听！</p>
+  <p>"教我跳舞"——它一步一步教你。</p>
+  <div class="grid">
+    <div class="it" style="background:var(--coral-l)"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7"/><circle cx="15" cy="26" r="3.5" fill="#993C1D"/><rect x="17.5" y="12" width="2.5" height="14" fill="#993C1D"/><path d="M17.5 12l8-2v3.5" fill="none" stroke="#993C1D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b style="color:#993C1D">唱歌</b><span>你点什么它唱什么</span></div></div>
+    <div class="it" style="background:var(--coral-l)"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7"/><circle cx="20" cy="13" r="2.5" fill="#993C1D"/><path d="M20 16v6 M20 19l-5 3 M20 19l5-2 M20 22l-3 5 M20 22l4 4" stroke="#993C1D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><div><b style="color:#993C1D">跳舞</b><span>一步一步教你</span></div></div>
+    <div class="it" style="background:var(--coral-l)"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7"/><circle cx="20" cy="20" r="12" fill="none" stroke="#993C1D" stroke-width="2"/><circle cx="16" cy="17" r="1.5" fill="#993C1D"/><circle cx="24" cy="17" r="1.5" fill="#993C1D"/><path d="M15 23a6 6 0 0010 0" fill="none" stroke="#993C1D" stroke-width="2" stroke-linecap="round"/></svg><div><b style="color:#993C1D">讲笑话</b><span>把你逗得哈哈笑</span></div></div>
+    <div class="it" style="background:var(--coral-l)"><svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7"/><rect x="12" y="16" width="16" height="11" rx="3" fill="none" stroke="#993C1D" stroke-width="2"/><circle cx="16" cy="22" r="1.5" fill="#993C1D"/><circle cx="22" cy="20" r="1.2" fill="#993C1D"/><circle cx="25" cy="23" r="1.2" fill="#993C1D"/></svg><div><b style="color:#993C1D">玩游戏</b><span>猜谜语、接龙</span></div></div>
+  </div>
+  <p style="margin-top:14px">你想玩什么，它就<b>陪你玩</b>。</p>
+</div>
+
+<!-- 4. 帮整理 -->
+<div class="card">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E6F1FB" stroke="#185FA5" stroke-width="2"/><path d="M13 14h14M13 20h14M13 26h14" stroke="#185FA5" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="14" r="1.5" fill="#185FA5"/><circle cx="11" cy="20" r="1.5" fill="#185FA5"/><circle cx="11" cy="26" r="1.5" fill="#185FA5"/></svg>
+    它能帮你整理
+  </h2>
+  <p>事情太多，脑子乱糟糟？</p>
+  <p>跟它说<b>"帮我列个清单"</b>，它就帮你排好。</p>
+  <p>比如办生日会，它帮你列出：</p>
+  <p>
+    <span class="pill p-blue">要请谁</span>
+    <span class="pill p-green">买什么</span>
+    <span class="pill p-amber">怎么布置</span>
+    <span class="pill p-coral">什么时候做</span>
+  </p>
+  <p>乱糟糟，一下子变<b>整齐</b>啦！</p>
+</div>
+
+<!-- 5. 不是万能的 -->
+<div class="card c-coral">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7" stroke="#993C1D" stroke-width="2"/><path d="M14 14l12 12M26 14L14 26" stroke="#993C1D" stroke-width="2.5" stroke-linecap="round"/></svg>
+    可是，它不是万能的
+  </h2>
+  <p class="lead">它很厉害，但不是什么都会。</p>
+  <p>有时候会<b>答错</b>，有时候会<b>乱编</b>。</p>
+  <div class="vs">
+    <div class="bad">
+      <b>✗ 全信它</b>
+      <span>它说什么就信什么？万一错了呢。</span>
+    </div>
+    <div class="good">
+      <b>✓ 自己想想</b>
+      <span>对不对？拿不准先问老师。</span>
+    </div>
+  </div>
+  <p>它很聪明，但<b>不是老师，也不是爸爸妈妈</b>。它说的，你要自己想一想。</p>
+</div>
+
+<!-- 6. 怎么做得更好 -->
+<div class="card c-green">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#E1F5EE" stroke="#0F6E56" stroke-width="2"/><path d="M14 22l4 4 8-10" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    怎么让它做得更好？
+  </h2>
+  <p>有几个<b>小窍门</b>：</p>
+  <div class="split">
+    <div style="background:var(--green-l)">
+      <b style="color:var(--green-d)">说清楚</b>
+      <span>"画只橘色的猫坐月亮上"比"画个猫"好。</span>
+    </div>
+    <div style="background:var(--green-l)">
+      <b style="color:var(--green-d)">一件一件来</b>
+      <span>先画猫，再加月亮。别一口气说太多。</span>
+    </div>
+  </div>
+  <div class="split">
+    <div style="background:var(--green-l)">
+      <b style="color:var(--green-d)">告诉它对不对</b>
+      <span>对了说"对"，错了说"重来"。它会越改越好。</span>
+    </div>
+    <div style="background:var(--green-l)">
+      <b style="color:var(--green-d)">换个说法</b>
+      <span>它没听懂？换个说法再说一遍。</span>
+    </div>
+  </div>
+  <p>你说得越清楚，它<b>做得越好</b>。</p>
+</div>
+
+<!-- 7. 安全第一 -->
+<div class="card c-coral">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#FAECE7" stroke="#993C1D" stroke-width="2"/><path d="M20 11l8 4v8c0 5-4 8-8 10-4-2-8-5-8-10v-4z" fill="none" stroke="#993C1D" stroke-width="2" stroke-linejoin="round"/><path d="M16 20l3 3 5-5" fill="none" stroke="#993C1D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    安全第一
+  </h2>
+  <p>有几件事<b>一定要记住</b>：</p>
+  <div class="vs">
+    <div class="bad">
+      <b>✗ 不要告诉它</b>
+      <span>名字、住哪、电话、密码、学校——这是你的秘密。</span>
+    </div>
+    <div class="good">
+      <b>✓ 要这样做</b>
+      <span>遇到怪事，先找老师，再告诉家人。</span>
+    </div>
+  </div>
+  <p>它帮你做事，但<b>动脑筋得靠自己</b>。它帮你查，你自己想明白；它帮你写，你自己决定写什么。</p>
+</div>
+
+<!-- 8. 总结 -->
+<div class="card c-purple">
+  <h2>
+    <svg class="ic" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#EEEDFE" stroke="#534AB7" stroke-width="2"/><path d="M20 12l2.2 5 5.4.6-4 3.8 1.1 5.4L20 30l-4.7 2.8 1.1-5.4-4-3.8 5.4-.6z" fill="none" stroke="#534AB7" stroke-width="2" stroke-linejoin="round"/></svg>
+    今天学了什么？
+  </h2>
+  <p>沃克巴迪能帮你：</p>
+  <p>
+    <span class="pill p-green">学习</span>
+    <span class="pill p-amber">创造</span>
+    <span class="pill p-coral">玩</span>
+    <span class="pill p-blue">整理</span>
+  </p>
+  <p>可是要记住：</p>
+  <p>
+    <span class="pill p-coral">不是万能的</span>
+    <span class="pill p-purple">自己动脑</span>
+    <span class="pill p-green">安全第一</span>
+  </p>
+  <p>用好它，你会更聪明、更能干。它就是你成长路上的<b>好伙伴</b>。</p>
+  <div class="note">
+    小朋友，记住几句就好：<br>
+    📚 陪你学习、创造、整理<br>
+    🎵 还会唱歌、跳舞、讲笑话<br>
+    ⚠️ 它不是万能的，会答错、会乱编<br>
+    🧠 动脑筋靠自己<br>
+    🔒 别告诉它秘密，怪事先找老师
+  </div>
+</div>
+
+<footer>WorkBuddy（沃克巴迪）的故事 · 第四篇 · 2026</footer>
+
+</div>
+
+<!-- 朗读功能 · 预生成 MP3，任何设备（含微信）都能播放 -->
+<style>
+.tbar{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(0deg,#fff 30%,rgba(255,255,255,.85) 75%,rgba(255,255,255,0));}
+.tbar button{font-family:inherit;font-size:17px;font-weight:800;border:none;border-radius:999px;padding:13px 24px;cursor:pointer;box-shadow:0 5px 16px rgba(0,0,0,.16);transition:transform .12s;}
+.tbar button:active{transform:scale(.95);}
+.tbar .rdPlay{background:#378ADD;color:#fff;}
+.tbar .rdPlay.on{background:#F0997B;}
+.tbar .rdStop{background:#fff;color:#5F5E5A;border:1.5px solid #ddd;display:none;}
+.tbar .rdHint{font-size:12px;color:#9a9a9a;max-width:48%;line-height:1.4;}
+</style>
+<div class="tbar">
+  <button class="rdPlay" id="rdPlay">🔊 听故事</button>
+  <button class="rdStop" id="rdStop">■ 停止</button>
+  <span class="rdHint" id="rdHint"></span>
+</div>
+<div id="startMask" style="position:fixed;inset:0;z-index:99999;background:rgba(253,246,236,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity .4s;">
+  <div style="font-size:60px;">🎵</div>
+  <div style="font-size:22px;font-weight:800;color:#0C447C;margin-top:12px;">点这里，听沃克巴迪的故事</div>
+  <div style="font-size:14px;color:#9a9a9a;margin-top:6px;">先听主题曲，再听故事</div>
+</div>
+<audio id="rdAudio" preload="auto" src="story4.mp3"></audio>
+<script>
+// ===== 主题曲旋律（Web Audio 合成，与主题曲页面一致）=====
+var THEME=(function(){
+  var N={C3:130.81,D3:146.83,E3:164.81,G3:196.00,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25,G5:783.99,C6:1046.50,R:0};
+  var B=0.42;
+  var sg=[[[["C5",1],["G4",.5],["E4",.5],["R",.3],["C5",1],["G4",.5],["E4",.5],["D4",.5]],0],[[["E4",.5],["E4",.5],["G4",.5],["A4",.5],["C5",1],["R",.2],["C5",.5],["B4",.5],["G4",1],["R",.2],["A4",.5],["G4",.5],["E4",1.2]],1],[[["C5",1],["G4",.5],["E4",.5],["D4",.5],["R",.2],["C5",1],["G4",.5],["E4",.5],["D4",.5]],2],[[["C6",.4],["C6",.4],["R",.3],["G5",.4],["G5",.4],["R",.3],["C6",.3],["G5",.3],["C6",.3],["G5",.3],["R",.5]],3]];
+  var bs=[["C3",2],["C3",2],["C3",2],["G3",2],["C3",2],["C3",2],["G3",2],["C3",2],["C3",2]];
+  function P(cb){
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC){cb&&cb();return null;}
+    var c=new AC(),m=c.createGain();m.gain.value=.5;m.connect(c.destination);
+    function n(f,s,d,t,v){if(!f)return;var o=c.createOscillator(),g=c.createGain();o.type=t||"triangle";o.frequency.value=f;o.connect(g);g.connect(m);g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v||.26,s+.015);g.gain.exponentialRampToValueAtTime((v||.26)*.6,s+.06);g.gain.exponentialRampToValueAtTime(.0008,s+d);o.start(s);o.stop(s+d+.05);}
+    function dn(f,s,d){if(!f)return;var o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=f;o.connect(g);g.connect(m);g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.18,s+.005);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d+.03);}
+    var t0=c.currentTime+.1,t=t0;
+    sg.forEach(function(sg2){sg2[0].forEach(function(x){var d=x[1]*B;n(N[x[0]],t,d*.92,sg2[1]===3?"square":"triangle");if(sg2[1]===3&&x[0]!=="R")dn(N[x[0]]*2,t,d*.6);t+=d;});});
+    var bt=t0;bs.forEach(function(b){var d=b[1]*B;n(N[b[0]],bt,d*.9,"sine",.2);n(N[b[0]],bt+d*.5,d*.45,"sine",.16);bt+=d;});
+    var total=(t-t0)*1000+200;
+    setTimeout(function(){cb&&cb();},total);
+    return c;
+  }
+  return {play:P};
+})();
+// ===== 播放器：先主题曲，再故事 =====
+(function(){
+  var audio=document.getElementById('rdAudio');
+  var playBtn=document.getElementById('rdPlay'),stopBtn=document.getElementById('rdStop'),hint=document.getElementById('rdHint');
+  var mask=document.getElementById('startMask');
+  if(!audio||!audio.canPlayType){hint.textContent='此设备不支持音频播放';return;}
+  var themePlayed=false,themeCtx=null,waitingNarration=false;
+  function resetUI(){playBtn.textContent='\u{1F50A} 听故事';playBtn.classList.remove('on');stopBtn.style.display='none';}
+  function clearTheme(){if(themeCtx){try{themeCtx.close();}catch(e){}themeCtx=null;}}
+  audio.addEventListener('play',function(){playBtn.textContent='\u23F8 暂停';playBtn.classList.add('on');stopBtn.style.display='';});
+  audio.addEventListener('pause',function(){playBtn.textContent='\u25B6 继续';playBtn.classList.remove('on');});
+  audio.addEventListener('ended',function(){resetUI();hint.textContent='故事讲完啦';themePlayed=false;});
+  audio.addEventListener('error',function(){hint.textContent='音频加载失败，请检查网络';resetUI();});
+  function startAll(){
+    if(!themePlayed&&!waitingNarration&&audio.paused&&audio.currentTime===0){
+      themePlayed=true;waitingNarration=true;
+      playBtn.textContent='\u{1F3B5} 主题曲…';playBtn.classList.add('on');stopBtn.style.display='';
+      hint.textContent='正在播放主题曲';
+      themeCtx=THEME.play(function(){
+        waitingNarration=false;hint.textContent='';
+        audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';resetUI();themePlayed=false;});
+      });
+    } else if(waitingNarration){
+      clearTheme();waitingNarration=false;hint.textContent='';
+      audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';});
+    } else {
+      if(audio.paused){audio.play().catch(function(){hint.textContent='播放失败，请点一下页面再试';});}
+      else{audio.pause();}
+    }
+  }
+  playBtn.addEventListener('click',startAll);
+  // 开场遮罩：点一下就开始（主题曲+故事）
+  if(mask){
+    mask.addEventListener('click',function(){
+      mask.style.opacity='0';
+      setTimeout(function(){mask.style.display='none';},400);
+      startAll();
+    });
+  }
+  stopBtn.addEventListener('click',function(){clearTheme();waitingNarration=false;audio.pause();audio.currentTime=0;resetUI();hint.textContent='';themePlayed=false;});
+})();
+</script>
+
+<!-- 集间导航 -->
+<div class="nav-fab" id="navFab" onclick="document.getElementById('navOverlay').classList.add('show');document.getElementById('navPanel').classList.add('show')">☰</div>
+<div class="nav-overlay" id="navOverlay" onclick="this.classList.remove('show');document.getElementById('navPanel').classList.remove('show')"></div>
+<div class="nav-panel" id="navPanel">
+  <button class="nav-close" onclick="document.getElementById('navOverlay').classList.remove('show');document.getElementById('navPanel').classList.remove('show')">✕</button>
+  <div class="np-title">沃克巴迪的故事</div>
+<a class="collection" href="https://867d8e5c42c14574b74ae6cb01d7cb8c.app.codebuddy.work"><span class="np-num">📖</span>合集目录</a>
+<a class="prelude" href="https://c3ecf1d883b2417db00e6079e84e3606.app.codebuddy.work"><span class="np-num">🎵</span>序曲 · 斯卡布罗集市圆号版</a>
+<a class="story" href="https://ce5f2dbc1cd6411dbf64a1521636ebc6.app.codebuddy.work"><span class="np-num">1</span>第一篇 · WorkBuddy工作伙伴</a>
+<a class="story" href="https://91f3afe7089a4ec5afa9a6b407e37d23.app.codebuddy.work"><span class="np-num">2</span>第二篇 · 它从哪儿来的</a>
+<a class="story" href="https://175a1bd63b0f44e6b623f7f87d9e8e5d.app.codebuddy.work"><span class="np-num">3</span>第三篇 · 怎么学习跟沃克巴迪做事</a>
+<a class="story current" href="https://29a1239baf15483d93eeab70a1aff1b4.app.codebuddy.work"><span class="np-num">4</span>第四篇 · 沃克巴迪能帮你做什么</a>
+<a class="story" href="https://6892155814574a8db037b2b39930b5f3.app.codebuddy.work"><span class="np-num">5</span>第五篇 · 和沃克巴迪一起长大</a>
+<a class="theme" href="https://e57ac8793a0342888344acc3ded6b040.app.codebuddy.work"><span class="np-num">🎶</span>主题曲 · 沃克巴迪之歌</a>
+</div>
+<a class="nav-next blue" href="https://6892155814574a8db037b2b39930b5f3.app.codebuddy.work">下一集：第五篇 ›</a>
+<a class="nav-back" href="https://175a1bd63b0f44e6b623f7f87d9e8e5d.app.codebuddy.work">‹ 上一集：第三篇</a>
+
+</body>
+</html>
