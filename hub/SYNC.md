@@ -34,7 +34,21 @@ Token：`~/.workbuddy/github-token`（电脑端已配置）
 2. 每次会话结束前更新一次；任务变化时也更新
 3. **读取无需权限**（公开仓库），**写入需要 token**——没有 token 的终端，把内容发给有 token 的终端代写
 
-## 三、各终端操作口令
+## 三、任务信箱（手机 → 电脑）
+
+手机端能独立完成大部分任务（写页面、部署、生成文档都在云端沙箱里跑）。只有需要**电脑本地资源**的任务才需要转交给电脑：桌面文件、定时任务、邮箱登录态、Claw 源文件。
+
+转交方式——往 `state.json` 的 `requests` 数组追加一条：
+
+```json
+{ "id": "r-20261028-01", "from": "手机端", "task": "把桌面最新的日报内容摘要发我", "status": "pending", "createdAt": "ISO 时间", "result": "" }
+```
+
+- `status` 取值：`pending` → `done` / `failed`
+- 电脑端每天 09:30 晨报会自动检查 `pending` 队列，逐条执行并回写 `result`
+- 手机上想立刻催办：直接跟电脑端说一句"处理信箱任务"即可
+
+## 四、各终端操作口令
 
 **电脑端（有 token）：**
 > "更新同步状态：任务=xxx" → 改写 `Claw/hub/sync/state.json` 并 push 到 `hub/sync/state.json`
