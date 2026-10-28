@@ -1,7 +1,7 @@
 {
   "meta": {
-    "updatedAt": "2026-10-28T08:10:00-04:00",
-    "version": "1.0",
+    "updatedAt": "2026-10-28T09:38:00-04:00",
+    "version": "1.1",
     "note": "全局唯一资源真相源（SSOT）。任何终端、任何页面、任何总结，都只从这里取数，不再各说一套。改这里 = 改所有终端看到的内容。"
   },
   "identity": {
@@ -9,7 +9,10 @@
     "userId": "eef38531-9dc0-46a0-9f3e-d7643add7bb2",
     "repo": "koworkbussy/workbuddy-stories-v2",
     "entry": "https://koworkbussy.github.io/workbuddy-stories-v2/hub/",
-    "stateFile": "https://raw.githubusercontent.com/koworkbussy/workbuddy-stories-v2/main/hub/sync/state.json"
+    "stateFile": "https://raw.githubusercontent.com/koworkbussy/workbuddy-stories-v2/main/hub/sync/state.json",
+    "progressFile": "https://raw.githubusercontent.com/koworkbussy/workbuddy-stories-v2/main/hub/data/progress.json",
+    "reportsIndex": "https://raw.githubusercontent.com/koworkbussy/workbuddy-stories-v2/main/reports/index.json",
+    "boardUrl": "https://github.com/koworkbussy/workbuddy-stories-v2/blob/main/hub/data/PROJECTS.md"
   },
   "devices": [
     {
@@ -117,8 +120,9 @@
   ],
   "resources": [
     { "name": "项目源文件", "where": "C:/Users/koralo/WorkBuddy/Claw/", "access": "仅电脑", "cloud": "部分（GitHub 仓库）" },
-    { "name": "桌面日报", "where": "C:/Users/koralo/Desktop/Email_Daily_*.html", "access": "仅电脑", "cloud": "未上云（待迁移 reports/）" },
-    { "name": "项目看板", "where": "C:/Users/koralo/WorkBuddy/Claw/PROJECTS.md", "access": "仅电脑", "cloud": "待上云" },
+    { "name": "邮件日报", "where": "电脑桌面生成 → 自动推 reports/", "access": "生成仅电脑 · 阅读全终端", "cloud": "已同步（26 期归档）" },
+    { "name": "项目看板", "where": "Claw/PROJECTS.md → hub/data/PROJECTS.md", "access": "编辑仅电脑 · 阅读全终端", "cloud": "已同步" },
+    { "name": "进展时间线", "where": "hub/data/progress.json（GitHub）", "access": "全部终端", "cloud": "已同步" },
     { "name": "设备状态与任务队列", "where": "hub/sync/state.json（GitHub）", "access": "全部终端", "cloud": "已同步" },
     { "name": "本资源清单", "where": "hub/data/resources.json（GitHub）", "access": "全部终端", "cloud": "已同步（SSOT）" },
     { "name": "邮箱登录态", "where": "~/.workbuddy/browser_profiles/outlook_msn", "access": "仅电脑", "cloud": "不同步（安全）" },
@@ -129,7 +133,9 @@
     "单一入口：任何设备打开同一个总控台地址",
     "单一任务队列：跨端任务只走 state.json 的 requests，不再口头散落",
     "单一状态口径：项目状态只有四种——进行中 / 待部署 / 已完成 / 暂停",
-    "产出统一落点：新产出优先上云（CloudStudio / GitHub Pages），本机只作源文件存放",
+    "产出统一落点：新产出优先上云（CloudStudio / GitHub Pages / reports/），本机只作源文件存放",
+    "写入唯一通道：任何终端改数据只通过 cloudsync.py（reports / projects / progress / push），不手改远端",
+    "进展统一记录：任何一方做完事，追加一条 progress.json 事件，另一终端刷新即见",
     "隐私边界：公开仓库不写邮件正文、账号、财务、登录态"
   ]
 }
