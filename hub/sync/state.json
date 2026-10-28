@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2026-10-28T07:38:30-04:00",
+  "updatedBy": "电脑端 · k2309",
+  "note": "各终端每次会话结束后更新本文件并 push，总控台会自动读取显示。",
+  "devices": [
+    {
+      "name": "电脑端 · k2309",
+      "status": "online",
+      "lastSeen": "2026-10-28T07:38:30-04:00",
+      "task": "跨端同步通道搭建完成，总控台已联网"
+    },
+    {
+      "name": "手机端",
+      "status": "working",
+      "lastSeen": "2026-10-28T07:38:30-04:00",
+      "task": "用户反馈已启动工作，等待手机端上报具体任务"
+    }
+  ],
+  "projects": [
+    { "name": "儿童故事 V2 元宝版", "state": "进行中", "next": "第2集部署 + 3-5集开发" },
+    { "name": "老王 V3（9集）", "state": "待部署", "next": "部署 deploy-1~9" },
+    { "name": "AI 重点资讯总结", "state": "暂停", "next": "决定恢复或删除" }
+  ],
+  "reports": {
+    "latest": "Email_Daily_20261027.html",
+    "location": "电脑端桌面（未上云）",
+    "pending": "日报上云（推送至 reports/ 目录）"
+  }
+}
