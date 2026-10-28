@@ -1,19 +1,19 @@
 {
-  "updatedAt": "2026-10-28T07:55:00-04:00",
+  "updatedAt": "2026-10-28T09:40:00-04:00",
   "updatedBy": "电脑端 · k2309",
-  "note": "各终端每次会话结束后更新本文件并 push，总控台会自动读取显示。",
+  "note": "各终端每次会话结束后更新本文件并 push，总控台会自动读取显示。写入工具：cloudsync.py",
   "devices": [
     {
       "name": "电脑端 · k2309",
-      "status": "online",
-      "lastSeen": "2026-10-28T07:55:00-04:00",
-      "task": "已建立手机→电脑任务信箱，晨报自动检查"
+      "status": "working",
+      "lastSeen": "2026-10-28T09:40:00-04:00",
+      "task": "全终端同步已打通：26 期日报上云 · 看板上云 · 进展时间线启用"
     },
     {
       "name": "手机端",
       "status": "working",
       "lastSeen": "2026-10-28T07:38:00-04:00",
-      "task": "云端会话「询问工作经历与建议」进行中（内容不可见，仅见会话标题）"
+      "task": "云端会话进行中；打开总控台即可看到最新进展与全部日报"
     }
   ],
   "requests": [],
@@ -23,8 +23,9 @@
     { "name": "AI 重点资讯总结", "state": "暂停", "next": "决定恢复或删除" }
   ],
   "reports": {
-    "latest": "Email_Daily_20261027.html",
-    "location": "电脑端桌面（未上云）",
-    "pending": "日报上云（推送至 reports/ 目录）"
+    "latest": "2026-10-27",
+    "location": "云端 reports/（电脑桌面为源，生成后自动上云）",
+    "archive": "https://koworkbussy.github.io/workbuddy-stories-v2/hub/",
+    "count": 26
   }
 }
