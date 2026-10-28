@@ -26,18 +26,35 @@
 | MSN 邮箱日报自动化 | 2026-07-28 | 持续运行中，详见下方"日常机制" |
 | WorkBuddy 升级 5.3.11 → 5.6.2 | 2026-09-24 | 备份：workbuddy-backup-5.3.11-20260924 |
 
-## ⚙️ 日常机制（2026-10-27 建立）
+## ⚙️ 日常机制（2026-10-27 建立｜2026-10-28 全部上云）
 
 **跨端总控台（任何设备可访问）：** https://koworkbussy.github.io/workbuddy-stories-v2/hub/
-本地源文件：`C:/Users/koralo/WorkBuddy/Claw/hub/index.html`（改完需重新推送到 GitHub 仓库 workbuddy-stories-v2 的 hub/ 目录）
-**设备同步状态文件：** `hub/sync/state.json`（页面每 45 秒自动刷新；写协议见 `hub/SYNC.md`）
+本地源文件：`C:/Users/koralo/WorkBuddy/Claw/hub/index.html`
+
+**云端数据（唯一口径，所有终端只读同一份）：**
+
+| 文件 | 内容 | 地址 |
+|---|---|---|
+| `hub/data/resources.json` | 项目 / 链接 / 状态（SSOT） | raw.githubusercontent.com/…/hub/data/resources.json |
+| `hub/data/progress.json` | 进展时间线 | …/hub/data/progress.json |
+| `hub/sync/state.json` | 设备状态 + 任务信箱 | …/hub/sync/state.json |
+| `reports/index.json` | 日报归档索引（26 期） | …/reports/index.json |
+| `hub/data/PROJECTS.md` | 本看板云端副本 | …/hub/data/PROJECTS.md |
+
+**唯一写入口：** `C:/Users/koralo/WorkBuddy/2026-07-28-08-50-34/cloudsync.py`
+```
+python cloudsync.py reports            # 日报上云 + 重建索引（日报脚本已自动调用）
+python cloudsync.py projects           # 推送本看板
+python cloudsync.py progress "内容" --tag 标签   # 追加进展时间线
+python cloudsync.py push <远端路径> <本地文件> --msg 说明
+```
 
 | 时间 | 任务 | 说明 |
 |---|---|---|
-| 每天 09:30 | 晨间站会 | 昨日邮件待办 + 项目待办 + 今日建议 |
-| 每天 10:00 | MSN 邮箱日报 | 抓取邮件生成 Email_Daily_YYYYMMDD.html |
-| 每天 21:00 | 日报看门狗 | 检查当天日报，缺失则补跑并通知 |
-| 每周日 20:00 | 项目周报 | 本周产出 + 未完成清单 + 下周建议 |
+| 每天 09:30 | 晨间站会 | 读云端数据：任务信箱 + 昨日待办 + 项目待办 + 今日建议 |
+| 每天 10:00 | MSN 邮箱日报 | 生成 Email_Daily_YYYYMMDD.html 并**自动上云** |
+| 每天 21:00 | 日报看门狗 | 本地与云端双查，缺失则补跑/补推 |
+| 每周日 20:00 | 项目周报 | 云端口径：产出 + 挂起 + 自动化健康度 |
 
 ## 📌 工作规范（沿用既有原则）
 
