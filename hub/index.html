@@ -41,6 +41,16 @@
   li{margin:5px 0}
   .note{background:#fffdf5;border:1px solid #f6e3b4;border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7c5a15}
   .note b{color:#8a5a00}
+  .syncbox{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .dev{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:13px}
+  .dev:last-child{border-bottom:none}
+  .dev .name{font-weight:500}
+  .devtask{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .dev .time{font-size:11px;color:#9aa5b1;white-space:nowrap}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+  .dot.working{background:#EF9F27}
+  .dot.online{background:#1D9E75}
+  .dot.idle{background:#B4B2A9}
   footer{margin-top:28px;text-align:center;font-size:11px;color:#a8b2bd}
 </style>
 </head>
@@ -56,6 +66,13 @@
   <div class="stat"><b>5</b><span>项目系列</span></div>
   <div class="stat"><b>30+</b><span>云端页面</span></div>
   <div class="stat"><b>4</b><span>定时任务</span></div>
+</div>
+
+<h2>设备同步 <span id="syncAge" style="font-size:11px;color:#8894a2;font-weight:400"></span></h2>
+<div id="syncPanel" class="syncbox">
+  <div class="dev">
+    <div><b>加载中…</b><div class="devtask">正在读取各终端状态</div></div>
+  </div>
 </div>
 
 <h2>儿童故事 · V1 正式版</h2>
@@ -160,5 +177,50 @@
 
 <footer>WorkBuddy 总控台 · 由 koralo 账号统一管理</footer>
 </div>
+
+<script>
+(function(){
+  var STATE_URL = "https://raw.githubusercontent.com/koworkbussy/workbuddy-stories-v2/main/hub/sync/state.json";
+  var panel = document.getElementById("syncPanel");
+  var age = document.getElementById("syncAge");
+  function ago(iso){
+    var t = Date.parse(iso);
+    if(isNaN(t)) return "未知";
+    var m = Math.round((Date.now() - t)/60000);
+    if(m < 1) return "刚刚";
+    if(m < 60) return m + " 分钟前";
+    var h = Math.round(m/60);
+    if(h < 24) return h + " 小时前";
+    return Math.round(h/24) + " 天前";
+  }
+  var label = {working:"工作中", online:"在线", idle:"空闲"};
+  function render(s){
+    var html = "";
+    (s.devices||[]).forEach(function(d){
+      html += '<div class="dev"><div><b class="name"><span class="dot ' + (d.status||"idle") + '"></span>' + d.name + "</b>" +
+              '<div class="devtask">' + (d.task||"") + " · " + (label[d.status]||d.status||"") + "</div></div>" +
+              '<div class="time">' + ago(d.lastSeen) + "</div></div>";
+    });
+    if(s.projects && s.projects.length){
+      html += '<div class="dev"><div><b class="name">未完成事项</b><div class="devtask">' +
+        s.projects.map(function(p){ return p.name + "（" + p.state + "）"; }).join("　·　") +
+        "</div></div><div class=\"time\">" + (s.updatedBy||"") + "</div></div>";
+    }
+    panel.innerHTML = html;
+    if(age) age.textContent = "最后同步 " + ago(s.updatedAt) + " · 每 45 秒自动刷新";
+  }
+  function load(){
+    fetch(STATE_URL + "?t=" + Date.now(), {cache:"no-store"})
+      .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(render)
+      .catch(function(){
+        panel.innerHTML = '<div class="dev"><div><b class="name"><span class="dot idle"></span>状态读取失败</b>' +
+          '<div class="devtask">可能是网络或仓库权限问题，页面其余内容不受影响</div></div><div class="time">重试中</div></div>';
+      });
+  }
+  load();
+  setInterval(load, 45000);
+})();
+</script>
 </body>
 </html>
