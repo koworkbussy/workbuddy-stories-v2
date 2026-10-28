@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "updatedAt": "2026-10-28T08:10:00-04:00",
+    "version": "1.0",
+    "note": "全局唯一资源真相源（SSOT）。任何终端、任何页面、任何总结，都只从这里取数，不再各说一套。改这里 = 改所有终端看到的内容。"
+  },
+  "identity": {
+    "account": "koralo@msn.com",
+    "userId": "eef38531-9dc0-46a0-9f3e-d7643add7bb2",
+    "repo": "koworkbussy/workbuddy-stories-v2",
+    "entry": "https://koworkbussy.github.io/workbuddy-stories-v2/hub/",
+    "stateFile": "https://raw.githubusercontent.com/koworkbussy/workbuddy-stories-v2/main/hub/sync/state.json"
+  },
+  "devices": [
+    {
+      "id": "desktop",
+      "name": "电脑端 · k2309",
+      "role": "主执行节点",
+      "can": ["本地文件读写", "定时任务", "邮箱抓取（浏览器登录态）", "Claw 源文件", "部署/推送 GitHub"],
+      "cannot": []
+    },
+    {
+      "id": "mobile",
+      "name": "手机端",
+      "role": "移动执行节点",
+      "can": ["云端沙箱内建站与部署", "生成文档/图片", "查资料", "读取总控台"],
+      "cannot": ["访问电脑本地文件", "触发本机定时任务", "复用电脑浏览器登录态"]
+    }
+  ],
+  "projects": [
+    {
+      "id": "stories-v1",
+      "name": "沃克巴迪儿童故事 V1",
+      "state": "已上线",
+      "summary": "5 篇故事 + 圆号序曲 + 主题曲，已发给小朋友，链接永不变更",
+      "links": [
+        { "label": "合集入口", "url": "https://867d8e5c42c14574b74ae6cb01d7cb8c.app.codebuddy.work", "primary": true },
+        { "label": "序曲·圆号版", "url": "https://c3ecf1d883b2417db00e6079e84e3606.app.codebuddy.work" },
+        { "label": "第1篇", "url": "https://ce5f2dbc1cd6411dbf64a1521636ebc6.app.codebuddy.work" },
+        { "label": "第2篇", "url": "https://91f3afe7089a4ec5afa9a6b407e37d23.app.codebuddy.work" },
+        { "label": "第3篇", "url": "https://175a1bd63b0f44e6b623f7f87d9e8e5d.app.codebuddy.work" },
+        { "label": "第4篇", "url": "https://29a1239baf15483d93eeab70a1aff1b4.app.codebuddy.work" },
+        { "label": "第5篇", "url": "https://6892155814574a8db037b2b39930b5f3.app.codebuddy.work" },
+        { "label": "主题曲", "url": "https://e57ac8793a0342888344acc3ded6b040.app.codebuddy.work" }
+      ]
+    },
+    {
+      "id": "stories-v2",
+      "name": "儿童故事 V2 · 元宝版",
+      "state": "进行中",
+      "summary": "连续剧式重制 5 集；第 1 集封板，第 2 集待部署，3–5 集待开发",
+      "links": [
+        { "label": "第1集·天外来客", "url": "https://57f4a960ed8f44caa8157be9283b3031.app.codebuddy.work", "primary": true },
+        { "label": "第2集·魔法充电", "url": "https://a9a554d0ef6c40b293f769d93877a7d8.app.codebuddy.work" },
+        { "label": "第5集", "url": "https://73297860af6a4bd397211edd2eb1cb52.app.codebuddy.work" }
+      ]
+    },
+    {
+      "id": "elderly",
+      "name": "老李和沃克巴迪（8 篇）",
+      "state": "已上线",
+      "summary": "老年人互动故事，每篇内嵌 WorkBuddy 界面模拟器",
+      "links": [
+        { "label": "合集入口", "url": "https://a05551cd04bc404c8d7fb2543aec0be0.app.codebuddy.work", "primary": true },
+        { "label": "1·电脑太乱", "url": "https://b345d20a15204d9bb184afb715099d76.app.codebuddy.work" },
+        { "label": "2·照片太乱", "url": "https://91e9e19cdc1342de8d3c95a0517c0596.app.codebuddy.work" },
+        { "label": "3·文件大扫除", "url": "https://6c454120cd684ca19cd2f2da4ffdfd2a.app.codebuddy.work" },
+        { "label": "4·存本事", "url": "https://0ca56a51422d436d9412f1051ce3def7.app.codebuddy.work" },
+        { "label": "5·有记性", "url": "https://f7468caab9e84f90b57de9481f696066.app.codebuddy.work" },
+        { "label": "6·听你的", "url": "https://0fe3861a1b8849c282cdb70d1ef2da61.app.codebuddy.work" },
+        { "label": "7·定规矩", "url": "https://eb0794204b8c4db7a433e78ca3621975.app.codebuddy.work" },
+        { "label": "8·老李的新生活", "url": "https://86888849a2f54137bbf26d0282139c4f.app.codebuddy.work" }
+      ]
+    },
+    {
+      "id": "duckling",
+      "name": "丑小鸭的蜕变记",
+      "state": "已上线",
+      "summary": "双版本并存：手机端原版（带 TTS）+ 电脑端重制版",
+      "links": [
+        { "label": "V2·电脑端重制", "url": "https://3bba91545b734f27a139576870fa42f7.sh3.agentos-app.net", "primary": true },
+        { "label": "V1·手机端原版", "url": "https://801329d9c3fe422facb257ca8f283595.sh3.agentos-app.net" }
+      ]
+    },
+    {
+      "id": "laowang-v2",
+      "name": "老王和沃克巴迪 V2（8 集）",
+      "state": "已上线",
+      "summary": "退休物理教师老王的使用旅程，手机端部署",
+      "links": [
+        { "label": "合集入口", "url": "https://a71bffad78d14a65820d67c7eff8c415.bj7.agentos-app.net", "primary": true },
+        { "label": "1", "url": "https://f76ad8c621b3486e99d02cb9149953a1.bj4.agentos-app.net" },
+        { "label": "2", "url": "https://0cdc2187f97c43ffa74db718f3fe7322.gz1.agentos-app.net" },
+        { "label": "3", "url": "https://9f59f87705354f7bb7b7d9d1ce14ba95.bj4.agentos-app.net" },
+        { "label": "4", "url": "https://71fe50328ff5443b85dc678a65a162e8.gz5.agentos-app.net" },
+        { "label": "5", "url": "https://1866dd46523746a7a04283d126dfa464.gz3.agentos-app.net" },
+        { "label": "6", "url": "https://bac3a18ff1064108ab366588d3e383d1.gz1.agentos-app.net" },
+        { "label": "7", "url": "https://1ff3130b43ea4f788d8fb37959d89fdd.gz5.agentos-app.net" },
+        { "label": "8", "url": "https://e2cb24607ca340779d5267823c7acca0.bj6.agentos-app.net" }
+      ]
+    },
+    {
+      "id": "laowang-v3",
+      "name": "老王 V3 · 全新修订版（9 集）",
+      "state": "待部署",
+      "summary": "代码已完成，新增《初识 WorkBuddy》安装篇，等部署上线",
+      "links": [
+        { "label": "GitHub 仓库", "url": "https://koworkbussy.github.io/workbuddy-stories-v2/" }
+      ]
+    }
+  ],
+  "automations": [
+    { "time": "09:30 每日", "name": "晨间站会", "desc": "处理任务信箱 + 昨日邮件待办 + 项目待办 + 今日建议" },
+    { "time": "10:00 每日", "name": "MSN 邮箱日报", "desc": "生成 Email_Daily_YYYYMMDD.html" },
+    { "time": "21:00 每日", "name": "日报看门狗", "desc": "当天日报缺失则补跑并通知" },
+    { "time": "20:00 每周日", "name": "项目周报", "desc": "本周产出 + 挂起事项 + 下周建议" }
+  ],
+  "resources": [
+    { "name": "项目源文件", "where": "C:/Users/koralo/WorkBuddy/Claw/", "access": "仅电脑", "cloud": "部分（GitHub 仓库）" },
+    { "name": "桌面日报", "where": "C:/Users/koralo/Desktop/Email_Daily_*.html", "access": "仅电脑", "cloud": "未上云（待迁移 reports/）" },
+    { "name": "项目看板", "where": "C:/Users/koralo/WorkBuddy/Claw/PROJECTS.md", "access": "仅电脑", "cloud": "待上云" },
+    { "name": "设备状态与任务队列", "where": "hub/sync/state.json（GitHub）", "access": "全部终端", "cloud": "已同步" },
+    { "name": "本资源清单", "where": "hub/data/resources.json（GitHub）", "access": "全部终端", "cloud": "已同步（SSOT）" },
+    { "name": "邮箱登录态", "where": "~/.workbuddy/browser_profiles/outlook_msn", "access": "仅电脑", "cloud": "不同步（安全）" },
+    { "name": "GitHub 凭据", "where": "~/.workbuddy/github-token", "access": "仅电脑", "cloud": "不同步（安全）" }
+  ],
+  "rules": [
+    "单一真相源：链接、状态、清单只写在 resources.json，页面与总结一律引用，不再手写第二份",
+    "单一入口：任何设备打开同一个总控台地址",
+    "单一任务队列：跨端任务只走 state.json 的 requests，不再口头散落",
+    "单一状态口径：项目状态只有四种——进行中 / 待部署 / 已完成 / 暂停",
+    "产出统一落点：新产出优先上云（CloudStudio / GitHub Pages），本机只作源文件存放",
+    "隐私边界：公开仓库不写邮件正文、账号、财务、登录态"
+  ]
+}
