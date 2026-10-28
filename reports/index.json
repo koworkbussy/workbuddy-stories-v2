@@ -1,0 +1,277 @@
+{
+ "updatedAt": "2026-10-28T09:38:35-04:00",
+ "note": "邮件日报云端归档索引，由 cloudsync.py reports 自动生成。任何终端只读此文件。",
+ "count": 26,
+ "latest": {
+  "date": "2026-10-27",
+  "todo": 2,
+  "meeting": 0,
+  "fyi": 7,
+  "total": 9,
+  "file": "Email_Daily_20261027.html",
+  "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20261027.html",
+  "bytes": 5693
+ },
+ "reports": [
+  {
+   "date": "2026-10-27",
+   "todo": 2,
+   "meeting": 0,
+   "fyi": 7,
+   "total": 9,
+   "file": "Email_Daily_20261027.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20261027.html",
+   "bytes": 5693
+  },
+  {
+   "date": "2026-10-22",
+   "todo": 1,
+   "meeting": 0,
+   "fyi": 8,
+   "total": 9,
+   "file": "Email_Daily_20261022.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20261022.html",
+   "bytes": 6207
+  },
+  {
+   "date": "2026-10-03",
+   "todo": 2,
+   "meeting": 0,
+   "fyi": 7,
+   "total": 9,
+   "file": "Email_Daily_20261003.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20261003.html",
+   "bytes": 6112
+  },
+  {
+   "date": "2026-09-29",
+   "todo": 0,
+   "meeting": 0,
+   "fyi": 1,
+   "total": 1,
+   "file": "Email_Daily_20260929.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260929.html",
+   "bytes": 2617
+  },
+  {
+   "date": "2026-09-24",
+   "todo": 1,
+   "meeting": 0,
+   "fyi": 8,
+   "total": 9,
+   "file": "Email_Daily_20260924.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260924.html",
+   "bytes": 6093
+  },
+  {
+   "date": "2026-09-23",
+   "todo": 1,
+   "meeting": 0,
+   "fyi": 7,
+   "total": 8,
+   "file": "Email_Daily_20260923.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260923.html",
+   "bytes": 6023
+  },
+  {
+   "date": "2026-09-12",
+   "todo": 2,
+   "meeting": 0,
+   "fyi": 7,
+   "total": 9,
+   "file": "Email_Daily_20260912.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260912.html",
+   "bytes": 5972
+  },
+  {
+   "date": "2026-09-11",
+   "todo": 3,
+   "meeting": 1,
+   "fyi": 5,
+   "total": 9,
+   "file": "Email_Daily_20260911.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260911.html",
+   "bytes": 6358
+  },
+  {
+   "date": "2026-09-10",
+   "todo": 2,
+   "meeting": 1,
+   "fyi": 6,
+   "total": 9,
+   "file": "Email_Daily_20260910.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260910.html",
+   "bytes": 5997
+  },
+  {
+   "date": "2026-09-09",
+   "todo": 1,
+   "meeting": 0,
+   "fyi": 8,
+   "total": 9,
+   "file": "Email_Daily_20260909.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260909.html",
+   "bytes": 5858
+  },
+  {
+   "date": "2026-08-31",
+   "todo": 4,
+   "meeting": 0,
+   "fyi": 5,
+   "total": 9,
+   "file": "Email_Daily_20260831.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260831.html",
+   "bytes": 6012
+  },
+  {
+   "date": "2026-08-30",
+   "todo": 3,
+   "meeting": 0,
+   "fyi": 6,
+   "total": 9,
+   "file": "Email_Daily_20260830.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260830.html",
+   "bytes": 5970
+  },
+  {
+   "date": "2026-08-14",
+   "todo": 2,
+   "meeting": 0,
+   "fyi": 7,
+   "total": 9,
+   "file": "Email_Daily_20260814.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260814.html",
+   "bytes": 6068
+  },
+  {
+   "date": "2026-08-13",
+   "todo": 3,
+   "meeting": 0,
+   "fyi": 6,
+   "total": 9,
+   "file": "Email_Daily_20260813.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260813.html",
+   "bytes": 6129
+  },
+  {
+   "date": "2026-08-12",
+   "todo": 1,
+   "meeting": 0,
+   "fyi": 8,
+   "total": 9,
+   "file": "Email_Daily_20260812.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260812.html",
+   "bytes": 6529
+  },
+  {
+   "date": "2026-08-11",
+   "todo": 3,
+   "meeting": 0,
+   "fyi": 6,
+   "total": 9,
+   "file": "Email_Daily_20260811.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260811.html",
+   "bytes": 6603
+  },
+  {
+   "date": "2026-08-10",
+   "todo": 3,
+   "meeting": 0,
+   "fyi": 6,
+   "total": 9,
+   "file": "Email_Daily_20260810.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260810.html",
+   "bytes": 5899
+  },
+  {
+   "date": "2026-08-09",
+   "todo": 0,
+   "meeting": 0,
+   "fyi": 9,
+   "total": 9,
+   "file": "Email_Daily_20260809.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260809.html",
+   "bytes": 6290
+  },
+  {
+   "date": "2026-08-07",
+   "todo": 1,
+   "meeting": 0,
+   "fyi": 8,
+   "total": 9,
+   "file": "Email_Daily_20260807.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260807.html",
+   "bytes": 5928
+  },
+  {
+   "date": "2026-08-06",
+   "todo": 1,
+   "meeting": 0,
+   "fyi": 7,
+   "total": 8,
+   "file": "Email_Daily_20260806.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260806.html",
+   "bytes": 5586
+  },
+  {
+   "date": "2026-08-04",
+   "todo": 2,
+   "meeting": 0,
+   "fyi": 7,
+   "total": 9,
+   "file": "Email_Daily_20260804.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260804.html",
+   "bytes": 5998
+  },
+  {
+   "date": "2026-08-01",
+   "todo": 0,
+   "meeting": 2,
+   "fyi": 6,
+   "total": 8,
+   "file": "Email_Daily_20260801.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260801.html",
+   "bytes": 5818
+  },
+  {
+   "date": "2026-07-31",
+   "todo": 0,
+   "meeting": 0,
+   "fyi": 9,
+   "total": 9,
+   "file": "Email_Daily_20260731.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260731.html",
+   "bytes": 5927
+  },
+  {
+   "date": "2026-07-30",
+   "todo": 0,
+   "meeting": 0,
+   "fyi": 9,
+   "total": 9,
+   "file": "Email_Daily_20260730.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260730.html",
+   "bytes": 5975
+  },
+  {
+   "date": "2026-07-29",
+   "todo": 0,
+   "meeting": 0,
+   "fyi": 8,
+   "total": 8,
+   "file": "Email_Daily_20260729.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260729.html",
+   "bytes": 5789
+  },
+  {
+   "date": "2026-07-28",
+   "todo": 0,
+   "meeting": 0,
+   "fyi": 8,
+   "total": 8,
+   "file": "Email_Daily_20260728.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20260728.html",
+   "bytes": 5780
+  }
+ ]
+}
