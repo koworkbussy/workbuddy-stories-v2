@@ -1,18 +1,28 @@
 {
- "updatedAt": "2026-10-28T23:05:33-04:00",
+ "updatedAt": "2026-10-29T10:28:32-04:00",
  "note": "邮件日报云端归档索引，由 cloudsync.py reports 自动生成。任何终端只读此文件。",
- "count": 1,
+ "count": 2,
  "latest": {
-  "date": "2026-10-28",
-  "todo": 4,
+  "date": "2026-10-29",
+  "todo": 2,
   "meeting": 0,
   "fyi": 5,
-  "total": 9,
-  "file": "Email_Daily_20261028.html",
-  "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20261028.html",
-  "bytes": 6186
+  "total": 7,
+  "file": "Email_Daily_20261029.html",
+  "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20261029.html",
+  "bytes": 5380
  },
  "reports": [
+  {
+   "date": "2026-10-29",
+   "todo": 2,
+   "meeting": 0,
+   "fyi": 5,
+   "total": 7,
+   "file": "Email_Daily_20261029.html",
+   "url": "https://koworkbussy.github.io/workbuddy-stories-v2/reports/Email_Daily_20261029.html",
+   "bytes": 5380
+  },
   {
    "date": "2026-10-28",
    "todo": 4,
